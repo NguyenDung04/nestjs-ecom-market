@@ -1,0 +1,93 @@
+<header class="sticky top-0 z-40 border-b border-gray-200 bg-white/90 backdrop-blur">
+  <nav class="mx-auto max-w-7xl px-5">
+    <div class="flex h-16 items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600 text-white shadow-lg shadow-primary-600/20">
+          <i class="fa-solid fa-store"></i>
+        </div>
+
+        <div>
+          <span class="block text-lg font-extrabold leading-5 text-gray-900">
+            Client Shop
+          </span>
+          <span class="hidden text-xs font-medium text-gray-400 sm:block">
+            NestJS HBS
+          </span>
+        </div>
+      </a>
+
+      <div class="hidden items-center gap-7 text-sm font-bold text-gray-600 md:flex">
+        <a href="/" class="transition hover:text-primary-600">
+          Trang chủ
+        </a>
+
+        <a href="/products" class="transition hover:text-primary-600">
+          Sản phẩm
+        </a>
+
+        <a href="/profile" class="transition hover:text-primary-600">
+          Tài khoản
+        </a>
+      </div>
+
+      <div class="hidden items-center gap-3 md:flex">
+        <a
+          href="/auth/login"
+          class="rounded-xl px-4 py-2 text-sm font-bold text-gray-700 transition hover:bg-gray-100"
+        >
+          Đăng nhập
+        </a>
+
+        <a
+          href="/auth/register"
+          class="rounded-xl bg-primary-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition hover:bg-primary-700"
+        >
+          Đăng ký
+        </a>
+      </div>
+
+      <button
+        type="button"
+        onclick="toggleClientMobileMenu()"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 md:hidden"
+      >
+        <i id="clientMobileMenuIcon" class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <div id="clientMobileMenu" class="hidden border-t border-gray-100 py-4 md:hidden">
+      <div class="space-y-1 text-sm font-bold text-gray-600">
+        <a href="/" class="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-gray-50 hover:text-primary-600">
+          <i class="fa-solid fa-house w-5"></i>
+          Trang chủ
+        </a>
+
+        <a href="/products" class="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-gray-50 hover:text-primary-600">
+          <i class="fa-solid fa-box-open w-5"></i>
+          Sản phẩm
+        </a>
+
+        <a href="/profile" class="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-gray-50 hover:text-primary-600">
+          <i class="fa-solid fa-user w-5"></i>
+          Tài khoản
+        </a>
+      </div>
+
+      <div class="mt-4 grid grid-cols-2 gap-3 border-t border-gray-100 pt-4">
+        <a
+          href="/auth/login"
+          class="inline-flex items-center justify-center rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50"
+        >
+          Đăng nhập
+        </a>
+
+        <a
+          href="/auth/register"
+          class="inline-flex items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-primary-700"
+        >
+          Đăng ký
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  {{> head title=title}}
+</head>
+
+<body class="bg-slate-100 text-slate-900 antialiased">
+  {{> toast}}
+
+  <div id="adminMobileOverlay"
+       class="fixed inset-0 z-40 hidden bg-slate-950/45 backdrop-blur-sm lg:hidden"
+       onclick="closeAdminSidebar()"></div>
+
+  <div class="relative min-h-screen overflow-hidden">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute left-[-120px] top-[-120px] h-80 w-80 rounded-full bg-primary-200/40 blur-3xl"></div>
+      <div class="absolute right-[-140px] top-40 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl"></div>
+      <div class="absolute bottom-[-120px] left-1/3 h-72 w-72 rounded-full bg-emerald-200/30 blur-3xl"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.55),rgba(248,250,252,0.92))]"></div>
+    </div>
+
+    <div class="min-h-screen">
+      {{> admin-sidebar}}
+
+      <div class="relative lg:pl-72">
+        {{> admin-topbar}}
+
+        <main class="min-h-[calc(100vh-4rem)] p-4 sm:p-5 lg:p-8">
+          <div class="mx-auto max-w-[1600px]">
+            {{{body}}}
+          </div>
+        </main>
+
+        {{> admin-footer}}
+      </div>
+    </div>
+  </div>
+
+  {{> scripts}}
+
+  <script>
+    function openAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('adminMobileOverlay');
+
+      if (sidebar) {
+        sidebar.classList.remove('-translate-x-full');
+      }
+
+      if (overlay) {
+        overlay.classList.remove('hidden');
+      }
+    }
+
+    function closeAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('adminMobileOverlay');
+
+      if (sidebar) {
+        sidebar.classList.add('-translate-x-full');
+      }
+
+      if (overlay) {
+        overlay.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>

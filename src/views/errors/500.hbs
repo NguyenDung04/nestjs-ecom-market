@@ -1,0 +1,140 @@
+<section class="relative min-h-screen overflow-hidden bg-slate-50">
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-rose-100/70 blur-3xl"></div>
+    <div class="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-amber-100/60 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-5 py-16">
+    <div class="w-full max-w-4xl text-center">
+      <div class="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white text-rose-600 shadow-lg shadow-slate-200/60">
+        <i class="fa-solid fa-server text-4xl"></i>
+      </div>
+
+      <div class="inline-flex items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-rose-700 shadow-sm">
+        <i class="fa-solid fa-bug"></i>
+        500 Server Error
+      </div>
+
+      <h1 class="mt-6 text-5xl font-black tracking-tight text-slate-900 sm:text-6xl">
+        Hệ thống đang gặp lỗi
+      </h1>
+
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+        Máy chủ không thể xử lý yêu cầu ở thời điểm hiện tại. Bạn có thể tải lại trang,
+        quay lại bước trước hoặc trở về trang chủ trong khi hệ thống tự phục hồi.
+      </p>
+
+      <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <button
+          type="button"
+          onclick="window.location.reload()"
+          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-rose-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-rose-600/20 transition hover:bg-rose-700"
+        >
+          <i class="fa-solid fa-rotate-right"></i>
+          Tải lại trang
+        </button>
+
+        <a
+          href="/"
+          class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-6 py-3.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+        >
+          <i class="fa-solid fa-house"></i>
+          Về trang chủ
+        </a>
+
+        <button
+          type="button"
+          onclick="history.back()"
+          class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-6 py-3.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          Quay lại
+        </button>
+      </div>
+
+      <div class="mt-12 grid gap-4 text-left sm:grid-cols-3">
+        <div class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+
+          <h3 class="font-black text-slate-900">
+            Lỗi máy chủ
+          </h3>
+
+          <p class="mt-2 text-sm leading-6 text-slate-500">
+            Có thể API, database hoặc service nội bộ đang gặp sự cố tạm thời.
+          </p>
+        </div>
+
+        <div class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+            <i class="fa-solid fa-rotate"></i>
+          </div>
+
+          <h3 class="font-black text-slate-900">
+            Thử lại sau
+          </h3>
+
+          <p class="mt-2 text-sm leading-6 text-slate-500">
+            Hãy tải lại trang hoặc quay lại sau vài phút nếu lỗi vẫn tiếp tục xảy ra.
+          </p>
+        </div>
+
+        <div class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+
+          <h3 class="font-black text-slate-900">
+            Kiểm tra log
+          </h3>
+
+          <p class="mt-2 text-sm leading-6 text-slate-500">
+            Nếu bạn là developer hoặc admin, hãy kiểm tra log server để xác định nguyên nhân.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-10 rounded-[32px] border border-slate-200 bg-white p-5 text-left shadow-sm">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 class="font-black text-slate-900">
+              Gợi ý kiểm tra nhanh cho developer
+            </h3>
+            <p class="mt-1 text-sm text-slate-500">
+              Một số nguyên nhân thường gặp khi render HBS hoặc gọi API trong NestJS.
+            </p>
+          </div>
+
+          <span class="inline-flex w-fit items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+            <i class="fa-solid fa-code"></i>
+            Debug
+          </span>
+        </div>
+
+        <div class="mt-5 grid gap-3 text-sm text-slate-600 md:grid-cols-2">
+          <div class="rounded-2xl bg-slate-50 p-4">
+            <span class="font-bold text-slate-900">1.</span>
+            Kiểm tra route render HBS có đúng layout và đường dẫn view hay không.
+          </div>
+
+          <div class="rounded-2xl bg-slate-50 p-4">
+            <span class="font-bold text-slate-900">2.</span>
+            Kiểm tra prefix <span class="font-semibold">/api</span> và response shape của controller.
+          </div>
+
+          <div class="rounded-2xl bg-slate-50 p-4">
+            <span class="font-bold text-slate-900">3.</span>
+            Kiểm tra kết nối MySQL, entity TypeORM và dữ liệu seed/migration.
+          </div>
+
+          <div class="rounded-2xl bg-slate-50 p-4">
+            <span class="font-bold text-slate-900">4.</span>
+            Kiểm tra guard, cookie JWT và quyền truy cập giữa client với admin.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

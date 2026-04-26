@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  {{> head title=title}}
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
+  {{> toast}}
+
+  <main class="relative min-h-screen overflow-hidden">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute left-[-100px] top-[-90px] h-80 w-80 rounded-full bg-primary-200/70 blur-3xl"></div>
+      <div class="absolute bottom-[-120px] right-[-120px] h-[26rem] w-[26rem] rounded-full bg-sky-200/70 blur-3xl"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(248,250,252,0.95),rgba(255,255,255,0.88))]"></div>
+    </div>
+
+    <div class="grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
+      <section class="relative hidden overflow-hidden bg-[linear-gradient(160deg,#1d4ed8_0%,#2563eb_35%,#0f766e_100%)] text-white lg:flex lg:flex-col lg:justify-between">
+        <div class="absolute inset-0 opacity-20">
+          <div class="absolute left-12 top-20 h-32 w-32 rounded-full border border-white/30"></div>
+          <div class="absolute right-16 top-40 h-20 w-20 rounded-full border border-white/30"></div>
+          <div class="absolute bottom-20 left-24 h-44 w-44 rounded-full border border-white/20"></div>
+        </div>
+
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.14),transparent_25%)]"></div>
+
+        <div class="relative z-10 p-12">
+          {{> auth-brand}}
+        </div>
+
+        <div class="relative z-10 px-12">
+          <div class="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-primary-50 backdrop-blur">
+            <i class="fa-solid fa-shield-halved"></i>
+            Secure Access Experience
+          </div>
+
+          <h1 class="max-w-xl text-4xl font-black leading-tight tracking-tight xl:text-5xl">
+            Quản lý đăng nhập, bảo mật và truy cập hệ thống mượt mà hơn.
+          </h1>
+
+          <p class="mt-6 max-w-xl text-lg leading-8 text-primary-100">
+            Khu vực auth được tách riêng để tối ưu trải nghiệm đăng nhập, đăng ký,
+            khôi phục mật khẩu và kiểm soát truy cập rõ ràng hơn cho cả admin lẫn user.
+          </p>
+
+          <div class="mt-10 grid max-w-xl gap-4 sm:grid-cols-3">
+            <div class="rounded-3xl bg-white/10 p-5 backdrop-blur">
+              <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
+                <i class="fa-solid fa-user-lock"></i>
+              </div>
+              <p class="text-xl font-black">JWT</p>
+              <p class="mt-1 text-sm text-primary-100">Xác thực</p>
+            </div>
+
+            <div class="rounded-3xl bg-white/10 p-5 backdrop-blur">
+              <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <p class="text-xl font-black">MVC</p>
+              <p class="mt-1 text-sm text-primary-100">HBS Views</p>
+            </div>
+
+            <div class="rounded-3xl bg-white/10 p-5 backdrop-blur">
+              <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
+                <i class="fa-solid fa-gauge-high"></i>
+              </div>
+              <p class="text-xl font-black">Access</p>
+              <p class="mt-1 text-sm text-primary-100">Phân quyền</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative z-10 flex items-center justify-between p-12 text-sm text-primary-100">
+          <p>© 2026 NestJS HBS Project</p>
+          <a href="/" class="font-semibold text-white hover:text-primary-100">
+            Về trang chủ
+          </a>
+        </div>
+      </section>
+
+      <section class="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8">
+        <div class="w-full max-w-md">
+          <div class="mb-8 flex justify-center lg:hidden">
+            {{> auth-brand}}
+          </div>
+
+          {{{body}}}
+
+          <p class="mt-8 text-center text-xs font-medium text-slate-400">
+            NestJS + HBS + Tailwind CSS + Flowbite
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  {{> scripts}}
+</body>
+</html>

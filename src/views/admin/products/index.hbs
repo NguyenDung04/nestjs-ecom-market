@@ -1,0 +1,595 @@
+<div class="space-y-6">
+  <section class="relative overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.16),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.14),_transparent_30%),linear-gradient(135deg,_rgba(248,250,252,0.98),_rgba(255,255,255,0.95))]"></div>
+    <div class="absolute -right-12 top-8 h-44 w-44 rounded-full bg-emerald-100/60 blur-3xl"></div>
+    <div class="absolute bottom-6 left-12 h-24 w-24 rounded-full bg-sky-100/70 blur-2xl"></div>
+
+    <div class="relative p-6 lg:p-8">
+      <div class="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+        <div class="max-w-3xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50/90 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">
+            <i class="fa-solid fa-box"></i>
+            Admin / Products
+          </div>
+
+          <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+            Quản lý sản phẩm
+          </h1>
+
+          <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+            Tập trung vào hiệu quả bán hàng với bảng quản trị sản phẩm rõ ràng hơn, hỗ trợ tìm kiếm,
+            lọc tồn kho, theo dõi trạng thái hiển thị và các thao tác cập nhật nhanh.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <div class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/85 px-4 py-2 text-sm text-slate-600 shadow-sm backdrop-blur">
+              <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                <i class="fa-solid fa-bolt"></i>
+              </span>
+              Tối ưu cho danh sách bán hàng
+            </div>
+
+            <div class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/85 px-4 py-2 text-sm text-slate-600 shadow-sm backdrop-blur">
+              <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                <i class="fa-solid fa-tags"></i>
+              </span>
+              Sẵn sàng nối API `/api/products`
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition hover:-translate-y-0.5 hover:bg-primary-700"
+          >
+            <i class="fa-solid fa-plus"></i>
+            Thêm sản phẩm
+          </button>
+
+          <button
+            type="button"
+            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            <i class="fa-solid fa-file-export"></i>
+            Xuất danh sách
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-5 md:grid-cols-2 2xl:grid-cols-4">
+    <article class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm font-medium text-slate-500">Tổng sản phẩm</p>
+          <h2 class="mt-3 text-3xl font-black text-slate-900">1.284</h2>
+          <p class="mt-2 text-xs font-medium text-emerald-600">+56 sản phẩm mới tuần này</p>
+        </div>
+
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
+          <i class="fa-solid fa-boxes-stacked text-xl"></i>
+        </div>
+      </div>
+
+      <div class="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div class="h-full w-[84%] rounded-full bg-sky-500"></div>
+      </div>
+    </article>
+
+    <article class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm font-medium text-slate-500">Đang bán</p>
+          <h2 class="mt-3 text-3xl font-black text-slate-900">978</h2>
+          <p class="mt-2 text-xs font-medium text-emerald-600">76% đang hiển thị storefront</p>
+        </div>
+
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+          <i class="fa-solid fa-circle-check text-xl"></i>
+        </div>
+      </div>
+
+      <div class="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div class="h-full w-[76%] rounded-full bg-emerald-500"></div>
+      </div>
+    </article>
+
+    <article class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm font-medium text-slate-500">Sắp hết hàng</p>
+          <h2 class="mt-3 text-3xl font-black text-slate-900">48</h2>
+          <p class="mt-2 text-xs font-medium text-amber-600">Cần bổ sung tồn kho sớm</p>
+        </div>
+
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+          <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+        </div>
+      </div>
+
+      <div class="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div class="h-full w-[18%] rounded-full bg-amber-500"></div>
+      </div>
+    </article>
+
+    <article class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm font-medium text-slate-500">Đã xóa mềm</p>
+          <h2 class="mt-3 text-3xl font-black text-slate-900">22</h2>
+          <p class="mt-2 text-xs font-medium text-rose-600">Chờ khôi phục hoặc dọn dẹp</p>
+        </div>
+
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
+          <i class="fa-solid fa-trash-can text-xl"></i>
+        </div>
+      </div>
+
+      <div class="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div class="h-full w-[10%] rounded-full bg-rose-500"></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div class="overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm">
+      <div class="border-b border-slate-200 px-5 py-5 sm:px-6">
+        <div class="flex flex-col gap-5">
+          <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div>
+              <h2 class="text-xl font-black tracking-tight text-slate-900">
+                Danh sách sản phẩm
+              </h2>
+              <p class="mt-1 text-sm text-slate-500">
+                Quét nhanh ảnh đại diện, giá, tồn kho, danh mục và trạng thái bán.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+              >
+                <i class="fa-solid fa-arrow-rotate-right"></i>
+                Làm mới
+              </button>
+
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+              >
+                <i class="fa-solid fa-filter-circle-xmark"></i>
+                Xóa bộ lọc
+              </button>
+            </div>
+          </div>
+
+          <div class="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,0.55fr))]">
+            <label class="relative block">
+              <span class="sr-only">Tìm kiếm sản phẩm</span>
+              <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"></i>
+              <input
+                type="text"
+                placeholder="Tìm tên sản phẩm, SKU..."
+                class="w-full rounded-2xl border border-slate-300 bg-slate-50 py-3 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
+              />
+            </label>
+
+            <select
+              class="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
+            >
+              <option>Tất cả danh mục</option>
+              <option>Thời trang nam</option>
+              <option>Phụ kiện công nghệ</option>
+              <option>Nội thất</option>
+            </select>
+
+            <select
+              class="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
+            >
+              <option>Tất cả trạng thái</option>
+              <option>Đang bán</option>
+              <option>Tạm ẩn</option>
+              <option>Đã xóa mềm</option>
+            </select>
+
+            <select
+              class="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
+            >
+              <option>Tồn kho</option>
+              <option>Còn hàng</option>
+              <option>Sắp hết</option>
+              <option>Hết hàng</option>
+            </select>
+
+            <button
+              type="button"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+            >
+              <i class="fa-solid fa-sliders"></i>
+              Lọc nâng cao
+            </button>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
+              1.284 sản phẩm
+            </span>
+            <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+              978 đang bán
+            </span>
+            <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+              48 sắp hết hàng
+            </span>
+            <span class="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
+              22 đã xóa mềm
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead class="bg-slate-50 text-xs uppercase tracking-[0.2em] text-slate-500">
+            <tr>
+              <th class="px-6 py-4 font-bold">Sản phẩm</th>
+              <th class="px-6 py-4 font-bold">Danh mục</th>
+              <th class="px-6 py-4 font-bold">Giá</th>
+              <th class="px-6 py-4 font-bold">Tồn kho</th>
+              <th class="px-6 py-4 font-bold">Trạng thái</th>
+              <th class="px-6 py-4 text-right font-bold">Thao tác</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100">
+            <tr class="transition hover:bg-slate-50/80">
+              <td class="px-6 py-5">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
+                    <i class="fa-regular fa-image text-2xl"></i>
+                  </div>
+
+                  <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <p class="font-bold text-slate-900">Áo khoác bomber basic</p>
+                      <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700">
+                        Best seller
+                      </span>
+                    </div>
+                    <p class="mt-1 max-w-md text-xs leading-6 text-slate-500">
+                      SKU: AKB-1024 • Cập nhật 24/04/2026 bởi Admin
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-6 py-5">
+                <span class="rounded-full bg-primary-50 px-3 py-1.5 text-xs font-semibold text-primary-700">
+                  Thời trang nam
+                </span>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="font-bold text-slate-900">890.000đ</div>
+                <div class="mt-1 text-xs text-slate-500">Giảm 12% so với giá niêm yết</div>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="font-bold text-slate-900">42 sản phẩm</div>
+                <div class="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full w-[68%] rounded-full bg-emerald-500"></div>
+                </div>
+              </td>
+
+              <td class="px-6 py-5">
+                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
+                  <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                  Đang bán
+                </span>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100"
+                    title="Xem"
+                  >
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100"
+                    title="Sửa"
+                  >
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-rose-200 text-rose-600 transition hover:bg-rose-50"
+                    title="Xóa"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr class="transition hover:bg-slate-50/80">
+              <td class="px-6 py-5">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-50 to-cyan-100 text-sky-500">
+                    <i class="fa-solid fa-headphones text-2xl"></i>
+                  </div>
+
+                  <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <p class="font-bold text-slate-900">Tai nghe bluetooth chống ồn</p>
+                      <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
+                        Sắp hết
+                      </span>
+                    </div>
+                    <p class="mt-1 max-w-md text-xs leading-6 text-slate-500">
+                      SKU: TNB-8452 • Cập nhật 23/04/2026 bởi Editor
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-6 py-5">
+                <span class="rounded-full bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700">
+                  Phụ kiện công nghệ
+                </span>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="font-bold text-slate-900">1.490.000đ</div>
+                <div class="mt-1 text-xs text-slate-500">Biên lợi nhuận tốt</div>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="font-bold text-slate-900">06 sản phẩm</div>
+                <div class="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full w-[14%] rounded-full bg-amber-500"></div>
+                </div>
+              </td>
+
+              <td class="px-6 py-5">
+                <span class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700">
+                  <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                  Sắp hết hàng
+                </span>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100"
+                    title="Xem"
+                  >
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100"
+                    title="Sửa"
+                  >
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-amber-200 text-amber-600 transition hover:bg-amber-50"
+                    title="Nhập thêm hàng"
+                  >
+                    <i class="fa-solid fa-warehouse"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr class="transition hover:bg-slate-50/80">
+              <td class="px-6 py-5">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-50 to-pink-100 text-rose-500">
+                    <i class="fa-solid fa-couch text-2xl"></i>
+                  </div>
+
+                  <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <p class="font-bold text-slate-900">Sofa vải tối giản 2 chỗ</p>
+                      <span class="rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-bold text-rose-700">
+                        Đã xóa mềm
+                      </span>
+                    </div>
+                    <p class="mt-1 max-w-md text-xs leading-6 text-slate-500">
+                      SKU: SFV-2201 • Ẩn khỏi storefront từ 20/04/2026
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-6 py-5">
+                <span class="rounded-full bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700">
+                  Nội thất
+                </span>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="font-bold text-slate-900">8.900.000đ</div>
+                <div class="mt-1 text-xs text-slate-500">Đã ngừng hiển thị</div>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="font-bold text-slate-900">03 sản phẩm</div>
+                <div class="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full w-[10%] rounded-full bg-rose-500"></div>
+                </div>
+              </td>
+
+              <td class="px-6 py-5">
+                <span class="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700">
+                  <span class="h-2 w-2 rounded-full bg-rose-500"></span>
+                  Đã xóa mềm
+                </span>
+              </td>
+
+              <td class="px-6 py-5">
+                <div class="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 text-emerald-600 transition hover:bg-emerald-50"
+                    title="Khôi phục"
+                  >
+                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100"
+                    title="Xem"
+                  >
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-rose-200 text-rose-600 transition hover:bg-rose-50"
+                    title="Xóa vĩnh viễn"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex flex-col gap-4 border-t border-slate-200 bg-slate-50/70 px-5 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+        <p class="text-sm text-slate-500">
+          Hiển thị 1 đến 3 trên tổng số 1.284 sản phẩm.
+        </p>
+
+        <div class="flex items-center gap-2 self-end lg:self-auto">
+          <button
+            type="button"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400"
+            disabled
+          >
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <button
+            type="button"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-primary-600 px-3 text-sm font-bold text-white"
+          >
+            1
+          </button>
+
+          <button
+            type="button"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+          >
+            2
+          </button>
+
+          <button
+            type="button"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+          >
+            3
+          </button>
+
+          <button
+            type="button"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="space-y-6">
+      <div class="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Quick Insight
+            </p>
+            <h3 class="mt-2 text-xl font-black text-slate-900">
+              Tình trạng bán hàng
+            </h3>
+          </div>
+
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+        </div>
+
+        <div class="mt-6 space-y-4">
+          <div>
+            <div class="mb-2 flex items-center justify-between text-sm">
+              <span class="font-medium text-slate-600">Đang bán</span>
+              <span class="font-bold text-slate-900">76%</span>
+            </div>
+            <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+              <div class="h-full w-[76%] rounded-full bg-emerald-500"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="mb-2 flex items-center justify-between text-sm">
+              <span class="font-medium text-slate-600">Sắp hết hàng</span>
+              <span class="font-bold text-slate-900">18%</span>
+            </div>
+            <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+              <div class="h-full w-[18%] rounded-full bg-amber-500"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="mb-2 flex items-center justify-between text-sm">
+              <span class="font-medium text-slate-600">Đã xóa mềm</span>
+              <span class="font-bold text-slate-900">6%</span>
+            </div>
+            <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+              <div class="h-full w-[6%] rounded-full bg-rose-500"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-[32px] border border-slate-200 bg-slate-900 p-6 text-white shadow-sm">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">
+          Checklist
+        </p>
+        <h3 class="mt-2 text-xl font-black">
+          Gợi ý tối ưu UX
+        </h3>
+
+        <div class="mt-5 space-y-3 text-sm text-slate-300">
+          <div class="flex items-start gap-3 rounded-2xl bg-white/5 px-4 py-3">
+            <i class="fa-solid fa-check mt-0.5 text-emerald-400"></i>
+            Khi nối dữ liệu thật, nên thêm sort theo giá, tồn kho và ngày cập nhật.
+          </div>
+          <div class="flex items-start gap-3 rounded-2xl bg-white/5 px-4 py-3">
+            <i class="fa-solid fa-check mt-0.5 text-emerald-400"></i>
+            Dùng skeleton loading cho bảng và thumbnail ảnh sản phẩm.
+          </div>
+          <div class="flex items-start gap-3 rounded-2xl bg-white/5 px-4 py-3">
+            <i class="fa-solid fa-check mt-0.5 text-emerald-400"></i>
+            Thêm bulk action để ẩn, gắn danh mục hoặc cập nhật trạng thái hàng loạt.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+</div>
