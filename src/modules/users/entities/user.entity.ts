@@ -1,6 +1,20 @@
-import { Column, Entity, Index } from 'typeorm';
-import { UserRole } from '../../../common/enums/role.enum';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { UserStatus } from 'src/common/enums/ecommerce.enum';
+import { Role } from '../../roles/entities/role.entity';
+import { Address } from '../../addresses/entities/address.entity';
+import { Cart } from '../../carts/entities/cart.entity';
+import { Order } from '../../orders/entities/order.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { Notification } from '../../notifications/entities/notification.entity';
+import { InventoryLog } from '../../inventory-logs/entities/inventory-log.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -8,35 +22,49 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 150, unique: true })
   email!: string;
 
-  @Index('IDX_USERS_USERNAME', { unique: true })
-  @Column({ type: 'varchar', length: 50, unique: true })
-  username!: string;
+  @Column({ type: 'varchar', length: 150 })
+  name!: string;
 
-  @Column({ name: 'password_hash', type: 'varchar', length: 255 })
-  passwordHash!: string;
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  phone!: string | null;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
-  })
-  role!: UserRole;
+  @Column({ type: 'varchar', length: 255 })
+  password!: string;
 
-  @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive!: boolean;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  avatar!: string | null;
 
-  @Column({
-    name: 'reset_password_token',
-    type: 'varchar',
-    length: 255,
+  @Column({ name: 'role_id', type: 'int', nullable: true })
+  roleId!: number | null;
+
+  @Column({ type: 'enum', enum: UserStatus, default: UserStatus.ACTIVE })
+  status!: UserStatus;
+
+  @Column({ name: 'email_verified_at', type: 'timestamp', nullable: true })
+  emailVerifiedAt!: Date | null;
+
+  @ManyToOne(() => Role, (role) => role.users, {
     nullable: true,
+    onDelete: 'SET NULL',
   })
-  resetPasswordToken!: string | null;
+  @JoinColumn({ name: 'role_id' })
+  role!: Role | null;
 
-  @Column({
-    name: 'reset_password_expires_at',
-    type: 'datetime',
-    nullable: true,
-  })
-  resetPasswordExpiresAt!: Date | null;
+  @OneToMany(() => Address, (address) => address.user)
+  addresses!: Address[];
+
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts!: Cart[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders!: Order[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews!: Review[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications!: Notification[];
+
+  @OneToMany(() => InventoryLog, (inventoryLog) => inventoryLog.user)
+  inventoryLogs!: InventoryLog[];
 }

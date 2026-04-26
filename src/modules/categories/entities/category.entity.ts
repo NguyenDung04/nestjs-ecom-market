@@ -1,6 +1,13 @@
-import { Column, Entity, Index, OneToMany } from 'typeorm';
-import { Product } from '../../products/entities/product.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Product } from '../../products/entities/product.entity';
 
 @Entity('categories')
 export class Category extends BaseEntity {
@@ -15,8 +22,18 @@ export class Category extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   description!: string | null;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image!: string | null;
+
+  @Column({ name: 'parent_id', type: 'int', nullable: true })
+  parentId!: number | null;
+
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive!: boolean;
+
+  @ManyToOne(() => Category, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'parent_id' })
+  parent!: Category | null;
 
   @OneToMany(() => Product, (product) => product.category)
   products!: Product[];

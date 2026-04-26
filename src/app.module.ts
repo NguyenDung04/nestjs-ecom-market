@@ -8,22 +8,24 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import databaseConfig from './config/database.config';
 import { winstonConfig } from './common/logger/winston.config';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
-
-// import { AppController } from './app.controller';
-
-import { User } from './modules/users/entities/user.entity';
-import { Category } from './modules/categories/entities/category.entity';
-import { Product } from './modules/products/entities/product.entity';
-
-import { AuthModule } from './modules/auth/auth.module';
-import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
-
+import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
-
-import { WebModule } from './web/web.module';
+import { ProductImagesModule } from './modules/product-images/product-images.module';
+import { AddressesModule } from './modules/addresses/addresses.module';
+import { CartsModule } from './modules/carts/carts.module';
+import { CartItemsModule } from './modules/cart-items/cart-items.module';
+import { CouponsModule } from './modules/coupons/coupons.module';
+import { OrdersModule } from './modules/orders/orders.module';
+import { OrderItemsModule } from './modules/order-items/order-items.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ContactsModule } from './modules/contacts/contacts.module';
+import { BannersModule } from './modules/banners/banners.module';
+import { SettingsModule } from './modules/settings/settings.module';
+import { InventoryLogsModule } from './modules/inventory-logs/inventory-logs.module';
 
 @Module({
   imports: [
@@ -57,32 +59,38 @@ import { WebModule } from './web/web.module';
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
         database: configService.get<string>('database.database'),
-        entities: [User, Category, Product],
+
+        autoLoadEntities: true,
+
         synchronize: false,
         logging: configService.get<boolean>('database.logging'),
-        autoLoadEntities: false,
       }),
     }),
 
-    AuthModule,
+    RolesModule,
     UsersModule,
     CategoriesModule,
     ProductsModule,
-    WebModule,
+    ProductImagesModule,
+    AddressesModule,
+    CartsModule,
+    CartItemsModule,
+    CouponsModule,
+    OrdersModule,
+    OrderItemsModule,
+    PaymentsModule,
+    ReviewsModule,
+    NotificationsModule,
+    ContactsModule,
+    BannersModule,
+    SettingsModule,
+    InventoryLogsModule,
   ],
-  // controllers: [AppController],
+
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
     },
   ],
 })

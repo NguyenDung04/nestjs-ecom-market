@@ -2,10 +2,6 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 
-import { User } from '../modules/users/entities/user.entity';
-import { Category } from '../modules/categories/entities/category.entity';
-import { Product } from '../modules/products/entities/product.entity';
-
 dotenv.config({
   path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
@@ -21,8 +17,11 @@ export default new DataSource({
   username: process.env.DB_USERNAME || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_DATABASE || 'nest_mvc_dev',
-  entities: [User, Category, Product],
+
+  entities: ['src/modules/**/*.entity{.ts,.js}'],
+
   migrations: ['src/database/migrations/*{.ts,.js}'],
+
   synchronize: false,
   logging: process.env.DB_LOGGING === 'true' || isDevelopment,
 });

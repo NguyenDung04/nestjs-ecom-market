@@ -1,5 +1,6 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsBoolean,
+  IsEnum,
   IsInt,
   IsNotEmpty,
   IsNumberString,
@@ -8,11 +9,16 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ProductStatus } from 'src/common/enums/ecommerce.enum';
 
 export class CreateProductDto {
+  @ApiPropertyOptional({ example: 1, description: 'ID danh mục' })
+  @IsOptional()
+  @IsInt({ message: 'ID danh mục phải là số nguyên' })
+  categoryId?: number;
+
   @ApiProperty({
-    example: 'iPhone 15',
+    example: 'iPhone 15 Pro Max',
     description: 'Tên sản phẩm',
     maxLength: 180,
   })
@@ -22,67 +28,82 @@ export class CreateProductDto {
   name!: string;
 
   @ApiProperty({
-    example: 'iphone-15',
-    description: 'Đường dẫn định danh duy nhất của sản phẩm',
-    maxLength: 200,
+    example: 'iphone-15-pro-max',
+    description: 'Slug sản phẩm',
+    maxLength: 220,
   })
-  @IsNotEmpty({ message: 'Đường dẫn sản phẩm không được để trống' })
-  @IsString({ message: 'Đường dẫn sản phẩm phải là chuỗi ký tự' })
-  @MaxLength(200, {
-    message: 'Đường dẫn sản phẩm không được vượt quá 200 ký tự',
-  })
+  @IsNotEmpty({ message: 'Slug sản phẩm không được để trống' })
+  @IsString({ message: 'Slug sản phẩm phải là chuỗi ký tự' })
+  @MaxLength(220, { message: 'Slug sản phẩm không được vượt quá 220 ký tự' })
   slug!: string;
 
-  @ApiPropertyOptional({
-    example: 'Điện thoại Apple iPhone 15 chính hãng',
-    description: 'Mô tả ngắn về sản phẩm',
-    maxLength: 255,
-  })
-  @IsOptional()
-  @IsString({ message: 'Mô tả sản phẩm phải là chuỗi ký tự' })
-  @MaxLength(255, { message: 'Mô tả sản phẩm không được vượt quá 255 ký tự' })
-  description?: string;
-
-  @ApiPropertyOptional({
-    example: 'iphone15.jpg',
-    description: 'Tên tệp ảnh hoặc đường dẫn ảnh của sản phẩm',
-    maxLength: 255,
-  })
-  @IsOptional()
-  @IsString({ message: 'Ảnh sản phẩm phải là chuỗi ký tự' })
-  @MaxLength(255, { message: 'Ảnh sản phẩm không được vượt quá 255 ký tự' })
-  image?: string;
-
   @ApiProperty({
-    example: '22990000',
-    description: 'Giá sản phẩm dạng chuỗi số thập phân',
+    example: 'IP15PM-256',
+    description: 'Mã SKU sản phẩm',
+    maxLength: 80,
   })
+  @IsNotEmpty({ message: 'SKU không được để trống' })
+  @IsString({ message: 'SKU phải là chuỗi ký tự' })
+  @MaxLength(80, { message: 'SKU không được vượt quá 80 ký tự' })
+  sku!: string;
+
+  @ApiProperty({ example: '29990000.00', description: 'Giá bán sản phẩm' })
   @IsNotEmpty({ message: 'Giá sản phẩm không được để trống' })
   @IsNumberString({}, { message: 'Giá sản phẩm phải là chuỗi số hợp lệ' })
   price!: string;
 
-  @ApiProperty({
-    example: 50,
-    description: 'Số lượng sản phẩm còn trong kho',
-    minimum: 0,
-  })
-  @IsInt({ message: 'Số lượng tồn kho phải là số nguyên' })
-  @Min(0, { message: 'Số lượng tồn kho không được nhỏ hơn 0' })
-  stockQuantity!: number;
-
   @ApiPropertyOptional({
-    example: true,
-    description: 'Trạng thái hoạt động của sản phẩm',
-    default: true,
+    example: '27990000.00',
+    description: 'Giá khuyến mãi',
   })
   @IsOptional()
-  @IsBoolean({ message: 'Trạng thái hoạt động phải là đúng hoặc sai' })
-  isActive?: boolean;
+  @IsNumberString({}, { message: 'Giá khuyến mãi phải là chuỗi số hợp lệ' })
+  salePrice?: string;
 
-  @ApiProperty({
-    example: 1,
-    description: 'Mã danh mục đã tồn tại trong hệ thống',
+  @ApiPropertyOptional({
+    example: 50,
+    description: 'Số lượng tồn kho',
+    default: 0,
   })
-  @IsInt({ message: 'Mã danh mục phải là số nguyên' })
-  categoryId!: number;
+  @IsOptional()
+  @IsInt({ message: 'Số lượng phải là số nguyên' })
+  @Min(0, { message: 'Số lượng không được âm' })
+  quantity?: number;
+
+  @ApiPropertyOptional({
+    example: 'Sản phẩm chính hãng',
+    description: 'Mô tả ngắn',
+    maxLength: 255,
+  })
+  @IsOptional()
+  @IsString({ message: 'Mô tả ngắn phải là chuỗi ký tự' })
+  @MaxLength(255, { message: 'Mô tả ngắn không được vượt quá 255 ký tự' })
+  shortDescription?: string;
+
+  @ApiPropertyOptional({
+    example: 'Mô tả chi tiết sản phẩm',
+    description: 'Mô tả chi tiết',
+  })
+  @IsOptional()
+  @IsString({ message: 'Mô tả chi tiết phải là chuỗi ký tự' })
+  description?: string;
+
+  @ApiPropertyOptional({
+    example: 'https://example.com/product.png',
+    description: 'Ảnh đại diện sản phẩm',
+    maxLength: 255,
+  })
+  @IsOptional()
+  @IsString({ message: 'Ảnh đại diện phải là chuỗi ký tự' })
+  @MaxLength(255, { message: 'Ảnh đại diện không được vượt quá 255 ký tự' })
+  thumbnail?: string;
+
+  @ApiPropertyOptional({
+    enum: ProductStatus,
+    example: ProductStatus.ACTIVE,
+    description: 'Trạng thái sản phẩm',
+  })
+  @IsOptional()
+  @IsEnum(ProductStatus, { message: 'Trạng thái sản phẩm không hợp lệ' })
+  status?: ProductStatus;
 }

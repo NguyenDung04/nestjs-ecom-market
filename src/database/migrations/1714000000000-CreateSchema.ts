@@ -4,307 +4,55 @@ export class CreateSchema1714000000000 implements MigrationInterface {
   name = 'CreateSchema1714000000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`SET FOREIGN_KEY_CHECKS = 0;`);
-    await queryRunner.query(`
-CREATE TABLE roles (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(255) NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE users (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    role_id BIGINT UNSIGNED NOT NULL DEFAULT 3,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    phone VARCHAR(20) NULL,
-    password VARCHAR(255) NOT NULL,
-    avatar VARCHAR(255) NULL,
-    status ENUM('active', 'locked', 'inactive') NOT NULL DEFAULT 'active',
-    email_verified_at TIMESTAMP NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_users_role_id FOREIGN KEY (role_id) REFERENCES roles(id)
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE categories (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    parent_id BIGINT UNSIGNED NULL,
-    name VARCHAR(150) NOT NULL,
-    slug VARCHAR(180) NOT NULL UNIQUE,
-    image VARCHAR(255) NULL,
-    description TEXT NULL,
-    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_categories_parent_id FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE products (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    category_id BIGINT UNSIGNED NOT NULL,
-    name VARCHAR(200) NOT NULL,
-    slug VARCHAR(220) NOT NULL UNIQUE,
-    sku VARCHAR(80) NOT NULL UNIQUE,
-    price DECIMAL(15,2) NOT NULL DEFAULT 0,
-    sale_price DECIMAL(15,2) NULL,
-    quantity INT NOT NULL DEFAULT 0,
-    short_description VARCHAR(500) NULL,
-    description TEXT NULL,
-    thumbnail VARCHAR(255) NULL,
-    status ENUM('active', 'inactive', 'out_of_stock') NOT NULL DEFAULT 'active',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_products_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE product_images (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    product_id BIGINT UNSIGNED NOT NULL,
-    image_url VARCHAR(255) NOT NULL,
-    sort_order INT NOT NULL DEFAULT 0,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_product_images_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE addresses (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NOT NULL,
-    receiver_name VARCHAR(100) NOT NULL,
-    receiver_phone VARCHAR(20) NOT NULL,
-    province VARCHAR(100) NOT NULL,
-    district VARCHAR(100) NOT NULL,
-    ward VARCHAR(100) NOT NULL,
-    address_detail VARCHAR(255) NOT NULL,
-    is_default TINYINT(1) NOT NULL DEFAULT 0,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_addresses_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE carts (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NOT NULL UNIQUE,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_carts_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE cart_items (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    cart_id BIGINT UNSIGNED NOT NULL,
-    product_id BIGINT UNSIGNED NOT NULL,
-    quantity INT NOT NULL DEFAULT 1,
-    price DECIMAL(15,2) NOT NULL DEFAULT 0,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_cart_items_cart_id FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
-    CONSTRAINT fk_cart_items_product_id FOREIGN KEY (product_id) REFERENCES products(id),
-    CONSTRAINT uq_cart_product UNIQUE (cart_id, product_id)
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE coupons (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(50) NOT NULL UNIQUE,
-    type ENUM('percent', 'fixed', 'free_shipping') NOT NULL,
-    value DECIMAL(15,2) NOT NULL DEFAULT 0,
-    min_order_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    max_discount_amount DECIMAL(15,2) NULL,
-    usage_limit INT NULL,
-    used_count INT NOT NULL DEFAULT 0,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    status ENUM('active', 'inactive', 'expired') NOT NULL DEFAULT 'active',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE orders (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NULL,
-    coupon_id BIGINT UNSIGNED NULL,
-    order_code VARCHAR(50) NOT NULL UNIQUE,
-    customer_name VARCHAR(100) NOT NULL,
-    customer_phone VARCHAR(20) NOT NULL,
-    customer_email VARCHAR(150) NULL,
-    shipping_address VARCHAR(500) NOT NULL,
-    note TEXT NULL,
-    subtotal DECIMAL(15,2) NOT NULL DEFAULT 0,
-    shipping_fee DECIMAL(15,2) NOT NULL DEFAULT 0,
-    discount_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    total_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    payment_method ENUM('cod', 'bank_transfer', 'vnpay', 'momo', 'paypal') NOT NULL DEFAULT 'cod',
-    payment_status ENUM('unpaid', 'paid', 'failed', 'refunded') NOT NULL DEFAULT 'unpaid',
-    order_status ENUM('pending', 'confirmed', 'preparing', 'shipping', 'completed', 'cancelled', 'returned') NOT NULL DEFAULT 'pending',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_orders_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
-    CONSTRAINT fk_orders_coupon_id FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE order_items (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    order_id BIGINT UNSIGNED NOT NULL,
-    product_id BIGINT UNSIGNED NULL,
-    product_name VARCHAR(200) NOT NULL,
-    product_image VARCHAR(255) NULL,
-    quantity INT NOT NULL DEFAULT 1,
-    price DECIMAL(15,2) NOT NULL DEFAULT 0,
-    total DECIMAL(15,2) NOT NULL DEFAULT 0,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_order_items_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    CONSTRAINT fk_order_items_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE payments (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    order_id BIGINT UNSIGNED NOT NULL UNIQUE,
-    payment_method ENUM('cod', 'bank_transfer', 'vnpay', 'momo', 'paypal') NOT NULL,
-    transaction_code VARCHAR(100) NULL,
-    amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    status ENUM('unpaid', 'paid', 'failed', 'refunded') NOT NULL DEFAULT 'unpaid',
-    paid_at TIMESTAMP NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_payments_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE reviews (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NOT NULL,
-    product_id BIGINT UNSIGNED NOT NULL,
-    order_id BIGINT UNSIGNED NOT NULL,
-    rating TINYINT UNSIGNED NOT NULL,
-    comment TEXT NULL,
-    status ENUM('visible', 'hidden', 'pending') NOT NULL DEFAULT 'visible',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_reviews_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_reviews_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    CONSTRAINT fk_reviews_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    CONSTRAINT chk_reviews_rating CHECK (rating BETWEEN 1 AND 5),
-    CONSTRAINT uq_review_once UNIQUE (user_id, product_id, order_id)
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE notifications (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNSIGNED NULL,
-    title VARCHAR(200) NOT NULL,
-    message TEXT NOT NULL,
-    type ENUM('order', 'payment', 'system', 'inventory', 'promotion') NOT NULL DEFAULT 'system',
-    is_read TINYINT(1) NOT NULL DEFAULT 0,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_notifications_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE contacts (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL,
-    phone VARCHAR(20) NULL,
-    subject VARCHAR(200) NULL,
-    message TEXT NOT NULL,
-    status ENUM('new', 'processing', 'replied', 'closed') NOT NULL DEFAULT 'new',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE banners (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    image VARCHAR(255) NOT NULL,
-    link VARCHAR(255) NULL,
-    position VARCHAR(50) NOT NULL DEFAULT 'home_top',
-    sort_order INT NOT NULL DEFAULT 0,
-    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE settings (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    setting_key VARCHAR(100) NOT NULL UNIQUE,
-    setting_value TEXT NULL,
-    description VARCHAR(255) NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`
-CREATE TABLE inventory_logs (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    product_id BIGINT UNSIGNED NOT NULL,
-    user_id BIGINT UNSIGNED NULL,
-    type ENUM('import', 'export', 'adjustment', 'return') NOT NULL,
-    quantity INT NOT NULL,
-    note VARCHAR(255) NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_inventory_logs_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    CONSTRAINT fk_inventory_logs_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
-    `);
-
-    await queryRunner.query(`SET FOREIGN_KEY_CHECKS = 1;`);
+    const queries = [
+      "CREATE TABLE roles (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(60) NOT NULL UNIQUE,\n  description VARCHAR(255) NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE users (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  email VARCHAR(150) NOT NULL UNIQUE,\n  name VARCHAR(150) NOT NULL,\n  phone VARCHAR(20) NULL,\n  password VARCHAR(255) NOT NULL,\n  avatar VARCHAR(255) NULL,\n  role_id INT NULL,\n  status ENUM('active','inactive','blocked') NOT NULL DEFAULT 'active',\n  email_verified_at TIMESTAMP NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE categories (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(120) NOT NULL UNIQUE,\n  slug VARCHAR(150) NOT NULL UNIQUE,\n  description VARCHAR(255) NULL,\n  image VARCHAR(255) NULL,\n  parent_id INT NULL,\n  is_active BOOLEAN NOT NULL DEFAULT TRUE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_categories_parent FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE products (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  category_id INT NULL,\n  name VARCHAR(180) NOT NULL,\n  slug VARCHAR(220) NOT NULL UNIQUE,\n  sku VARCHAR(80) NOT NULL UNIQUE,\n  price DECIMAL(12,2) NOT NULL DEFAULT 0,\n  sale_price DECIMAL(12,2) NULL,\n  quantity INT NOT NULL DEFAULT 0,\n  short_description VARCHAR(255) NULL,\n  description TEXT NULL,\n  thumbnail VARCHAR(255) NULL,\n  status ENUM('active','inactive','out_of_stock') NOT NULL DEFAULT 'active',\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT chk_products_price CHECK (price >= 0),\n  CONSTRAINT chk_products_sale_price CHECK (sale_price IS NULL OR sale_price >= 0),\n  CONSTRAINT chk_products_quantity CHECK (quantity >= 0),\n  CONSTRAINT fk_products_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE product_images (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  product_id INT NOT NULL,\n  image_url VARCHAR(255) NOT NULL,\n  sort_order INT NOT NULL DEFAULT 0,\n  is_primary BOOLEAN NOT NULL DEFAULT FALSE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_product_images_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE addresses (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  receiver_name VARCHAR(150) NOT NULL,\n  receiver_phone VARCHAR(20) NOT NULL,\n  province VARCHAR(100) NOT NULL,\n  district VARCHAR(100) NOT NULL,\n  ward VARCHAR(100) NOT NULL,\n  address_detail VARCHAR(255) NOT NULL,\n  is_default BOOLEAN NOT NULL DEFAULT FALSE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_addresses_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE carts (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_carts_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE cart_items (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  cart_id INT NOT NULL,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL DEFAULT 1,\n  price DECIMAL(12,2) NOT NULL DEFAULT 0,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  UNIQUE KEY uq_cart_items_cart_product (cart_id, product_id),\n  CONSTRAINT chk_cart_items_quantity CHECK (quantity > 0),\n  CONSTRAINT chk_cart_items_price CHECK (price >= 0),\n  CONSTRAINT fk_cart_items_cart FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,\n  CONSTRAINT fk_cart_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE coupons (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  code VARCHAR(50) NOT NULL UNIQUE,\n  type ENUM('percent','fixed','free_shipping') NOT NULL,\n  value DECIMAL(12,2) NOT NULL DEFAULT 0,\n  min_order_amount DECIMAL(12,2) NOT NULL DEFAULT 0,\n  max_discount_amount DECIMAL(12,2) NULL,\n  usage_limit INT NULL,\n  used_count INT NOT NULL DEFAULT 0,\n  start_date TIMESTAMP NULL,\n  end_date TIMESTAMP NULL,\n  is_active BOOLEAN NOT NULL DEFAULT TRUE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT chk_coupons_value CHECK (value >= 0),\n  CONSTRAINT chk_coupons_used_count CHECK (used_count >= 0)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE orders (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NULL,\n  coupon_id INT NULL,\n  order_code VARCHAR(40) NOT NULL UNIQUE,\n  customer_name VARCHAR(150) NOT NULL,\n  customer_phone VARCHAR(20) NOT NULL,\n  customer_email VARCHAR(150) NULL,\n  shipping_address VARCHAR(255) NOT NULL,\n  note VARCHAR(255) NULL,\n  subtotal DECIMAL(12,2) NOT NULL DEFAULT 0,\n  shipping_fee DECIMAL(12,2) NOT NULL DEFAULT 0,\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0,\n  total_amount DECIMAL(12,2) NOT NULL DEFAULT 0,\n  payment_method ENUM('cod','bank_transfer','vnpay','momo','paypal') NOT NULL DEFAULT 'cod',\n  payment_status ENUM('unpaid','paid','failed','refunded') NOT NULL DEFAULT 'unpaid',\n  order_status ENUM('pending','confirmed','preparing','shipping','completed','cancelled','returned') NOT NULL DEFAULT 'pending',\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT chk_orders_amounts CHECK (subtotal >= 0 AND shipping_fee >= 0 AND discount_amount >= 0 AND total_amount >= 0),\n  CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,\n  CONSTRAINT fk_orders_coupon FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE order_items (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  order_id INT NOT NULL,\n  product_id INT NULL,\n  product_name VARCHAR(180) NOT NULL,\n  product_image VARCHAR(255) NULL,\n  quantity INT NOT NULL DEFAULT 1,\n  price DECIMAL(12,2) NOT NULL DEFAULT 0,\n  total DECIMAL(12,2) NOT NULL DEFAULT 0,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT chk_order_items_quantity CHECK (quantity > 0),\n  CONSTRAINT chk_order_items_amount CHECK (price >= 0 AND total >= 0),\n  CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,\n  CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE payments (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  order_id INT NOT NULL UNIQUE,\n  payment_method ENUM('cod','bank_transfer','vnpay','momo','paypal') NOT NULL DEFAULT 'cod',\n  transaction_code VARCHAR(100) NULL,\n  amount DECIMAL(12,2) NOT NULL DEFAULT 0,\n  status ENUM('unpaid','paid','failed','refunded') NOT NULL DEFAULT 'unpaid',\n  paid_at TIMESTAMP NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT chk_payments_amount CHECK (amount >= 0),\n  CONSTRAINT fk_payments_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE reviews (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  product_id INT NOT NULL,\n  order_id INT NULL,\n  rating TINYINT NOT NULL,\n  comment TEXT NULL,\n  is_visible BOOLEAN NOT NULL DEFAULT TRUE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  UNIQUE KEY uq_reviews_user_product_order (user_id, product_id, order_id),\n  CONSTRAINT chk_reviews_rating CHECK (rating BETWEEN 1 AND 5),\n  CONSTRAINT fk_reviews_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,\n  CONSTRAINT fk_reviews_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,\n  CONSTRAINT fk_reviews_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE notifications (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NULL,\n  title VARCHAR(150) NOT NULL,\n  message TEXT NOT NULL,\n  type ENUM('system','order','payment','promotion','inventory') NOT NULL DEFAULT 'system',\n  is_read BOOLEAN NOT NULL DEFAULT FALSE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_notifications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE contacts (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(150) NOT NULL,\n  email VARCHAR(150) NOT NULL,\n  phone VARCHAR(20) NULL,\n  subject VARCHAR(180) NULL,\n  message TEXT NOT NULL,\n  status ENUM('new','processing','resolved') NOT NULL DEFAULT 'new',\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE banners (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  title VARCHAR(150) NOT NULL,\n  image_url VARCHAR(255) NOT NULL,\n  link_url VARCHAR(255) NULL,\n  position VARCHAR(60) NOT NULL DEFAULT 'home',\n  sort_order INT NOT NULL DEFAULT 0,\n  is_active BOOLEAN NOT NULL DEFAULT TRUE,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE settings (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  setting_key VARCHAR(100) NOT NULL UNIQUE,\n  setting_value TEXT NULL,\n  value_type ENUM('string','number','boolean','json') NOT NULL DEFAULT 'string',\n  description VARCHAR(255) NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE inventory_logs (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  product_id INT NOT NULL,\n  user_id INT NULL,\n  type ENUM('import','export','adjust','order','return') NOT NULL,\n  quantity INT NOT NULL,\n  quantity_before INT NOT NULL DEFAULT 0,\n  quantity_after INT NOT NULL DEFAULT 0,\n  note VARCHAR(255) NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  deleted_at TIMESTAMP NULL,\n  CONSTRAINT fk_inventory_logs_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,\n  CONSTRAINT fk_inventory_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE INDEX idx_products_category_id ON products(category_id)",
+      "CREATE INDEX idx_products_status ON products(status)",
+      "CREATE INDEX idx_orders_user_id ON orders(user_id)",
+      "CREATE INDEX idx_orders_status ON orders(order_status)",
+      "CREATE INDEX idx_orders_payment_status ON orders(payment_status)",
+      "CREATE INDEX idx_inventory_logs_product_id ON inventory_logs(product_id)"
+];
+    for (const query of queries) {
+      await queryRunner.query(query);
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`SET FOREIGN_KEY_CHECKS = 0;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`inventory_logs\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`settings\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`banners\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`contacts\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`notifications\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`reviews\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`payments\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`order_items\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`orders\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`coupons\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`cart_items\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`carts\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`addresses\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`product_images\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`products\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`categories\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`users\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`roles\`;`);
-    await queryRunner.query(`SET FOREIGN_KEY_CHECKS = 1;`);
+    await queryRunner.query('DROP TABLE IF EXISTS inventory_logs');
+    await queryRunner.query('DROP TABLE IF EXISTS settings');
+    await queryRunner.query('DROP TABLE IF EXISTS banners');
+    await queryRunner.query('DROP TABLE IF EXISTS contacts');
+    await queryRunner.query('DROP TABLE IF EXISTS notifications');
+    await queryRunner.query('DROP TABLE IF EXISTS reviews');
+    await queryRunner.query('DROP TABLE IF EXISTS payments');
+    await queryRunner.query('DROP TABLE IF EXISTS order_items');
+    await queryRunner.query('DROP TABLE IF EXISTS orders');
+    await queryRunner.query('DROP TABLE IF EXISTS coupons');
+    await queryRunner.query('DROP TABLE IF EXISTS cart_items');
+    await queryRunner.query('DROP TABLE IF EXISTS carts');
+    await queryRunner.query('DROP TABLE IF EXISTS addresses');
+    await queryRunner.query('DROP TABLE IF EXISTS product_images');
+    await queryRunner.query('DROP TABLE IF EXISTS products');
+    await queryRunner.query('DROP TABLE IF EXISTS categories');
+    await queryRunner.query('DROP TABLE IF EXISTS users');
+    await queryRunner.query('DROP TABLE IF EXISTS roles');
   }
 }
