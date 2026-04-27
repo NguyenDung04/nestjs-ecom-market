@@ -1,271 +1,69 @@
-<div class="relative overflow-hidden rounded-[32px] border border-white/70 bg-white/95 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.08)] backdrop-blur sm:p-9">
-  <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-500 via-violet-500 to-sky-500"></div>
+<div class="w-full max-w-md">
+  <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-8">
+    <div class="text-center mb-8">
+      <a href="/" class="inline-flex items-center justify-center w-14 h-14 rounded-3xl bg-teal-600 text-white shadow-lg">
+        <i class="fa-solid fa-user-plus text-xl"></i>
+      </a>
 
-  <div class="mb-8">
-    <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-[24px] bg-gradient-to-br from-primary-500 to-violet-500 text-white shadow-lg shadow-primary-500/20">
-      <i class="fa-solid fa-user-plus text-2xl"></i>
-    </div>
+      <h1 class="mt-5 text-2xl font-extrabold text-slate-900">
+        Đăng ký tài khoản
+      </h1>
 
-    <div class="flex flex-wrap items-center gap-2">
-      <span class="rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">
-        Create Account
-      </span>
-      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-        User Registration
-      </span>
-    </div>
-
-    <h1 class="mt-4 text-3xl font-black tracking-tight text-slate-900">
-      Tạo tài khoản
-    </h1>
-
-    <p class="mt-3 text-sm leading-7 text-slate-500">
-      Thiết kế biểu mẫu đăng ký rõ ràng hơn để người dùng hoàn thành nhanh, giảm sai sót và hiểu ngay quyền truy cập mặc định sau khi tạo tài khoản.
-    </p>
-  </div>
-
-  <form id="registerForm" class="space-y-5">
-    <div>
-      <label class="mb-2 block text-sm font-semibold text-slate-700">
-        Tên đăng nhập
-      </label>
-
-      <div class="relative">
-        <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"></i>
-
-        <input
-          id="username"
-          name="username"
-          type="text"
-          required
-          autocomplete="username"
-          class="block w-full rounded-2xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
-          placeholder="nguyenvana"
-        />
-      </div>
-    </div>
-
-    <div>
-      <label class="mb-2 block text-sm font-semibold text-slate-700">
-        Email
-      </label>
-
-      <div class="relative">
-        <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"></i>
-
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          autocomplete="email"
-          class="block w-full rounded-2xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
-          placeholder="example@email.com"
-        />
-      </div>
-    </div>
-
-    <div class="grid gap-5 sm:grid-cols-2">
-      <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
-          Mật khẩu
-        </label>
-
-        <div class="relative">
-          <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"></i>
-
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            autocomplete="new-password"
-            class="block w-full rounded-2xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-12 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
-            placeholder="Tối thiểu 6 ký tự"
-          />
-
-          <button
-            type="button"
-            onclick="togglePassword('password', 'passwordEye')"
-            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700"
-          >
-            <i id="passwordEye" class="fa-regular fa-eye"></i>
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
-          Nhập lại mật khẩu
-        </label>
-
-        <div class="relative">
-          <i class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"></i>
-
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            required
-            autocomplete="new-password"
-            class="block w-full rounded-2xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-12 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100"
-            placeholder="Nhập lại mật khẩu"
-          />
-
-          <button
-            type="button"
-            onclick="togglePassword('confirmPassword', 'confirmPasswordEye')"
-            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700"
-          >
-            <i id="confirmPasswordEye" class="fa-regular fa-eye"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2">
-      <div class="rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
-          Security
-        </p>
-        <p class="mt-2 text-sm leading-6 text-emerald-800">
-          Mật khẩu nên có ít nhất 6 ký tự và kết hợp chữ, số để an toàn hơn.
-        </p>
-      </div>
-
-      <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-          Default Role
-        </p>
-        <p class="mt-2 text-sm leading-6 text-slate-600">
-          Sau khi đăng ký thành công, tài khoản mặc định có quyền
-          <span class="font-semibold text-slate-800">user</span>.
-        </p>
-      </div>
-    </div>
-
-    <button
-      id="registerButton"
-      type="submit"
-      class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition hover:-translate-y-0.5 hover:bg-primary-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-    >
-      <i class="fa-solid fa-user-plus"></i>
-      Đăng ký
-    </button>
-  </form>
-
-  <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-sm leading-6 text-slate-600">
-    <div class="flex gap-3">
-      <div class="mt-0.5 text-primary-600">
-        <i class="fa-solid fa-circle-info"></i>
-      </div>
-
-      <p>
-        Quyền admin sẽ không được cấp trực tiếp tại đây. Nếu cần quyền quản trị, tài khoản sẽ được cập nhật bởi quản trị viên hệ thống.
+      <p class="mt-2 text-sm text-slate-500">
+        Tạo tài khoản mới để bắt đầu mua sắm
       </p>
     </div>
-  </div>
 
-  <div class="mt-6 text-center text-sm text-slate-600">
-    Đã có tài khoản?
-    <a href="/auth/login" class="font-semibold text-primary-600 hover:text-primary-700">
-      Đăng nhập ngay
-    </a>
+    <form action="/register" method="POST" class="space-y-5">
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">
+          Họ và tên
+        </label>
+        <input
+          type="text"
+          name="fullName"
+          placeholder="Nguyễn Văn A"
+          class="w-full h-12 px-4 rounded-2xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
+          required
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">
+          Email
+        </label>
+        <input
+          type="email"
+          name="email"
+          placeholder="example@gmail.com"
+          class="w-full h-12 px-4 rounded-2xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
+          required
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">
+          Mật khẩu
+        </label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Tối thiểu 6 ký tự"
+          class="w-full h-12 px-4 rounded-2xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
+          required
+        >
+      </div>
+
+      <button type="submit" class="w-full h-12 rounded-2xl bg-teal-600 text-white font-bold hover:bg-teal-700 transition shadow-lg shadow-teal-600/20">
+        Tạo tài khoản
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-slate-500">
+      Đã có tài khoản?
+      <a href="/login" class="font-bold text-teal-600 hover:text-teal-700">
+        Đăng nhập
+      </a>
+    </p>
   </div>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const registerForm = document.getElementById('registerForm');
-    const registerButton = document.getElementById('registerButton');
-
-    registerForm.addEventListener('submit', async function (event) {
-      event.preventDefault();
-
-      const username = document.getElementById('username').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-
-      if (password !== confirmPassword) {
-        if (typeof showToast === 'function') {
-          showToast('Mật khẩu nhập lại không khớp', 'error');
-        } else {
-          alert('Mật khẩu nhập lại không khớp');
-        }
-
-        return;
-      }
-
-      registerButton.disabled = true;
-      registerButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đăng ký...';
-
-      try {
-        const response = await fetch('/api/auth/register', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-        });
-
-        const result = await response.json();
-
-        console.log('REGISTER_RESPONSE:', result);
-
-        if (!response.ok || result.success === false) {
-          const message = result.message || 'Đăng ký thất bại';
-
-          if (typeof showToast === 'function') {
-            showToast(message, 'error');
-          } else {
-            alert(message);
-          }
-
-          return;
-        }
-
-        if (typeof showToast === 'function') {
-          showToast(result.message || 'Đăng ký tài khoản thành công', 'success');
-        } else {
-          alert(result.message || 'Đăng ký tài khoản thành công');
-        }
-
-        setTimeout(function () {
-          window.location.href = '/auth/login';
-        }, 800);
-      } catch (error) {
-        console.error(error);
-
-        if (typeof showToast === 'function') {
-          showToast('Không thể kết nối tới máy chủ', 'error');
-        } else {
-          alert('Không thể kết nối tới máy chủ');
-        }
-      } finally {
-        registerButton.disabled = false;
-        registerButton.innerHTML = '<i class="fa-solid fa-user-plus"></i> Đăng ký';
-      }
-    });
-  });
-
-  function togglePassword(inputId, iconId) {
-    const input = document.getElementById(inputId);
-    const icon = document.getElementById(iconId);
-
-    if (input.type === 'password') {
-      input.type = 'text';
-      icon.classList.remove('fa-eye');
-      icon.classList.add('fa-eye-slash');
-    } else {
-      input.type = 'password';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
-    }
-  }
-</script>

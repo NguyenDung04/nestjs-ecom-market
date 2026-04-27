@@ -1,0 +1,191 @@
+<header class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+  <!-- Top bar -->
+  <div class="bg-teal-800 text-teal-100 text-xs hidden md:block">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
+      <div class="flex items-center gap-4">
+        <span><i class="fa-solid fa-phone mr-1"></i> 1900 xxxx</span>
+        <span class="opacity-40">|</span>
+        <span><i class="fa-solid fa-envelope mr-1"></i> support@example.com</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/orders" class="hover:text-white transition-colors"><i class="fa-solid fa-truck mr-1"></i> Theo dõi đơn hàng</a>
+        <span class="opacity-40">|</span>
+        <a href="/help" class="hover:text-white transition-colors"><i class="fa-solid fa-circle-question mr-1"></i> Trợ giúp</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main header -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 gap-4">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 flex-shrink-0">
+        <div class="w-9 h-9 bg-teal-500 rounded-lg flex items-center justify-center">
+          <i class="fa-solid fa-store text-white text-sm"></i>
+        </div>
+        <span class="text-xl font-bold text-teal-800 hidden sm:block">TealShop</span>
+      </a>
+
+      <!-- Search bar - desktop -->
+      <form action="/search" method="GET" class="hidden md:flex flex-1 max-w-xl">
+        <div class="relative w-full flex">
+          <input
+            type="text"
+            name="q"
+            placeholder="Tìm kiếm sản phẩm..."
+            class="w-full h-10 pl-4 pr-12 rounded-l-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-300 focus:bg-white transition-all"
+          >
+          <button type="submit" class="px-4 bg-teal-500 hover:bg-teal-600 text-white rounded-r-lg transition-colors">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Cart -->
+        <a href="/cart" class="relative flex items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-all group">
+          <i class="fa-solid fa-cart-shopping text-lg group-hover:scale-110 transition-transform"></i>
+          {{#if cartCount}}
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">{{cartCount}}</span>
+          {{/if}}
+          <span class="hidden sm:inline text-sm font-medium">Giỏ hàng</span>
+        </a>
+
+        {{#if currentUser}}
+        <!-- User dropdown -->
+        <div class="relative" id="userMenuDropdown">
+          <button
+            type="button"
+            class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-all"
+            onclick="toggleUserMenu()"
+          >
+            <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+              <i class="fa-solid fa-user text-teal-600 text-sm"></i>
+            </div>
+            <span class="hidden sm:inline text-sm font-medium max-w-[100px] truncate">{{currentUser.fullName}}</span>
+            <i class="fa-solid fa-chevron-down text-xs hidden sm:inline"></i>
+          </button>
+          <!-- Dropdown menu -->
+          <div id="userDropdown" class="hidden absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+            <div class="px-4 py-2 border-b border-gray-100">
+              <p class="text-sm font-semibold text-gray-800 truncate">{{currentUser.fullName}}</p>
+              <p class="text-xs text-gray-400 truncate">{{currentUser.email}}</p>
+            </div>
+            <a href="/account" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+              <i class="fa-solid fa-user-pen w-4 text-center"></i> Thông tin tài khoản
+            </a>
+            <a href="/orders" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+              <i class="fa-solid fa-box w-4 text-center"></i> Đơn hàng của tôi
+            </a>
+            <a href="/account/address" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+              <i class="fa-solid fa-location-dot w-4 text-center"></i> Sổ địa chỉ
+            </a>
+            <div class="border-t border-gray-100 mt-1 pt-1">
+              <button onclick="confirmLogout()" class="flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors w-full text-left">
+                <i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+        {{else}}
+        <!-- Auth buttons -->
+        <a href="/auth/login" class="flex items-center gap-1 px-3 py-2 rounded-lg text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-all text-sm font-medium">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span class="hidden sm:inline">Đăng nhập</span>
+        </a>
+        <a href="/auth/register" class="hidden sm:flex items-center gap-1 px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium transition-colors">
+          <i class="fa-solid fa-user-plus"></i>
+          Đăng ký
+        </a>
+        {{/if}}
+
+        <!-- Mobile menu toggle -->
+        <button
+          type="button"
+          class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors"
+          onclick="toggleMobileMenu()"
+        >
+          <i class="fa-solid fa-bars text-lg" id="mobileMenuIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile search -->
+    <form action="/search" method="GET" class="md:hidden pb-3">
+      <div class="relative flex">
+        <input
+          type="text"
+          name="q"
+          placeholder="Tìm kiếm sản phẩm..."
+          class="w-full h-10 pl-4 pr-12 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-300 focus:bg-white transition-all"
+        >
+        <button type="submit" class="absolute right-0 top-0 px-4 h-10 text-teal-500">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Desktop nav -->
+  <nav class="hidden md:block border-t border-gray-50 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ul class="flex items-center gap-1 h-11">
+        <li>
+          <a href="/" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-teal-600 bg-teal-50 transition-colors">
+            <i class="fa-solid fa-house text-xs"></i> Trang chủ
+          </a>
+        </li>
+        <li>
+          <a href="/products" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-teal-600 hover:bg-teal-50 transition-colors">
+            <i class="fa-solid fa-grid-2 text-xs"></i> Sản phẩm
+          </a>
+        </li>
+        <li>
+          <a href="/categories" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-teal-600 hover:bg-teal-50 transition-colors">
+            <i class="fa-solid fa-layer-group text-xs"></i> Danh mục
+          </a>
+        </li>
+        <li>
+          <a href="/promotions" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-teal-600 hover:bg-teal-50 transition-colors">
+            <i class="fa-solid fa-tags text-xs"></i> Khuyến mãi
+            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+          </a>
+        </li>
+        <li>
+          <a href="/contact" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-teal-600 hover:bg-teal-50 transition-colors">
+            <i class="fa-solid fa-headset text-xs"></i> Liên hệ
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mobile nav -->
+  <nav id="mobileMenu" class="hidden md:hidden border-t border-gray-100 bg-white">
+    <div class="px-4 py-3 space-y-1">
+      <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-teal-600 bg-teal-50">
+        <i class="fa-solid fa-house w-5 text-center"></i> Trang chủ
+      </a>
+      <a href="/products" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+        <i class="fa-solid fa-grid-2 w-5 text-center"></i> Sản phẩm
+      </a>
+      <a href="/categories" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+        <i class="fa-solid fa-layer-group w-5 text-center"></i> Danh mục
+      </a>
+      <a href="/promotions" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+        <i class="fa-solid fa-tags w-5 text-center"></i> Khuyến mãi
+      </a>
+      <a href="/contact" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors">
+        <i class="fa-solid fa-headset w-5 text-center"></i> Liên hệ
+      </a>
+      {{#unless currentUser}}
+      <div class="border-t border-gray-100 pt-2 mt-2 flex gap-2">
+        <a href="/auth/login" class="flex-1 text-center py-2.5 rounded-lg border border-teal-500 text-teal-600 text-sm font-medium hover:bg-teal-50 transition-colors">Đăng nhập</a>
+        <a href="/auth/register" class="flex-1 text-center py-2.5 rounded-lg bg-teal-500 text-white text-sm font-medium hover:bg-teal-600 transition-colors">Đăng ký</a>
+      </div>
+      {{/unless}}
+    </div>
+  </nav>
+</header>

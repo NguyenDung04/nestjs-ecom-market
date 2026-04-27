@@ -1,69 +1,19 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  {{> head title=title}}
+  {{> head}}
 </head>
 
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-  {{> toast}}
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  {{> client-header}}
 
-  <div class="relative flex min-h-screen flex-col overflow-hidden">
-    <div class="pointer-events-none absolute inset-0 -z-10">
-      <div class="absolute left-[-140px] top-[-80px] h-80 w-80 rounded-full bg-primary-100/60 blur-3xl"></div>
-      <div class="absolute right-[-120px] top-80 h-96 w-96 rounded-full bg-sky-100/55 blur-3xl"></div>
-      <div class="absolute bottom-[-120px] left-1/3 h-72 w-72 rounded-full bg-emerald-100/40 blur-3xl"></div>
-    </div>
+  <main class="min-h-[calc(100vh-160px)]">
+    {{{body}}}
+  </main>
 
-    {{> client-header}}
-
-    <main class="relative flex-1">
-      {{{body}}}
-    </main>
-
-    {{> client-footer}}
-  </div>
+  {{> client-footer}}
 
   {{> scripts}}
-
-  <script>
-    function toggleClientMobileMenu() {
-      const menu = document.getElementById('clientMobileMenu');
-      const icon = document.getElementById('clientMobileMenuIcon');
-
-      if (!menu) return;
-
-      menu.classList.toggle('hidden');
-
-      if (icon) {
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-xmark');
-      }
-    }
-
-    async function logoutClientLayout() {
-      try {
-        await fetch('/api/auth/logout', {
-          method: 'POST',
-          credentials: 'include',
-        });
-
-        if (typeof showToast === 'function') {
-          showToast('Đăng xuất thành công', 'success');
-        }
-
-        setTimeout(function () {
-          window.location.href = '/auth/login';
-        }, 500);
-      } catch (error) {
-        console.error(error);
-
-        if (typeof showToast === 'function') {
-          showToast('Đăng xuất thất bại', 'error');
-        } else {
-          alert('Đăng xuất thất bại');
-        }
-      }
-    }
-  </script>
+  {{> flash}}
 </body>
 </html>

@@ -6,38 +6,34 @@ export class WebAdminController {
   @Render('admin/dashboard')
   dashboardPage() {
     return {
-      title: 'Admin Dashboard',
-      pageTitle: 'Dashboard',
-      layout: 'layouts/admin',
-    };
-  }
-
-  @Get('users')
-  @Render('admin/users/index')
-  usersPage() {
-    return {
-      title: 'Quản lý người dùng',
-      pageTitle: 'Quản lý người dùng',
-      layout: 'layouts/admin',
-    };
-  }
-
-  @Get('categories')
-  @Render('admin/categories/index')
-  categoriesPage() {
-    return {
-      title: 'Quản lý danh mục',
-      pageTitle: 'Quản lý danh mục',
+      title: 'Dashboard',
       layout: 'layouts/admin',
     };
   }
 
   @Get('products')
-  @Render('admin/products/index')
+  @Render('admin/products')
   productsPage() {
     return {
       title: 'Quản lý sản phẩm',
-      pageTitle: 'Quản lý sản phẩm',
+      layout: 'layouts/admin',
+    };
+  }
+
+  @Get('categories')
+  @Render('admin/categories')
+  categoriesPage() {
+    return {
+      title: 'Quản lý danh mục',
+      layout: 'layouts/admin',
+    };
+  }
+
+  @Get('orders')
+  @Render('admin/orders')
+  ordersPage() {
+    return {
+      title: 'Quản lý đơn hàng',
       layout: 'layouts/admin',
     };
   }

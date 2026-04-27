@@ -1,0 +1,139 @@
+<!-- Flowbite JS -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.2.1/dist/flowbite.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // ===== Mobile Menu Toggle =====
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const icon = document.getElementById('mobileMenuIcon');
+    menu.classList.toggle('hidden');
+    if (menu.classList.contains('hidden')) {
+      icon.className = 'fa-solid fa-bars text-lg';
+    } else {
+      icon.className = 'fa-solid fa-xmark text-lg';
+    }
+  }
+
+  // ===== User Dropdown Toggle =====
+  function toggleUserMenu() {
+    const dropdown = document.getElementById('userDropdown');
+    if (!dropdown) return;
+    dropdown.classList.toggle('hidden');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function (e) {
+    const container = document.getElementById('userMenuDropdown');
+    const dropdown = document.getElementById('userDropdown');
+    if (container && dropdown && !container.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+
+  // ===== Add To Cart =====
+  async function addToCart(productId) {
+    try {
+      const response = await fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: productId, quantity: 1 })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Đã thêm vào giỏ hàng',
+          text: data.message || 'Sản phẩm đã được thêm thành công!',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2500,
+          timerProgressBar: true,
+          customClass: { popup: 'rounded-xl' }
+        });
+
+        // Update cart count badge
+        if (data.cartCount !== undefined) {
+          updateCartBadge(data.cartCount);
+        }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Không thể thêm',
+          text: data.message || 'Đã xảy ra lỗi, vui lòng thử lại.',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: { popup: 'rounded-xl' }
+        });
+
+        // Redirect to login if unauthorized
+        if (response.status === 401) {
+          setTimeout(function () {
+            window.location.href = '/auth/login';
+          }, 1500);
+        }
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi kết nối',
+        text: 'Không thể kết nối đến máy chủ. Vui lòng thử lại.',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: { popup: 'rounded-xl' }
+      });
+    }
+  }
+
+  // ===== Update Cart Badge =====
+  function updateCartBadge(count) {
+    const cartLinks = document.querySelectorAll('a[href="/cart"]');
+    cartLinks.forEach(function (link) {
+      let badge = link.querySelector('span.absolute');
+      if (count > 0) {
+        if (badge) {
+          badge.textContent = count;
+        } else {
+          badge = document.createElement('span');
+          badge.className = 'absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center';
+          badge.textContent = count;
+          link.classList.add('relative');
+          link.appendChild(badge);
+        }
+      } else {
+        if (badge) badge.remove();
+      }
+    });
+  }
+
+  // ===== Confirm Logout =====
+  function confirmLogout() {
+    Swal.fire({
+      icon: 'question',
+      title: 'Đăng xuất',
+      text: 'Bạn có chắc chắn muốn đăng xuất?',
+      showCancelButton: true,
+      confirmButtonText: 'Đăng xuất',
+      cancelButtonText: 'Huỷ',
+      confirmButtonColor: '#007a7a',
+      cancelButtonColor: '#6b7280',
+      customClass: { popup: 'rounded-xl' }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = '/auth/logout';
+      }
+    });
+  }
+</script>

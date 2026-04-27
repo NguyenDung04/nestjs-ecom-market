@@ -8,6 +8,9 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import databaseConfig from './config/database.config';
 import { winstonConfig } from './common/logger/winston.config';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
+
+import { WebModule } from './web/web.module';
+
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
 import { CategoriesModule } from './modules/categories/categories.module';
@@ -66,6 +69,8 @@ import { InventoryLogsModule } from './modules/inventory-logs/inventory-logs.mod
         logging: configService.get<boolean>('database.logging'),
       }),
     }),
+
+    WebModule,
 
     RolesModule,
     UsersModule,

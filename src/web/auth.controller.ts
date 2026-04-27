@@ -2,7 +2,7 @@ import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
 
 @Public()
-@Controller('auth')
+@Controller()
 export class WebAuthController {
   @Get('login')
   @Render('auth/login')
@@ -27,15 +27,6 @@ export class WebAuthController {
   forgotPasswordPage() {
     return {
       title: 'Quên mật khẩu',
-      layout: 'layouts/auth',
-    };
-  }
-
-  @Get('reset-password')
-  @Render('auth/reset-password')
-  resetPasswordPage() {
-    return {
-      title: 'Đặt lại mật khẩu',
       layout: 'layouts/auth',
     };
   }

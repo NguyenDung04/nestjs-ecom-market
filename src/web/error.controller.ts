@@ -9,7 +9,7 @@ export class WebErrorController {
   notFoundPage() {
     return {
       title: 'Không tìm thấy trang',
-      layout: 'layouts/client',
+      layout: 'layouts/error',
     };
   }
 
@@ -18,7 +18,7 @@ export class WebErrorController {
   serverErrorPage() {
     return {
       title: 'Lỗi hệ thống',
-      layout: 'layouts/client',
+      layout: 'layouts/error',
     };
   }
 }

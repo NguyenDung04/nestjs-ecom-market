@@ -10,6 +10,22 @@ export class WebClientController {
     return {
       title: 'Trang chủ',
       layout: 'layouts/client',
+      cartCount: 0,
+
+      currentUser: null,
+
+      categories: [],
+
+      newProducts: [],
+
+      bestSellingProducts: [],
+
+      saleProducts: [],
+
+      success: null,
+      error: null,
+      warning: null,
+      message: null,
     };
   }
 
