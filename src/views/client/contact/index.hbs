@@ -1,0 +1,30 @@
+<section class="mx-auto max-w-3xl px-4 py-8">
+  <h1 class="mb-6 text-3xl font-bold text-slate-900">{{title}}</h1>
+
+  {{> common/alert}}
+
+  <form method="POST" action="/contact" class="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
+    <div>
+      <label class="mb-1 block text-sm font-medium">Họ tên</label>
+      <input name="name" class="w-full rounded-xl border px-4 py-3" />
+    </div>
+
+    <div>
+      <label class="mb-1 block text-sm font-medium">Email</label>
+      <input name="email" type="email" class="w-full rounded-xl border px-4 py-3" />
+    </div>
+
+    <div>
+      <label class="mb-1 block text-sm font-medium">Nội dung</label>
+      <textarea name="message" rows="5" class="w-full rounded-xl border px-4 py-3"></textarea>
+    </div>
+
+    <button
+      type="submit"
+      class="rounded-xl px-5 py-3 font-semibold text-white"
+      style="background: var(--teal-600);"
+    >
+      Gửi liên hệ
+    </button>
+  </form>
+</section>

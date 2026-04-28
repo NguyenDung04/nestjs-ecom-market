@@ -1,0 +1,11 @@
+<section class="mx-auto max-w-7xl px-4 py-8">
+  <h1 class="mb-6 text-3xl font-bold text-slate-900">{{title}}</h1>
+
+  {{#if cartItems.length}}
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+      Có sản phẩm trong giỏ hàng.
+    </div>
+  {{else}}
+    {{> common/empty-state}}
+  {{/if}}
+</section>

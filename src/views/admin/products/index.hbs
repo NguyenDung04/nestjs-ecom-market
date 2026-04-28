@@ -1,0 +1,46 @@
+{{> admin/breadcrumb}}
+{{> common/alert}}
+
+<div class="mb-5 flex items-center justify-between">
+  <h2 class="text-2xl font-bold text-slate-900">Danh sách sản phẩm</h2>
+
+  <a
+    href="/admin/products/create"
+    class="rounded-xl px-4 py-2 text-sm font-semibold text-white"
+    style="background: var(--teal-600);"
+  >
+    Thêm sản phẩm
+  </a>
+</div>
+
+<div class="overflow-hidden rounded-2xl border bg-white shadow-sm">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="px-5 py-4">STT</th>
+        <th class="px-5 py-4">Tên sản phẩm</th>
+        <th class="px-5 py-4">Danh mục</th>
+        <th class="px-5 py-4">Giá</th>
+        <th class="px-5 py-4">Trạng thái</th>
+        <th class="px-5 py-4">Thao tác</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each products}}
+        <tr class="border-t">
+          <td class="px-5 py-4">{{inc @index}}</td>
+          <td class="px-5 py-4 font-semibold">{{this.name}}</td>
+          <td class="px-5 py-4">{{this.category}}</td>
+          <td class="px-5 py-4">{{formatCurrency this.price}}</td>
+          <td class="px-5 py-4">{{this.status}}</td>
+          <td class="px-5 py-4">
+            <a href="/admin/products/{{this.id}}/edit" class="font-semibold" style="color: var(--teal-600);">
+              Sửa
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

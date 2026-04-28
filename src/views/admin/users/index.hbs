@@ -1,0 +1,27 @@
+{{> admin/breadcrumb}}
+
+<div class="overflow-hidden rounded-2xl border bg-white shadow-sm">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="px-5 py-4">STT</th>
+        <th class="px-5 py-4">Họ tên</th>
+        <th class="px-5 py-4">Email</th>
+        <th class="px-5 py-4">Vai trò</th>
+        <th class="px-5 py-4">Trạng thái</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each users}}
+        <tr class="border-t">
+          <td class="px-5 py-4">{{inc @index}}</td>
+          <td class="px-5 py-4 font-semibold">{{this.name}}</td>
+          <td class="px-5 py-4">{{this.email}}</td>
+          <td class="px-5 py-4">{{this.role}}</td>
+          <td class="px-5 py-4">{{this.status}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

@@ -8,12 +8,13 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
-import { join } from 'path';
+import { existsSync, readdirSync, readFileSync } from 'fs';
+import { join, extname, basename } from 'path';
+
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import hbs from 'hbs';
-
+import hbs = require('hbs');
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
@@ -22,10 +23,6 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
  * =========================================================
  * DANH SÁCH ROUTE WEB KHÔNG ĐƯỢC GẮN PREFIX /api
  * =========================================================
- * Các route này là route render HBS, không phải REST API.
- * Nếu không exclude, khi setGlobalPrefix('api') thì:
- * /products sẽ thành /api/products
- * /login sẽ thành /api/login
  */
 const WEB_ROUTE_EXCLUDES = [
   {
@@ -33,33 +30,55 @@ const WEB_ROUTE_EXCLUDES = [
     method: RequestMethod.GET,
   },
 
+  /*
+   * Auth views
+   */
   {
-    path: 'login',
+    path: 'auth/login',
     method: RequestMethod.GET,
   },
   {
-    path: 'register',
+    path: 'auth/login',
+    method: RequestMethod.POST,
+  },
+  {
+    path: 'auth/register',
     method: RequestMethod.GET,
   },
   {
-    path: 'forgot-password',
+    path: 'auth/register',
+    method: RequestMethod.POST,
+  },
+  {
+    path: 'auth/forgot-password',
     method: RequestMethod.GET,
   },
   {
-    path: 'reset-password',
+    path: 'auth/forgot-password',
+    method: RequestMethod.POST,
+  },
+  {
+    path: 'auth/reset-password',
     method: RequestMethod.GET,
+  },
+  {
+    path: 'auth/reset-password',
+    method: RequestMethod.POST,
+  },
+  {
+    path: 'auth/logout',
+    method: RequestMethod.POST,
   },
 
+  /*
+   * Client views
+   */
   {
     path: 'products',
     method: RequestMethod.GET,
   },
   {
-    path: 'products/:id',
-    method: RequestMethod.GET,
-  },
-  {
-    path: 'profile',
+    path: 'products/:slug',
     method: RequestMethod.GET,
   },
   {
@@ -67,28 +86,69 @@ const WEB_ROUTE_EXCLUDES = [
     method: RequestMethod.GET,
   },
   {
+    path: 'cart/(.*)',
+    method: RequestMethod.ALL,
+  },
+  {
     path: 'checkout',
     method: RequestMethod.GET,
   },
+  {
+    path: 'checkout',
+    method: RequestMethod.POST,
+  },
+  {
+    path: 'orders',
+    method: RequestMethod.GET,
+  },
+  {
+    path: 'orders/:id',
+    method: RequestMethod.GET,
+  },
+  {
+    path: 'profile',
+    method: RequestMethod.GET,
+  },
+  {
+    path: 'profile',
+    method: RequestMethod.POST,
+  },
+  {
+    path: 'contact',
+    method: RequestMethod.GET,
+  },
+  {
+    path: 'contact',
+    method: RequestMethod.POST,
+  },
 
+  /*
+   * Admin views
+   */
   {
     path: 'admin',
     method: RequestMethod.GET,
   },
   {
     path: 'admin/(.*)',
+    method: RequestMethod.ALL,
+  },
+
+  /*
+   * Error views
+   */
+  {
+    path: 'error/404',
+    method: RequestMethod.GET,
+  },
+  {
+    path: 'error/500',
     method: RequestMethod.GET,
   },
 
-  {
-    path: 'errors/404',
-    method: RequestMethod.GET,
-  },
-  {
-    path: 'errors/500',
-    method: RequestMethod.GET,
-  },
-
+  /*
+   * Static / system
+   */
   {
     path: 'health',
     method: RequestMethod.GET,
@@ -103,9 +163,6 @@ const WEB_ROUTE_EXCLUDES = [
  * =========================================================
  * ĐỌC BOOLEAN TỪ ENV
  * =========================================================
- * Cho phép dùng:
- * ENABLE_SWAGGER=true
- * ENABLE_SWAGGER=false
  */
 function getBooleanConfig(
   configService: ConfigService,
@@ -142,60 +199,96 @@ function getNumberConfig(
 
 /*
  * =========================================================
+ * REGISTER PARTIAL CÓ NAMESPACE
+ * =========================================================
+ * Ví dụ:
+ * src/views/partials/client/header.hbs
+ * → dùng trong view: {{> client/header}}
+ *
+ * src/views/partials/admin/sidebar.hbs
+ * → dùng trong view: {{> admin/sidebar}}
+ */
+function registerNamespacedPartials(
+  partialsRootDir: string,
+  namespace: string,
+  logger: Logger,
+): void {
+  const targetDir = join(partialsRootDir, namespace);
+
+  if (!existsSync(targetDir)) {
+    logger.warn(`Không tìm thấy partial directory: ${targetDir}`);
+    return;
+  }
+
+  const files = readdirSync(targetDir).filter(
+    (file) => extname(file) === '.hbs',
+  );
+
+  for (const file of files) {
+    const partialName = `${namespace}/${basename(file, '.hbs')}`;
+    const partialPath = join(targetDir, file);
+    const partialContent = readFileSync(partialPath, 'utf8');
+
+    hbs.registerPartial(partialName, partialContent);
+  }
+
+  logger.log(`Đã register partial namespace: ${namespace}`);
+}
+
+/*
+ * =========================================================
  * CẤU HÌNH HBS VIEW ENGINE
  * =========================================================
  */
 function setupViewEngine(app: NestExpressApplication, logger: Logger): void {
-  const viewsDir = join(process.cwd(), 'src', 'views');
+  // dist/views
+  // Khi chạy Nest, __dirname thường là dist.
+  // Vì vậy dùng join(__dirname, 'views') là đúng nhất.
+
+  const viewsDir = join(__dirname, 'views');
   const publicDir = join(process.cwd(), 'public');
+  const partialsDir = join(viewsDir, 'partials');
 
   /*
-   * Static assets.
-   *
-   * Cách này cho phép gọi file tĩnh trực tiếp:
+   * Static assets:
    * /css/output.css
    * /js/app.js
    * /images/logo.png
-   *
-   * Nếu bạn dùng prefix: '/public/' thì trong HBS phải gọi:
-   * /public/css/output.css
    */
   app.useStaticAssets(publicDir);
 
   /*
-   * Cấu hình thư mục view chính.
+   * Cấu hình thư mục views.
    */
   app.setBaseViewsDir(viewsDir);
   app.setViewEngine('hbs');
 
   /*
-   * Đăng ký partial.
-   *
-   * Nếu bạn để partial trực tiếp:
-   * src/views/partials/head.hbs
-   *
-   * Thì dùng được:
-   * {{> head}}
+   * Register partials thường.
+   * Dùng được nếu partial nằm trực tiếp trong:
+   * src/views/partials/header.hbs
+   * → {{> header}}
    */
-  hbs.registerPartials(join(viewsDir, 'partials'));
+  if (existsSync(partialsDir)) {
+    hbs.registerPartials(partialsDir);
+  }
 
   /*
-   * Nếu bạn chia partial theo thư mục con:
-   * src/views/partials/shared/head.hbs
-   * src/views/partials/client/client-header.hbs
-   * src/views/partials/admin/admin-sidebar.hbs
-   *
-   * Thì các dòng dưới sẽ giúp HBS nhận thêm.
+   * Register partials có namespace.
+   * Dùng được:
+   * {{> client/header}}
+   * {{> client/footer}}
+   * {{> admin/sidebar}}
+   * {{> admin/header}}
+   * {{> common/alert}}
    */
-  hbs.registerPartials(join(viewsDir, 'partials', 'shared'));
-  hbs.registerPartials(join(viewsDir, 'partials', 'auth'));
-  hbs.registerPartials(join(viewsDir, 'partials', 'client'));
-  hbs.registerPartials(join(viewsDir, 'partials', 'admin'));
+  registerNamespacedPartials(partialsDir, 'client', logger);
+  registerNamespacedPartials(partialsDir, 'admin', logger);
+  registerNamespacedPartials(partialsDir, 'auth', logger);
+  registerNamespacedPartials(partialsDir, 'common', logger);
 
   /*
    * Helper so sánh bằng.
-   * Dùng trong HBS:
-   * {{#if (eq status "active")}} ... {{/if}}
    */
   hbs.registerHelper('eq', function (a: unknown, b: unknown) {
     return a === b;
@@ -203,17 +296,27 @@ function setupViewEngine(app: NestExpressApplication, logger: Logger): void {
 
   /*
    * Helper OR.
-   * Dùng trong HBS:
-   * {{#if (or user admin)}} ... {{/if}}
    */
   hbs.registerHelper('or', function (a: unknown, b: unknown) {
-    return a || b;
+    return Boolean(a || b);
+  });
+
+  /*
+   * Helper AND.
+   */
+  hbs.registerHelper('and', function (a: unknown, b: unknown) {
+    return Boolean(a && b);
+  });
+
+  /*
+   * Helper tăng index.
+   */
+  hbs.registerHelper('inc', function (value: unknown) {
+    return Number(value || 0) + 1;
   });
 
   /*
    * Helper chuyển object sang JSON.
-   * Dùng khi cần đẩy data từ server sang JS phía client:
-   * const product = {{{json product}}};
    */
   hbs.registerHelper('json', function (context: unknown) {
     return JSON.stringify(context);
@@ -221,8 +324,6 @@ function setupViewEngine(app: NestExpressApplication, logger: Logger): void {
 
   /*
    * Helper format tiền Việt Nam.
-   * Dùng:
-   * {{formatCurrency price}}
    */
   hbs.registerHelper('formatCurrency', function (value: unknown) {
     const numberValue = Number(value || 0);
@@ -236,16 +337,53 @@ function setupViewEngine(app: NestExpressApplication, logger: Logger): void {
 
   /*
    * Helper format ngày.
-   * Dùng:
-   * {{formatDate createdAt}}
    */
   hbs.registerHelper('formatDate', function (value: unknown) {
-    if (!value) return '';
+    if (!value) {
+      return '';
+    }
+
+    const date = new Date(value as string);
+
+    if (Number.isNaN(date.getTime())) {
+      return '';
+    }
 
     return new Intl.DateTimeFormat('vi-VN', {
       dateStyle: 'medium',
       timeStyle: 'short',
-    }).format(new Date(value as string));
+    }).format(date);
+  });
+
+  /*
+   * Helper trạng thái đơn hàng.
+   */
+  hbs.registerHelper('orderStatusLabel', function (status: string) {
+    const labels: Record<string, string> = {
+      pending: 'Chờ xác nhận',
+      confirmed: 'Đã xác nhận',
+      preparing: 'Đang chuẩn bị',
+      shipping: 'Đang giao hàng',
+      completed: 'Hoàn tất',
+      cancelled: 'Đã hủy',
+      returned: 'Hoàn trả',
+    };
+
+    return labels[status] || status;
+  });
+
+  /*
+   * Helper trạng thái thanh toán.
+   */
+  hbs.registerHelper('paymentStatusLabel', function (status: string) {
+    const labels: Record<string, string> = {
+      unpaid: 'Chưa thanh toán',
+      paid: 'Đã thanh toán',
+      failed: 'Thanh toán thất bại',
+      refunded: 'Đã hoàn tiền',
+    };
+
+    return labels[status] || status;
   });
 
   logger.log(`Public directory: ${publicDir}`);
@@ -325,9 +463,7 @@ async function bootstrap() {
   );
 
   const enableSwagger = getBooleanConfig(configService, 'ENABLE_SWAGGER', true);
-
   const enableHelmet = getBooleanConfig(configService, 'ENABLE_HELMET', true);
-
   const enableCors = getBooleanConfig(configService, 'ENABLE_CORS', true);
 
   const enableCompression = getBooleanConfig(
@@ -340,7 +476,6 @@ async function bootstrap() {
    * =========================================================
    * 4. TRUST PROXY
    * =========================================================
-   * Cần thiết khi deploy sau Nginx, Proxy, Load Balancer.
    */
   app.set('trust proxy', 1);
 
@@ -359,7 +494,6 @@ async function bootstrap() {
    * =========================================================
    * 6. COMPRESSION
    * =========================================================
-   * Nén response HTML, CSS, JS, JSON.
    */
   if (enableCompression) {
     app.use(compression());
@@ -370,8 +504,6 @@ async function bootstrap() {
    * =========================================================
    * 7. HELMET
    * =========================================================
-   * Ở development tắt CSP để tránh lỗi CDN Tailwind, Flowbite,
-   * Font Awesome, SweetAlert2.
    */
   if (enableHelmet) {
     app.use(
@@ -403,10 +535,6 @@ async function bootstrap() {
 
     app.enableCors({
       origin: (origin, callback) => {
-        /*
-         * Cho phép request không có origin:
-         * Postman, mobile app, server-to-server.
-         */
         if (!origin) {
           return callback(null, true);
         }
@@ -440,8 +568,6 @@ async function bootstrap() {
    * =========================================================
    * 9. GLOBAL API PREFIX
    * =========================================================
-   * Chỉ API mới nên đi qua /api.
-   * Route web render HBS được exclude.
    */
   if (enableApiPrefix) {
     app.setGlobalPrefix(apiPrefix, {
@@ -483,11 +609,8 @@ async function bootstrap() {
    * =========================================================
    *
    * Lưu ý:
-   * Nếu TransformResponseInterceptor đang wrap cả dữ liệu render HBS,
-   * ví dụ biến { title, layout } bị đổi thành { success, data },
-   * thì view sẽ không nhận được title/layout.
-   *
-   * Khi đó cần sửa interceptor để bỏ qua request HTML.
+   * Nếu view bị mất layout/title/data, hãy sửa TransformResponseInterceptor
+   * để bỏ qua request HTML.
    */
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
@@ -502,8 +625,6 @@ async function bootstrap() {
    * =========================================================
    * 14. CSRF TOKEN TẠM THỜI CHO VIEW
    * =========================================================
-   * Hiện tại chỉ set rỗng để form không lỗi.
-   * Sau này khi bật csrf-csrf thì thay bằng token thật.
    */
   app.use((req: any, res: any, next: () => void) => {
     res.locals.csrfToken = '';

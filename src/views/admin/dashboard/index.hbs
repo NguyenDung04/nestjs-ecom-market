@@ -1,0 +1,32 @@
+{{> admin/breadcrumb}}
+
+<div class="grid gap-5 md:grid-cols-4">
+  <div class="rounded-2xl bg-white p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Doanh thu</p>
+    <h2 class="mt-2 text-2xl font-bold text-slate-900">
+      {{formatCurrency stats.revenue}}
+    </h2>
+  </div>
+
+  <div class="rounded-2xl bg-white p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Đơn hàng</p>
+    <h2 class="mt-2 text-2xl font-bold text-slate-900">{{stats.orders}}</h2>
+  </div>
+
+  <div class="rounded-2xl bg-white p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Sản phẩm</p>
+    <h2 class="mt-2 text-2xl font-bold text-slate-900">{{stats.products}}</h2>
+  </div>
+
+  <div class="rounded-2xl bg-white p-5 shadow-sm">
+    <p class="text-sm text-slate-500">Người dùng</p>
+    <h2 class="mt-2 text-2xl font-bold text-slate-900">{{stats.users}}</h2>
+  </div>
+</div>
+
+<div class="mt-6 rounded-2xl bg-white p-6 shadow-sm">
+  <h2 class="text-xl font-bold text-slate-900">Dashboard Admin</h2>
+  <p class="mt-2 text-slate-500">
+    Đây là trang quản trị dùng layout admin, sidebar admin và header admin.
+  </p>
+</div>

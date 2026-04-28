@@ -1,0 +1,11 @@
+<section class="mx-auto max-w-5xl px-4 py-8">
+  <h1 class="mb-6 text-3xl font-bold text-slate-900">
+    Chi tiết đơn hàng {{order.code}}
+  </h1>
+
+  <div class="rounded-2xl bg-white p-6 shadow-sm">
+    <p>Khách hàng: {{order.customerName}}</p>
+    <p>Tổng tiền: {{formatCurrency order.total}}</p>
+    <p>Trạng thái: {{orderStatusLabel order.status}}</p>
+  </div>
+</section>

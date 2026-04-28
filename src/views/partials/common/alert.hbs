@@ -1,0 +1,19 @@
+{{#if success}}
+  <div class="mb-4 rounded-xl bg-green-50 p-4 text-sm font-medium text-green-700">
+    {{success}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="mb-4 rounded-xl bg-red-50 p-4 text-sm font-medium text-red-700">
+    {{error}}
+  </div>
+{{/if}}
+
+{{#if errors}}
+  <div class="mb-4 rounded-xl bg-red-50 p-4 text-sm font-medium text-red-700">
+    {{#each errors}}
+      <div>{{this}}</div>
+    {{/each}}
+  </div>
+{{/if}}

@@ -1,69 +1,61 @@
-<div class="w-full max-w-md">
-  <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-8">
-    <div class="text-center mb-8">
-      <a href="/" class="inline-flex items-center justify-center w-14 h-14 rounded-3xl bg-teal-600 text-white shadow-lg">
-        <i class="fa-solid fa-user-plus text-xl"></i>
-      </a>
+<div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
+  <h1 class="text-2xl font-bold text-slate-900">Đăng ký</h1>
+  <p class="mt-1 text-sm text-slate-500">Tạo tài khoản khách hàng mới.</p>
 
-      <h1 class="mt-5 text-2xl font-extrabold text-slate-900">
-        Đăng ký tài khoản
-      </h1>
+  {{> common/alert}}
 
-      <p class="mt-2 text-sm text-slate-500">
-        Tạo tài khoản mới để bắt đầu mua sắm
-      </p>
+  <form method="POST" action="/auth/register" class="mt-6 space-y-4">
+    <div>
+      <label class="mb-1 block text-sm font-medium">Họ tên</label>
+      <input
+        name="name"
+        class="w-full rounded-xl border px-4 py-3"
+        placeholder="Nguyễn Văn A"
+      />
     </div>
 
-    <form action="/register" method="POST" class="space-y-5">
-      <div>
-        <label class="block text-sm font-bold text-slate-700 mb-2">
-          Họ và tên
-        </label>
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Nguyễn Văn A"
-          class="w-full h-12 px-4 rounded-2xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
-          required
-        >
-      </div>
+    <div>
+      <label class="mb-1 block text-sm font-medium">Email</label>
+      <input
+        name="email"
+        type="email"
+        class="w-full rounded-xl border px-4 py-3"
+        placeholder="email@example.com"
+      />
+    </div>
 
-      <div>
-        <label class="block text-sm font-bold text-slate-700 mb-2">
-          Email
-        </label>
-        <input
-          type="email"
-          name="email"
-          placeholder="example@gmail.com"
-          class="w-full h-12 px-4 rounded-2xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
-          required
-        >
-      </div>
+    <div>
+      <label class="mb-1 block text-sm font-medium">Số điện thoại</label>
+      <input
+        name="phone"
+        class="w-full rounded-xl border px-4 py-3"
+        placeholder="0900000000"
+      />
+    </div>
 
-      <div>
-        <label class="block text-sm font-bold text-slate-700 mb-2">
-          Mật khẩu
-        </label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Tối thiểu 6 ký tự"
-          class="w-full h-12 px-4 rounded-2xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
-          required
-        >
-      </div>
+    <div>
+      <label class="mb-1 block text-sm font-medium">Mật khẩu</label>
+      <input
+        name="password"
+        type="password"
+        class="w-full rounded-xl border px-4 py-3"
+        placeholder="••••••••"
+      />
+    </div>
 
-      <button type="submit" class="w-full h-12 rounded-2xl bg-teal-600 text-white font-bold hover:bg-teal-700 transition shadow-lg shadow-teal-600/20">
-        Tạo tài khoản
-      </button>
-    </form>
+    <button
+      type="submit"
+      class="w-full rounded-xl px-4 py-3 font-semibold text-white"
+      style="background: var(--teal-600);"
+    >
+      Tạo tài khoản
+    </button>
+  </form>
 
-    <p class="mt-6 text-center text-sm text-slate-500">
-      Đã có tài khoản?
-      <a href="/login" class="font-bold text-teal-600 hover:text-teal-700">
-        Đăng nhập
-      </a>
-    </p>
+  <div class="mt-5 text-center text-sm">
+    Đã có tài khoản?
+    <a href="/auth/login" class="font-semibold" style="color: var(--teal-600);">
+      Đăng nhập
+    </a>
   </div>
 </div>

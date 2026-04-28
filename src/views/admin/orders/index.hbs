@@ -1,0 +1,31 @@
+{{> admin/breadcrumb}}
+
+<div class="overflow-hidden rounded-2xl border bg-white shadow-sm">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="px-5 py-4">Mã đơn</th>
+        <th class="px-5 py-4">Khách hàng</th>
+        <th class="px-5 py-4">Tổng tiền</th>
+        <th class="px-5 py-4">Trạng thái</th>
+        <th class="px-5 py-4">Thao tác</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each orders}}
+        <tr class="border-t">
+          <td class="px-5 py-4 font-semibold">{{this.code}}</td>
+          <td class="px-5 py-4">{{this.customerName}}</td>
+          <td class="px-5 py-4">{{formatCurrency this.total}}</td>
+          <td class="px-5 py-4">{{orderStatusLabel this.status}}</td>
+          <td class="px-5 py-4">
+            <a href="/admin/orders/{{this.id}}" class="font-semibold" style="color: var(--teal-600);">
+              Chi tiết
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
