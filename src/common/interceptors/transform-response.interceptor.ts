@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -20,8 +21,43 @@ export class TransformResponseInterceptor<T>
     const response = httpContext.getResponse();
     const request = httpContext.getRequest();
 
+    const accept = request.headers?.accept || '';
+    const originalUrl = request.originalUrl || request.url || '';
+    const path = request.path || originalUrl;
+
+    const isWebRoute =
+      path === '/' ||
+      path.startsWith('/auth') ||
+      path.startsWith('/admin') ||
+      path.startsWith('/products') ||
+      path.startsWith('/cart') ||
+      path.startsWith('/checkout') ||
+      path.startsWith('/orders') ||
+      path.startsWith('/profile') ||
+      path.startsWith('/contact') ||
+      path.startsWith('/error');
+
+    const isHtmlRequest = accept.includes('text/html');
+
+    if (isHtmlRequest || isWebRoute) {
+      return next.handle();
+    }
+
     return next.handle().pipe(
       map((originalData) => {
+        /*
+         * Bảo vệ lần 2:
+         * Nếu data trả về có layout thì chắc chắn là dữ liệu render view HBS.
+         * Không được bọc response kiểu API.
+         */
+        if (
+          originalData &&
+          typeof originalData === 'object' &&
+          'layout' in (originalData as Record<string, unknown>)
+        ) {
+          return originalData;
+        }
+
         if (
           originalData &&
           typeof originalData === 'object' &&

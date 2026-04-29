@@ -1,0 +1,46 @@
+<!-- ========== HEADER ========== -->
+<header
+    class="relative z-10 border-b"
+    style="
+        border-color: rgba(0, 122, 122, 0.08);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+    "
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <a
+                href="/"
+                class="flex items-center gap-2.5 group"
+                aria-label="Về trang chủ"
+            >
+                <div
+                    class="w-9 h-9 rounded-lg flex items-center justify-center"
+                    style="background: var(--teal-500)"
+                >
+                    <i class="fa-solid fa-bag-shopping text-white text-sm"></i>
+                </div>
+                <span
+                    class="text-xl font-bold tracking-tight"
+                    style="color: var(--teal-800)"
+                    >{{siteShortName}} <span style="color: var(--teal-500)"
+                        >Market</span
+                    >
+                  </span
+                >
+            </a>
+
+            <!-- Nav phải -->
+            <nav class="flex items-center gap-2 sm:gap-3">
+                <a
+                    href="/"
+                    class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
+                >
+                    <i class="fa-solid fa-house text-xs"></i>
+                    Trang chủ
+                </a>
+            </nav>
+        </div>
+    </div>
+</header>

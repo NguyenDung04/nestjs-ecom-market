@@ -1,17 +1,13 @@
-import { Controller, Get, Param, Post, Render } from '@nestjs/common';
-import { AdminViewService } from './admin-view.service';
+import { Controller, Get, Post, Render } from '@nestjs/common';
 
 @Controller('admin')
 export class AdminViewController {
-  constructor(private readonly adminViewService: AdminViewService) {}
-
   @Get()
   @Render('admin/dashboard/index')
   adminHome() {
     return {
       layout: 'layouts/admin',
       title: 'Dashboard',
-      ...this.adminViewService.getDashboard(),
     };
   }
 
@@ -21,17 +17,15 @@ export class AdminViewController {
     return {
       layout: 'layouts/admin',
       title: 'Dashboard',
-      ...this.adminViewService.getDashboard(),
     };
   }
 
   @Get('products')
   @Render('admin/products/index')
-  products() {
+  productsView() {
     return {
       layout: 'layouts/admin',
       title: 'Quản lý sản phẩm',
-      products: this.adminViewService.getProducts(),
     };
   }
 
@@ -42,7 +36,6 @@ export class AdminViewController {
       layout: 'layouts/admin',
       title: 'Thêm sản phẩm',
       action: '/admin/products/create',
-      product: {},
     };
   }
 
@@ -55,33 +48,6 @@ export class AdminViewController {
       action: '/admin/products/create',
       product: {},
       success: 'Thêm sản phẩm mẫu thành công.',
-    };
-  }
-
-  @Get('products/:id/edit')
-  @Render('admin/products/form')
-  editProduct(@Param('id') id: string) {
-    const product = this.adminViewService.getProductById(Number(id));
-
-    return {
-      layout: 'layouts/admin',
-      title: 'Sửa sản phẩm',
-      action: `/admin/products/${id}/edit`,
-      product,
-    };
-  }
-
-  @Post('products/:id/edit')
-  @Render('admin/products/form')
-  updateProduct(@Param('id') id: string) {
-    const product = this.adminViewService.getProductById(Number(id));
-
-    return {
-      layout: 'layouts/admin',
-      title: 'Sửa sản phẩm',
-      action: `/admin/products/${id}/edit`,
-      product,
-      success: 'Cập nhật sản phẩm mẫu thành công.',
     };
   }
 
@@ -105,33 +71,19 @@ export class AdminViewController {
 
   @Get('orders')
   @Render('admin/orders/index')
-  orders() {
+  ordersView() {
     return {
       layout: 'layouts/admin',
       title: 'Quản lý đơn hàng',
-      orders: this.adminViewService.getOrders(),
-    };
-  }
-
-  @Get('orders/:id')
-  @Render('admin/orders/detail')
-  orderDetail(@Param('id') id: string) {
-    const order = this.adminViewService.getOrderById(Number(id));
-
-    return {
-      layout: 'layouts/admin',
-      title: 'Chi tiết đơn hàng',
-      order,
     };
   }
 
   @Get('users')
   @Render('admin/users/index')
-  users() {
+  usersView() {
     return {
       layout: 'layouts/admin',
       title: 'Quản lý người dùng',
-      users: this.adminViewService.getUsers(),
     };
   }
 }
