@@ -1,6 +1,9 @@
-import { Controller, Get, Post, Render } from '@nestjs/common';
+import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
+import { WebAuthGuard } from './guards/web-auth.guard';
+import { WebAdminGuard } from './guards/web-admin.guard';
 
 @Controller('admin')
+@UseGuards(WebAuthGuard, WebAdminGuard)
 export class AdminViewController {
   @Get()
   @Render('admin/dashboard/index')

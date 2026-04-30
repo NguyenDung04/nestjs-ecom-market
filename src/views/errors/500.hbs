@@ -1,15 +1,478 @@
-<section class="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-  <div class="text-center">
-    <h1 class="text-7xl font-bold text-red-600">500</h1>
-    <p class="mt-4 text-xl font-semibold text-slate-800">Lỗi hệ thống</p>
-    <p class="mt-2 text-slate-500">Đã có lỗi xảy ra. Vui lòng thử lại sau.</p>
-
-    <a
-      href="/"
-      class="mt-6 inline-block rounded-xl px-5 py-3 font-semibold text-white"
-      style="background: var(--teal-600);"
+<section class="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <div
+        class="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.08fr_0.92fr]"
     >
-      Về trang chủ
-    </a>
-  </div>
+        <div class="soft-card rounded-[2rem] p-6 sm:p-8 lg:p-10">
+            <div
+                class="mb-5 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700"
+            >
+                <span
+                    class="pulse-dot h-2.5 w-2.5 rounded-full bg-orange-500"
+                ></span>
+                Sự cố máy chủ tạm thời
+            </div>
+
+            <p
+                class="gradient-error text-7xl font-black leading-none tracking-normal sm:text-8xl lg:text-9xl"
+            >
+                {{statusCode}}
+            </p>
+
+            <h1
+                class="mt-4 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl"
+            >
+                {{errorTitle}}
+            </h1>
+
+            <p
+                class="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg"
+            >
+                {{errorDescription}}
+            </p>
+
+            <div
+                id="notificationCard"
+                class="mt-6 rounded-3xl border border-teal-100 bg-cyan-50 p-4 text-sm leading-6 text-[var(--teal-800)]"
+            ></div>
+
+            <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <button
+                    id="retryButton"
+                    type="button"
+                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl bg-teal-brand px-5 py-3 text-sm font-bold text-white shadow-lg shadow-teal-900/15 transition"
+                >
+                    <i class="fa-solid fa-rotate-right mr-2"></i>
+                    <span>Thử lại</span>
+                </button>
+
+                <button
+                    id="homeButton"
+                    type="button"
+                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl border border-teal-brand bg-white px-5 py-3 text-sm font-bold text-[var(--teal-700)] transition hover:bg-cyan-50"
+                >
+                    <i class="fa-solid fa-house mr-2"></i>
+                    Về trang chủ
+                </button>
+
+                <button
+                    id="backButton"
+                    type="button"
+                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-[var(--teal-500)] hover:text-[var(--teal-700)]"
+                >
+                    <i class="fa-solid fa-arrow-left mr-2"></i>
+                    Quay lại trang trước
+                </button>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div
+                class="float-soft mx-auto max-w-md rounded-[2.2rem] border border-teal-100 bg-white p-7 shadow-2xl shadow-teal-900/10"
+            >
+                <div
+                    class="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-cyan-50 text-[var(--teal-500)] sm:h-40 sm:w-40"
+                >
+                    <i class="fa-solid fa-server text-6xl sm:text-7xl"></i>
+                </div>
+
+                <div class="mt-7">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <p class="font-bold text-slate-950">
+                                Trạng thái hệ thống
+                            </p>
+
+                            <p class="text-sm text-slate-500">
+                                Thông tin mô phỏng trong giao diện lỗi.
+                            </p>
+                        </div>
+
+                        <i
+                            class="fa-solid fa-screwdriver-wrench text-orange-500"
+                        ></i>
+                    </div>
+
+                    <div
+                        id="systemStatusGrid"
+                        class="grid gap-3 sm:grid-cols-2"
+                    ></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<section class="px-4 pb-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+        <div class="mb-5">
+            <p
+                class="text-sm font-bold uppercase tracking-[0.18em] text-[var(--teal-600)]"
+            >
+                Nguyên nhân có thể xảy ra
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">
+                Sự cố thường chỉ là tạm thời
+            </h2>
+        </div>
+
+        <div
+            id="reasonGrid"
+            class="grid gap-4 md:grid-cols-2 lg:grid-cols-5"
+        ></div>
+    </div>
+</section>
+
+<section class="px-4 pb-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+        <div class="mb-5">
+            <p
+                class="text-sm font-bold uppercase tracking-[0.18em] text-[var(--teal-600)]"
+            >
+                Gợi ý hành động
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">
+                Bạn có thể tiếp tục bằng các lối tắt này
+            </h2>
+        </div>
+
+        <div
+            id="quickLinksGrid"
+            class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        ></div>
+    </div>
+</section>
+
+<section class="px-4 pb-14 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+        <div
+            class="rounded-[2rem] border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 lg:flex lg:items-center lg:justify-between lg:gap-8 lg:p-8"
+        >
+            <div class="flex gap-4">
+                <span
+                    class="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 px-4 py-3 text-[var(--teal-600)]"
+                >
+                    <i class="fa-solid fa-headset text-xl"></i>
+                </span>
+
+                <div>
+                    <h2 class="text-xl font-bold tracking-tight text-slate-950">
+                        Nếu sự cố tiếp tục xảy ra
+                    </h2>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        Vui lòng liên hệ bộ phận hỗ trợ để được kiểm tra.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-5 lg:mt-0">
+                <button
+                    id="supportButton"
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--teal-700)]"
+                >
+                    <i class="fa-regular fa-envelope mr-2"></i>
+                    Liên hệ hỗ trợ
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const systemNotificationDemo = {
+        title: "Hệ thống đang gặp sự cố",
+        message: "Một số chức năng có thể tạm thời không ổn định.",
+    };
+
+    const quickLinks = [
+        { label: "Trang chủ", href: "/", icon: "fa-house" },
+        { label: "Sản phẩm", href: "/products", icon: "fa-box" },
+        { label: "Danh mục", href: "/categories", icon: "fa-layer-group" },
+        { label: "Liên hệ", href: "/contact", icon: "fa-headset" },
+    ];
+
+    const issueReasons = [
+        {
+            text: "Máy chủ đang quá tải tạm thời.",
+            icon: "fa-gauge-high",
+        },
+        {
+            text: "Hệ thống đang bảo trì hoặc cập nhật.",
+            icon: "fa-screwdriver-wrench",
+        },
+        {
+            text: "Kết nối dữ liệu tạm thời không ổn định.",
+            icon: "fa-database",
+        },
+        {
+            text: "Có lỗi xử lý yêu cầu ngoài ý muốn.",
+            icon: "fa-triangle-exclamation",
+        },
+        {
+            text: "Một service phụ trợ đang phản hồi chậm.",
+            icon: "fa-clock-rotate-left",
+        },
+    ];
+
+    const systemStatusDemo = [
+        {
+            label: "API",
+            value: "Đang kiểm tra",
+            tone: "checking",
+            icon: "fa-code-branch",
+        },
+        {
+            label: "Database",
+            value: "Không ổn định",
+            tone: "warning",
+            icon: "fa-database",
+        },
+        {
+            label: "Thanh toán",
+            value: "Bình thường",
+            tone: "healthy",
+            icon: "fa-credit-card",
+        },
+        {
+            label: "Đơn hàng",
+            value: "Đang khôi phục",
+            tone: "recovering",
+            icon: "fa-boxes-packing",
+        },
+    ];
+
+    function showRedirectToast(message) {
+        Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: "info",
+            title: message,
+            showConfirmButton: false,
+            timer: 1200,
+            timerProgressBar: true,
+        });
+    }
+
+    function redirectTo(href, message) {
+        showRedirectToast(message || "Đang chuyển hướng");
+
+        window.setTimeout(() => {
+            window.location.href = href;
+        }, 700);
+    }
+
+    function renderNotification() {
+        const container = document.getElementById("notificationCard");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="flex gap-3">
+                <span class="mt-1 text-[var(--teal-600)]">
+                    <i class="fa-solid fa-circle-info"></i>
+                </span>
+
+                <div>
+                    <p class="font-bold">${systemNotificationDemo.title}</p>
+                    <p class="text-slate-600">${systemNotificationDemo.message}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function getStatusClasses(tone) {
+        if (tone === "healthy") {
+            return "border-emerald-100 bg-emerald-50 text-emerald-700";
+        }
+
+        if (tone === "warning") {
+            return "border-orange-100 bg-orange-50 text-orange-700";
+        }
+
+        if (tone === "recovering") {
+            return "border-teal-100 bg-cyan-50 text-[var(--teal-700)]";
+        }
+
+        return "border-slate-200 bg-slate-50 text-slate-700";
+    }
+
+    function renderSystemStatus() {
+        const container = document.getElementById("systemStatusGrid");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = systemStatusDemo
+            .map(
+                (item) => `
+                    <div class="rounded-2xl border p-4 ${getStatusClasses(item.tone)}">
+                        <div class="mb-3 flex items-center justify-between gap-3">
+                            <span class="font-bold">${item.label}</span>
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+
+                        <p class="text-sm font-semibold">${item.value}</p>
+                    </div>
+                `,
+            )
+            .join("");
+    }
+
+    function renderReasons() {
+        const container = document.getElementById("reasonGrid");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = issueReasons
+            .map(
+                (item) => `
+                    <div class="rounded-3xl border border-slate-200 bg-white p-5">
+                        <span class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-orange-500">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </span>
+
+                        <p class="text-sm font-semibold leading-6 text-slate-700">
+                            ${item.text}
+                        </p>
+                    </div>
+                `,
+            )
+            .join("");
+    }
+
+    function renderQuickLinks() {
+        const container = document.getElementById("quickLinksGrid");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = quickLinks
+            .map(
+                (item) => `
+                    <a href="${item.href}" class="lift-card group rounded-3xl border border-slate-200 bg-white p-5">
+                        <span class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 text-[var(--teal-600)] transition group-hover:bg-[var(--teal-500)] group-hover:text-white">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </span>
+
+                        <span class="block font-bold text-slate-950">
+                            ${item.label}
+                        </span>
+
+                        <span class="mt-1 block text-sm text-slate-500">
+                            ${item.href}
+                        </span>
+                    </a>
+                `,
+            )
+            .join("");
+    }
+
+    function setRetryLoading(isLoading) {
+        const retryButton = document.getElementById("retryButton");
+
+        if (!retryButton) {
+            return;
+        }
+
+        retryButton.disabled = isLoading;
+        retryButton.classList.toggle("opacity-75", isLoading);
+
+        retryButton.innerHTML = isLoading
+            ? '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Đang thử lại...</span>'
+            : '<i class="fa-solid fa-rotate-right mr-2"></i><span>Thử lại</span>';
+    }
+
+    const retryButton = document.getElementById("retryButton");
+
+    if (retryButton) {
+        retryButton.addEventListener("click", () => {
+            setRetryLoading(true);
+
+            window.setTimeout(() => {
+                window.location.reload();
+            }, 700);
+        });
+    }
+
+    const homeButton = document.getElementById("homeButton");
+
+    if (homeButton) {
+        homeButton.addEventListener("click", () => {
+            Swal.fire({
+                icon: "success",
+                title: "Quay về trang chủ",
+                text: "Hệ thống sẽ chuyển bạn về trang chủ.",
+                confirmButtonColor: "#007a7a",
+                timer: 1200,
+                showConfirmButton: false,
+            });
+
+            window.setTimeout(() => {
+                window.location.href = "/";
+            }, 900);
+        });
+    }
+
+    const backButton = document.getElementById("backButton");
+
+    if (backButton) {
+        backButton.addEventListener("click", () => {
+            if (document.referrer) {
+                history.back();
+                return;
+            }
+
+            Swal.fire({
+                icon: "warning",
+                title: "Không có trang trước",
+                text: "Bạn sẽ được chuyển về trang chủ.",
+                confirmButtonColor: "#007a7a",
+            }).then(() => {
+                window.location.href = "/";
+            });
+        });
+    }
+
+    const supportButton = document.getElementById("supportButton");
+
+    if (supportButton) {
+        supportButton.addEventListener("click", () => {
+            redirectTo("/contact", "Đang mở trang hỗ trợ");
+        });
+    }
+
+    document.addEventListener("click", (event) => {
+        const link = event.target.closest("a[href]");
+
+        if (!link) {
+            return;
+        }
+
+        const href = link.getAttribute("href");
+        const isInternalRoute = href && href.startsWith("/") && href !== "#";
+
+        if (
+            isInternalRoute &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.shiftKey
+        ) {
+            event.preventDefault();
+            redirectTo(href, "Đang mở đường dẫn");
+        }
+    });
+
+    renderNotification();
+    renderSystemStatus();
+    renderReasons();
+    renderQuickLinks();
+</script>

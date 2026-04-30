@@ -29,6 +29,7 @@ import { ContactsModule } from './modules/contacts/contacts.module';
 import { BannersModule } from './modules/banners/banners.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { InventoryLogsModule } from './modules/inventory-logs/inventory-logs.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -90,6 +91,7 @@ import { InventoryLogsModule } from './modules/inventory-logs/inventory-logs.mod
     BannersModule,
     SettingsModule,
     InventoryLogsModule,
+    AuthModule,
   ],
 
   providers: [

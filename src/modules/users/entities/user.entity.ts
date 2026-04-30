@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { UserStatus } from 'src/common/enums/ecommerce.enum';
+import { AuthProvider, UserStatus } from 'src/common/enums/ecommerce.enum';
 import { Role } from '../../roles/entities/role.entity';
 import { Address } from '../../addresses/entities/address.entity';
 import { Cart } from '../../carts/entities/cart.entity';
@@ -15,6 +15,7 @@ import { Order } from '../../orders/entities/order.entity';
 import { Review } from '../../reviews/entities/review.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { InventoryLog } from '../../inventory-logs/entities/inventory-log.entity';
+import { RefreshToken } from 'src/modules/auth/entities/refresh-token.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -22,22 +23,42 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 150, unique: true })
   email!: string;
 
+  @Index('IDX_USERS_NAME')
   @Column({ type: 'varchar', length: 150 })
   name!: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone!: string | null;
 
-  @Column({ type: 'varchar', length: 255 })
-  password!: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  password!: string | null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   avatar!: string | null;
 
+  @Column({
+    type: 'enum',
+    enum: AuthProvider,
+    default: AuthProvider.LOCAL,
+  })
+  provider!: AuthProvider;
+
+  @Column({
+    name: 'provider_id',
+    type: 'varchar',
+    length: 150,
+    nullable: true,
+  })
+  providerId!: string | null;
+
   @Column({ name: 'role_id', type: 'int', nullable: true })
   roleId!: number | null;
 
-  @Column({ type: 'enum', enum: UserStatus, default: UserStatus.ACTIVE })
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+  })
   status!: UserStatus;
 
   @Column({ name: 'email_verified_at', type: 'timestamp', nullable: true })
@@ -67,4 +88,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => InventoryLog, (inventoryLog) => inventoryLog.user)
   inventoryLogs!: InventoryLog[];
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshTokens!: RefreshToken[];
 }

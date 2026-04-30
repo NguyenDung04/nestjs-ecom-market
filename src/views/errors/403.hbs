@@ -4,10 +4,10 @@
     >
         <div class="soft-card rounded-[2rem] p-6 sm:p-8 lg:p-10">
             <div
-                class="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-cyan-50 px-4 py-2 text-sm font-semibold text-[var(--teal-700)]"
+                class="mb-5 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700"
             >
-                <i class="fa-solid fa-map-signs"></i>
-                Đường dẫn không hợp lệ
+                <i class="fa-solid fa-user-lock"></i>
+                Quyền truy cập bị giới hạn
             </div>
 
             <p
@@ -28,11 +28,20 @@
                 {{errorDescription}}
             </p>
 
-            <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <button
+                    id="loginButton"
+                    type="button"
+                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl bg-teal-brand px-5 py-3 text-sm font-bold text-white shadow-lg shadow-teal-900/15 transition"
+                >
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i>
+                    Đăng nhập
+                </button>
+
                 <button
                     id="homeButton"
                     type="button"
-                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl bg-teal-brand px-5 py-3 text-sm font-bold text-white shadow-lg shadow-teal-900/15 transition"
+                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl border border-teal-brand bg-white px-5 py-3 text-sm font-bold text-[var(--teal-700)] transition hover:bg-cyan-50"
                 >
                     <i class="fa-solid fa-house mr-2"></i>
                     Về trang chủ
@@ -41,7 +50,7 @@
                 <button
                     id="backButton"
                     type="button"
-                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl border border-teal-brand bg-white px-5 py-3 text-sm font-bold text-[var(--teal-700)] transition hover:bg-cyan-50"
+                    class="mobile-full focus-ring inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-[var(--teal-500)] hover:text-[var(--teal-700)]"
                 >
                     <i class="fa-solid fa-arrow-left mr-2"></i>
                     Quay lại trang trước
@@ -56,7 +65,9 @@
                 <div
                     class="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-cyan-50 text-[var(--teal-500)] sm:h-40 sm:w-40"
                 >
-                    <i class="fa-solid fa-box-open text-6xl sm:text-7xl"></i>
+                    <i
+                        class="fa-solid fa-shield-halved text-6xl sm:text-7xl"
+                    ></i>
                 </div>
 
                 <div class="mt-7 rounded-3xl bg-slate-50 p-5 text-left">
@@ -64,16 +75,17 @@
                         <span
                             class="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-orange-500"
                         >
-                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <i class="fa-solid fa-lock"></i>
                         </span>
 
                         <div>
                             <p class="font-bold text-slate-950">
-                                Không có kết quả
+                                Khu vực được bảo vệ
                             </p>
 
                             <p class="text-sm text-slate-500">
-                                Hãy chọn lối tắt bên dưới để tiếp tục.
+                                Một số trang yêu cầu tài khoản có vai trò phù
+                                hợp.
                             </p>
                         </div>
                     </div>
@@ -85,18 +97,41 @@
 
 <section class="px-4 pb-10 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-        <div class="mb-5 flex items-end justify-between gap-4">
+        <div class="mb-5">
+            <p
+                class="text-sm font-bold uppercase tracking-[0.18em] text-[var(--teal-600)]"
+            >
+                Nguyên nhân thường gặp
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">
+                Vì sao bạn thấy trang này?
+            </h2>
+        </div>
+
+        <div
+            id="reasonGrid"
+            class="grid gap-4 md:grid-cols-2 lg:grid-cols-5"
+        ></div>
+    </div>
+</section>
+
+<section class="px-4 pb-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+        <div
+            class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
+        >
             <div>
                 <p
                     class="text-sm font-bold uppercase tracking-[0.18em] text-[var(--teal-600)]"
                 >
-                    Điều hướng nhanh
+                    Gợi ý hành động
                 </p>
 
                 <h2
                     class="mt-2 text-2xl font-bold tracking-tight text-slate-950"
                 >
-                    Tiếp tục mua sắm
+                    Tiếp tục với lối đi phù hợp
                 </h2>
             </div>
         </div>
@@ -108,6 +143,42 @@
     </div>
 </section>
 
+<section class="px-4 pb-14 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+        <div
+            class="rounded-[2rem] border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-8"
+        >
+            <div class="flex gap-4">
+                <span
+                    class="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 px-4 py-3 text-[var(--teal-600)]"
+                >
+                    <i class="fa-solid fa-headset text-xl"></i>
+                </span>
+
+                <div>
+                    <h2 class="text-xl font-bold tracking-tight text-slate-950">
+                        Cần hỗ trợ thêm?
+                    </h2>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-600">
+                        Nếu bạn cho rằng đây là nhầm lẫn, vui lòng liên hệ bộ
+                        phận hỗ trợ.
+                    </p>
+                </div>
+            </div>
+
+            <button
+                id="supportButton"
+                type="button"
+                class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--teal-700)] sm:mt-0 sm:w-auto"
+            >
+                <i class="fa-regular fa-envelope mr-2"></i>
+                Liên hệ hỗ trợ
+            </button>
+        </div>
+    </div>
+</section>
+
 <script>
     const quickLinks = [
         { label: "Trang chủ", href: "/", icon: "fa-house" },
@@ -115,6 +186,23 @@
         { label: "Danh mục", href: "/categories", icon: "fa-layer-group" },
         { label: "Giỏ hàng", href: "/cart", icon: "fa-cart-shopping" },
         { label: "Liên hệ", href: "/contact", icon: "fa-headset" },
+    ];
+
+    const accessReasons = [
+        { text: "Bạn chưa đăng nhập.", icon: "fa-right-to-bracket" },
+        {
+            text: "Tài khoản hiện tại không có quyền truy cập trang này.",
+            icon: "fa-user-lock",
+        },
+        {
+            text: "Tài khoản đã bị khóa hoặc bị vô hiệu hóa.",
+            icon: "fa-ban",
+        },
+        {
+            text: "Trang này chỉ dành cho quản trị viên.",
+            icon: "fa-shield-halved",
+        },
+        { text: "Phiên đăng nhập đã hết hạn.", icon: "fa-clock" },
     ];
 
     function showRedirectToast(message) {
@@ -135,6 +223,30 @@
         window.setTimeout(() => {
             window.location.href = href;
         }, 700);
+    }
+
+    function renderReasons() {
+        const container = document.getElementById("reasonGrid");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = accessReasons
+            .map(
+                (item) => `
+                    <div class="rounded-3xl border border-slate-200 bg-white p-5">
+                        <span class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-orange-500">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </span>
+
+                        <p class="text-sm font-semibold leading-6 text-slate-700">
+                            ${item.text}
+                        </p>
+                    </div>
+                `,
+            )
+            .join("");
     }
 
     function renderQuickLinks() {
@@ -163,6 +275,25 @@
                 `,
             )
             .join("");
+    }
+
+    const loginButton = document.getElementById("loginButton");
+
+    if (loginButton) {
+        loginButton.addEventListener("click", () => {
+            Swal.fire({
+                icon: "info",
+                title: "Chuyển đến đăng nhập",
+                text: "Vui lòng đăng nhập bằng tài khoản có quyền truy cập.",
+                confirmButtonColor: "#007a7a",
+                timer: 1200,
+                showConfirmButton: false,
+            });
+
+            window.setTimeout(() => {
+                window.location.href = "/login";
+            }, 900);
+        });
     }
 
     const homeButton = document.getElementById("homeButton");
@@ -204,6 +335,14 @@
         });
     }
 
+    const supportButton = document.getElementById("supportButton");
+
+    if (supportButton) {
+        supportButton.addEventListener("click", () => {
+            redirectTo("/contact", "Đang mở trang hỗ trợ");
+        });
+    }
+
     document.addEventListener("click", (event) => {
         const link = event.target.closest("a[href]");
 
@@ -225,5 +364,6 @@
         }
     });
 
+    renderReasons();
     renderQuickLinks();
 </script>

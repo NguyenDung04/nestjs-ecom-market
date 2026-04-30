@@ -4,6 +4,18 @@ export enum UserStatus {
   BLOCKED = 'blocked',
 }
 
+export enum AuthProvider {
+  LOCAL = 'local',
+  GOOGLE = 'google',
+  FACEBOOK = 'facebook',
+}
+
+export enum RoleName {
+  ADMIN = 'admin',
+  STAFF = 'staff',
+  MEMBER = 'member',
+}
+
 export enum ProductStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',

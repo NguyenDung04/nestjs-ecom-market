@@ -101,20 +101,6 @@ Các bảng chính:
 | `failed`   | Thanh toán thất bại |
 | `refunded` | Đã hoàn tiền        |
 
-## Migration
-
-Dự án sử dụng TypeORM migration để tạo schema và seed dữ liệu mẫu.
-
-```text
-1714000000000-CreateSchema.ts
-1714000001000-SeedSampleData.ts
-```
-
-Trong đó:
-
-- `1714000000000-CreateSchema.ts`: tạo bảng, khóa chính, khóa ngoại và ràng buộc dữ liệu.
-- `1714000001000-SeedSampleData.ts`: thêm dữ liệu mẫu cho vai trò, người dùng, sản phẩm, đơn hàng, thanh toán, đánh giá và thông báo.
-
 ## Cài đặt dự án
 
 Clone repository:
@@ -160,30 +146,6 @@ Chạy dự án:
 
 ```bash
 npm run start:dev
-```
-
-## Cấu trúc chức năng đề xuất
-
-```text
-src/
-├── modules/
-│   ├── auth/
-│   ├── users/
-│   ├── roles/
-│   ├── categories/
-│   ├── products/
-│   ├── carts/
-│   ├── orders/
-│   ├── payments/
-│   ├── reviews/
-│   └── reports/
-├── database/
-│   └── migrations/
-├── views/
-│   ├── client/
-│   ├── admin/
-│   └── layouts/
-└── common/
 ```
 
 ## Tác giả

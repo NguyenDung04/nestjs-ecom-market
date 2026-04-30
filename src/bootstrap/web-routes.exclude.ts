@@ -1,10 +1,27 @@
 import { RequestMethod } from '@nestjs/common';
 
 export const WEB_ROUTE_EXCLUDES = [
+  /*
+   * Home view
+   */
   {
     path: '/',
     method: RequestMethod.GET,
   },
+
+  /*
+   * Auth views
+   * Các route dưới đây phục vụ render giao diện.
+   *
+   * Lưu ý:
+   * - Không exclude path 'auth/(.*)' ở đây.
+   * - Auth API sẽ đi qua global prefix /api.
+   *
+   * Ví dụ:
+   * - GET  /login              => render giao diện đăng nhập
+   * - POST /login              => xử lý form đăng nhập nếu WebModule còn dùng
+   * - POST /api/auth/login     => API đăng nhập chính
+   */
   {
     path: 'login',
     method: RequestMethod.GET,
@@ -40,15 +57,6 @@ export const WEB_ROUTE_EXCLUDES = [
   {
     path: 'logout',
     method: RequestMethod.POST,
-  },
-
-  /*
-   * Auth views - route cũ
-   * Giữ lại tạm thời nếu còn link /auth/login trong giao diện
-   */
-  {
-    path: 'auth/(.*)',
-    method: RequestMethod.ALL,
   },
 
   /*
@@ -109,6 +117,18 @@ export const WEB_ROUTE_EXCLUDES = [
   {
     path: 'error/(.*)',
     method: RequestMethod.ALL,
+  },
+  {
+    path: '403',
+    method: RequestMethod.GET,
+  },
+  {
+    path: '404',
+    method: RequestMethod.GET,
+  },
+  {
+    path: '500',
+    method: RequestMethod.GET,
   },
 
   /*
