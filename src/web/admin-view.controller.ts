@@ -1,92 +1,99 @@
-import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Render, Req, UseGuards } from '@nestjs/common';
 import { WebAuthGuard } from './guards/web-auth.guard';
 import { WebAdminGuard } from './guards/web-admin.guard';
+import type { WebAuthRequest } from './guards/web-auth.guard';
 
 @Controller('admin')
 @UseGuards(WebAuthGuard, WebAdminGuard)
 export class AdminViewController {
-  @Get()
-  @Render('admin/dashboard/index')
-  adminHome() {
+  private getViewData(
+    request: WebAuthRequest,
+    title: string,
+    extra: Record<string, unknown> = {},
+  ) {
+    const authUser = request.user;
+    const authRole = authUser?.role || null;
+
     return {
       layout: 'layouts/admin',
-      title: 'Dashboard',
+      title,
+      authUser,
+      authRole,
+      isAdmin: authRole === 'admin',
+      isStaff: authRole === 'staff',
+      ...extra,
     };
+  }
+
+  @Get()
+  @Render('admin/dashboard/index')
+  adminHome(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Dashboard');
   }
 
   @Get('dashboard')
   @Render('admin/dashboard/index')
-  dashboard() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Dashboard',
-    };
+  dashboard(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Dashboard');
   }
 
   @Get('products')
   @Render('admin/products/index')
-  productsView() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Quản lý sản phẩm',
-    };
+  productsView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý sản phẩm');
   }
 
   @Get('products/create')
   @Render('admin/products/form')
-  createProduct() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Thêm sản phẩm',
+  createProduct(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Thêm sản phẩm', {
       action: '/admin/products/create',
-    };
+    });
   }
 
   @Post('products/create')
   @Render('admin/products/form')
-  storeProduct() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Thêm sản phẩm',
+  storeProduct(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Thêm sản phẩm', {
       action: '/admin/products/create',
       product: {},
       success: 'Thêm sản phẩm mẫu thành công.',
-    };
+    });
   }
 
   @Get('categories')
   @Render('admin/categories/index')
-  categories() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Quản lý danh mục',
-    };
+  categories(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý danh mục');
   }
 
   @Get('categories/create')
   @Render('admin/categories/form')
-  createCategory() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Thêm danh mục',
-    };
+  createCategory(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Thêm danh mục');
   }
 
   @Get('orders')
   @Render('admin/orders/index')
-  ordersView() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Quản lý đơn hàng',
-    };
+  ordersView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý đơn hàng');
+  }
+
+  @Get('contacts')
+  @Render('admin/contacts/index')
+  contactsView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý liên hệ');
+  }
+
+  @Get('payments')
+  @Render('admin/payments/index')
+  paymentsView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý thanh toán');
   }
 
   @Get('users')
   @Render('admin/users/index')
-  usersView() {
-    return {
-      layout: 'layouts/admin',
-      title: 'Quản lý người dùng',
-    };
+  usersView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý người dùng');
   }
 }

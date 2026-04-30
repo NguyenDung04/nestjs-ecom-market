@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import {
   BadRequestException,
   ForbiddenException,
@@ -11,19 +12,37 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Response } from 'express';
-import { Repository } from 'typeorm';
+import type { Response } from 'express';
+import { IsNull, Repository } from 'typeorm';
+
 import {
   AuthProvider,
   RoleName,
   UserStatus,
 } from 'src/common/enums/ecommerce.enum';
+import type { JwtPayload } from 'src/common/types/jwt-payload.type';
+import {
+  generatePasswordResetRawToken,
+  hashPasswordResetToken,
+} from 'src/common/utils/password-reset-token.util';
+
 import { Role } from '../roles/entities/role.entity';
 import { User } from '../users/entities/user.entity';
+
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+
+import { PasswordResetToken } from './entities/password-reset-token.entity';
 import { RefreshToken } from './entities/refresh-token.entity';
-import { JwtPayload } from '../../common/types/jwt-payload.type';
+
+import {
+  sanitizeUser,
+  toLoginResponse,
+  toRegisterResponse,
+} from './mappers/auth-user-response.mapper';
+import { AuthMailService } from './auth-mail.service';
 
 @Injectable()
 export class AuthService {
@@ -40,8 +59,12 @@ export class AuthService {
     @InjectRepository(RefreshToken)
     private readonly refreshTokenRepository: Repository<RefreshToken>,
 
+    @InjectRepository(PasswordResetToken)
+    private readonly passwordResetTokenRepository: Repository<PasswordResetToken>,
+
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly authMailService: AuthMailService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -88,7 +111,7 @@ export class AuthService {
 
     return {
       message: 'Đăng ký tài khoản thành công. Vui lòng đăng nhập để tiếp tục.',
-      data: this.sanitizeUser(savedUser),
+      data: toRegisterResponse(savedUser),
     };
   }
 
@@ -130,7 +153,7 @@ export class AuthService {
     return {
       message: 'Đăng nhập thành công',
       data: {
-        user: this.sanitizeUser(user),
+        user: toLoginResponse(user),
       },
     };
   }
@@ -147,7 +170,7 @@ export class AuthService {
 
     return {
       message: 'Lấy thông tin tài khoản thành công',
-      data: this.sanitizeUser(user),
+      data: sanitizeUser(user),
     };
   }
 
@@ -159,7 +182,10 @@ export class AuthService {
     const payload = await this.verifyRefreshToken(oldRefreshToken);
 
     const storedToken = await this.refreshTokenRepository.findOne({
-      where: { token: oldRefreshToken },
+      where: {
+        token: oldRefreshToken,
+        deletedAt: IsNull(),
+      },
     });
 
     if (!storedToken) {
@@ -175,7 +201,9 @@ export class AuthService {
     }
 
     const user = await this.userRepository.findOne({
-      where: { id: payload.sub },
+      where: {
+        id: payload.sub,
+      },
       relations: ['role'],
     });
 
@@ -200,15 +228,157 @@ export class AuthService {
     return {
       message: 'Làm mới token thành công',
       data: {
-        user: this.sanitizeUser(user),
+        user: sanitizeUser(user),
       },
+    };
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const { email } = forgotPasswordDto;
+
+    const responseMessage =
+      'Nếu email tồn tại trong hệ thống, chúng tôi đã gửi liên kết đặt lại mật khẩu.';
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    /*
+     * Không báo rõ email không tồn tại / tài khoản bị khóa.
+     * Làm vậy để tránh lộ thông tin tài khoản trong hệ thống.
+     */
+    if (!user || user.status !== UserStatus.ACTIVE) {
+      return {
+        message: responseMessage,
+        data: null,
+      };
+    }
+
+    const rawToken = generatePasswordResetRawToken();
+    const tokenHash = hashPasswordResetToken(rawToken);
+
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+
+    /*
+     * Thu hồi các token reset cũ chưa dùng.
+     */
+    await this.passwordResetTokenRepository.update(
+      {
+        userId: user.id,
+        usedAt: IsNull(),
+        deletedAt: IsNull(),
+      },
+      {
+        usedAt: new Date(),
+      },
+    );
+
+    const resetToken = this.passwordResetTokenRepository.create({
+      userId: user.id,
+      email: user.email,
+      tokenHash,
+      expiresAt,
+      usedAt: null,
+    });
+
+    await this.passwordResetTokenRepository.save(resetToken);
+
+    await this.authMailService.sendPasswordResetEmail(
+      user.email,
+      user.name,
+      rawToken,
+    );
+
+    return {
+      message: responseMessage,
+      data: null,
+    };
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { email, token, password, confirmPassword } = resetPasswordDto;
+
+    if (password !== confirmPassword) {
+      throw new BadRequestException('Mật khẩu xác nhận không khớp');
+    }
+
+    const tokenHash = hashPasswordResetToken(token);
+
+    const resetToken = await this.passwordResetTokenRepository.findOne({
+      where: {
+        email,
+        tokenHash,
+        usedAt: IsNull(),
+        deletedAt: IsNull(),
+      },
+      relations: ['user'],
+    });
+
+    if (!resetToken) {
+      throw new BadRequestException(
+        'Liên kết đặt lại mật khẩu không hợp lệ hoặc đã được sử dụng',
+      );
+    }
+
+    if (resetToken.expiresAt.getTime() < Date.now()) {
+      resetToken.usedAt = new Date();
+      await this.passwordResetTokenRepository.save(resetToken);
+
+      throw new BadRequestException(
+        'Liên kết đặt lại mật khẩu đã hết hạn. Vui lòng yêu cầu lại.',
+      );
+    }
+
+    const user = resetToken.user;
+
+    if (!user) {
+      throw new BadRequestException('Tài khoản không tồn tại');
+    }
+
+    if (user.status !== UserStatus.ACTIVE) {
+      throw new ForbiddenException(
+        'Tài khoản đã bị khóa hoặc chưa được kích hoạt',
+      );
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    user.password = passwordHash;
+    user.provider = AuthProvider.LOCAL;
+
+    await this.userRepository.save(user);
+
+    resetToken.usedAt = new Date();
+    await this.passwordResetTokenRepository.save(resetToken);
+
+    /*
+     * Sau khi đổi mật khẩu, thu hồi toàn bộ refresh token còn hiệu lực.
+     */
+    await this.refreshTokenRepository.update(
+      {
+        userId: user.id,
+        revokedAt: IsNull(),
+        deletedAt: IsNull(),
+      },
+      {
+        revokedAt: new Date(),
+      },
+    );
+
+    return {
+      message: 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập.',
+      data: null,
     };
   }
 
   async logout(refreshToken: string | undefined, response: Response) {
     if (refreshToken) {
       const storedToken = await this.refreshTokenRepository.findOne({
-        where: { token: refreshToken },
+        where: {
+          token: refreshToken,
+          deletedAt: IsNull(),
+        },
       });
 
       if (storedToken && !storedToken.revokedAt) {
@@ -294,7 +464,6 @@ export class AuthService {
     token: string,
   ): Promise<RefreshToken> {
     const expiresAt = new Date();
-
     expiresAt.setDate(expiresAt.getDate() + 7);
 
     const refreshToken = this.refreshTokenRepository.create({
@@ -345,28 +514,5 @@ export class AuthService {
       secure: isProduction,
       sameSite: 'lax',
     });
-  }
-
-  private sanitizeUser(user: User) {
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      phone: user.phone,
-      avatar: user.avatar,
-      provider: user.provider,
-      providerId: user.providerId,
-      status: user.status,
-      emailVerifiedAt: user.emailVerifiedAt,
-      role: user.role
-        ? {
-            id: user.role.id,
-            name: user.role.name,
-            description: user.role.description,
-          }
-        : null,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
   }
 }

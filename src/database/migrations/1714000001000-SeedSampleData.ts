@@ -35,10 +35,10 @@ export class SeedSampleData1714000001000 implements MigrationInterface {
       'roles',
       ['id', 'name', 'description'],
       [
-        { id: 1, name: 'Admin', description: 'Quản trị viên toàn hệ thống' },
+        { id: 1, name: 'admin', description: 'Quản trị viên toàn hệ thống' },
         {
           id: 2,
-          name: 'Staff',
+          name: 'staff',
           description: 'Nhân viên xử lý đơn hàng và hỗ trợ khách hàng',
         },
         {

@@ -8,15 +8,17 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { JwtStrategy } from '../../common/strategies/jwt.strategy';
+import { AuthMailService } from './auth-mail.service';
+import { PasswordResetToken } from './entities/password-reset-token.entity';
 
 @Module({
   imports: [
     ConfigModule,
     JwtModule.register({}),
-    TypeOrmModule.forFeature([User, Role, RefreshToken]),
+    TypeOrmModule.forFeature([User, Role, RefreshToken, PasswordResetToken]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, AuthMailService],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

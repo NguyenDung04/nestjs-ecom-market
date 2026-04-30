@@ -16,7 +16,7 @@ export class WebAdminGuard implements CanActivate {
     }
 
     if (user.role !== 'admin' && user.role !== 'staff') {
-      response.redirect('/error/403');
+      response.redirect('/403');
       return false;
     }
 
@@ -37,7 +37,7 @@ export class WebAdminGuard implements CanActivate {
     });
 
     if (!isAllowedForStaff) {
-      response.redirect('/error/403');
+      response.redirect('/403');
       return false;
     }
 

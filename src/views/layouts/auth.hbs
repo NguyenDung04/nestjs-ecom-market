@@ -5,12 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <title>{{title}} - {{siteName}}</title>
+
         <script src="https://cdn.tailwindcss.com"></script>
+
         <link
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <style>
             :root {
                 --teal-50: #adffff;
@@ -49,7 +51,6 @@
                 );
             }
 
-            /* Hiệu ứng nền động */
             .bg-pattern {
                 position: fixed;
                 top: 0;
@@ -60,6 +61,7 @@
                 z-index: 0;
                 overflow: hidden;
             }
+
             .bg-pattern::before {
                 content: "";
                 position: absolute;
@@ -75,6 +77,7 @@
                 border-radius: 50%;
                 animation: floatBlob 20s ease-in-out infinite;
             }
+
             .bg-pattern::after {
                 content: "";
                 position: absolute;
@@ -90,20 +93,22 @@
                 border-radius: 50%;
                 animation: floatBlob 15s ease-in-out infinite reverse;
             }
+
             @keyframes floatBlob {
                 0%,
                 100% {
                     transform: translate(0, 0) scale(1);
                 }
+
                 33% {
                     transform: translate(30px, -40px) scale(1.05);
                 }
+
                 66% {
                     transform: translate(-20px, 20px) scale(0.95);
                 }
             }
 
-            /* Custom checkbox teal */
             .custom-checkbox {
                 appearance: none;
                 -webkit-appearance: none;
@@ -116,10 +121,12 @@
                 transition: all 0.2s ease;
                 flex-shrink: 0;
             }
+
             .custom-checkbox:checked {
                 background: var(--teal-500);
                 border-color: var(--teal-500);
             }
+
             .custom-checkbox:checked::after {
                 content: "";
                 position: absolute;
@@ -131,25 +138,26 @@
                 border-width: 0 2px 2px 0;
                 transform: rotate(45deg);
             }
+
             .custom-checkbox:focus-visible {
                 outline: 2px solid var(--teal-300);
                 outline-offset: 2px;
             }
 
-            /* Input focus ring teal */
             .input-teal:focus {
                 border-color: var(--teal-400) !important;
                 box-shadow: 0 0 0 3px rgba(0, 122, 122, 0.12);
             }
+
             .input-teal.input-error {
                 border-color: #ef4444 !important;
                 box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
             }
+
             .input-teal.input-valid {
                 border-color: var(--teal-400) !important;
             }
 
-            /* Password strength bar */
             .strength-bar {
                 height: 4px;
                 border-radius: 2px;
@@ -157,6 +165,7 @@
                 overflow: hidden;
                 transition: all 0.3s ease;
             }
+
             .strength-fill {
                 height: 100%;
                 border-radius: 2px;
@@ -165,15 +174,17 @@
                     background 0.4s ease;
             }
 
-            /* Hiệu ứng card */
-            .form-card {
+            .form-card,
+            .auth-login-card {
                 animation: cardSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
             }
+
             @keyframes cardSlideUp {
                 from {
                     opacity: 0;
                     transform: translateY(30px);
                 }
+
                 to {
                     opacity: 1;
                     transform: translateY(0);
@@ -183,37 +194,44 @@
             .benefit-item {
                 animation: benefitFade 0.5s ease both;
             }
+
             .benefit-item:nth-child(1) {
                 animation-delay: 0.1s;
             }
+
             .benefit-item:nth-child(2) {
                 animation-delay: 0.2s;
             }
+
             .benefit-item:nth-child(3) {
                 animation-delay: 0.3s;
             }
+
             .benefit-item:nth-child(4) {
                 animation-delay: 0.4s;
             }
+
             .benefit-item:nth-child(5) {
                 animation-delay: 0.5s;
             }
+
             @keyframes benefitFade {
                 from {
                     opacity: 0;
                     transform: translateX(-15px);
                 }
+
                 to {
                     opacity: 1;
                     transform: translateX(0);
                 }
             }
 
-            /* Button loading */
             .btn-loading {
                 pointer-events: none;
                 opacity: 0.8;
             }
+
             .spinner {
                 display: inline-block;
                 width: 18px;
@@ -223,24 +241,24 @@
                 border-radius: 50%;
                 animation: spin 0.6s linear infinite;
             }
+
             @keyframes spin {
                 to {
                     transform: rotate(360deg);
                 }
             }
 
-            /* Link teal hover */
             .link-teal {
                 color: var(--teal-600);
                 text-decoration: none;
                 transition: color 0.2s ease;
             }
+
             .link-teal:hover {
                 color: var(--teal-800);
                 text-decoration: underline;
             }
 
-            /* Error message */
             .error-msg {
                 color: #dc2626;
                 font-size: 0.8rem;
@@ -249,23 +267,24 @@
                 align-items: center;
                 gap: 4px;
             }
+
             .error-msg.show {
                 display: flex;
             }
 
-            /* Scrollbar */
             ::-webkit-scrollbar {
                 width: 6px;
             }
+
             ::-webkit-scrollbar-track {
                 background: transparent;
             }
+
             ::-webkit-scrollbar-thumb {
                 background: var(--teal-200);
                 border-radius: 3px;
             }
 
-            /* Toggle password button */
             .toggle-pw {
                 position: absolute;
                 right: 12px;
@@ -279,8 +298,90 @@
                 transition: color 0.2s;
                 font-size: 0.95rem;
             }
+
             .toggle-pw:hover {
                 color: var(--teal-600);
+            }
+
+            .divider-line {
+                height: 1px;
+                flex: 1;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #e5e7eb,
+                    transparent
+                );
+            }
+
+            .btn-google {
+                border: 1px solid #e5e7eb;
+                background: #ffffff;
+                transition:
+                    border-color 0.2s ease,
+                    box-shadow 0.2s ease,
+                    transform 0.2s ease;
+            }
+
+            .btn-google:hover {
+                border-color: var(--teal-200);
+                box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+                transform: translateY(-1px);
+            }
+
+            .alert24-item {
+                pointer-events: auto;
+                animation: alert24In 0.25s ease-out both;
+            }
+
+            .alert24-item.alert24-removing {
+                animation: alert24Out 0.22s ease-in both;
+            }
+
+            .alert24-progress {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 3px;
+                width: 100%;
+                transform-origin: left;
+                animation-name: alert24Progress;
+                animation-timing-function: linear;
+                animation-fill-mode: forwards;
+            }
+
+            @keyframes alert24In {
+                from {
+                    opacity: 0;
+                    transform: translateX(24px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            @keyframes alert24Out {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+
+                to {
+                    opacity: 0;
+                    transform: translateX(24px);
+                }
+            }
+
+            @keyframes alert24Progress {
+                from {
+                    transform: scaleX(1);
+                }
+
+                to {
+                    transform: scaleX(0);
+                }
             }
 
             @media (prefers-reduced-motion: reduce) {
@@ -292,15 +393,170 @@
                 }
             }
         </style>
+
+        <script>
+            function escapeHtml24(value) {
+                return String(value || "")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            function showAlert24(type, title, message, duration, callback) {
+                var container = document.getElementById("alert24-container");
+
+                if (!container) {
+                    console.warn("Missing #alert24-container");
+                    return;
+                }
+
+                duration = duration || 3500;
+
+                var variants = {
+                    success: {
+                        box: "bg-emerald-50 border-emerald-200",
+                        iconBox: "bg-emerald-100 text-emerald-600",
+                        title: "text-emerald-900",
+                        message: "text-emerald-700",
+                        progress: "bg-emerald-500",
+                        icon: "fa-circle-check",
+                    },
+                    error: {
+                        box: "bg-red-50 border-red-200",
+                        iconBox: "bg-red-100 text-red-600",
+                        title: "text-red-900",
+                        message: "text-red-700",
+                        progress: "bg-red-500",
+                        icon: "fa-circle-xmark",
+                    },
+                    warning: {
+                        box: "bg-amber-50 border-amber-200",
+                        iconBox: "bg-amber-100 text-amber-600",
+                        title: "text-amber-900",
+                        message: "text-amber-700",
+                        progress: "bg-amber-500",
+                        icon: "fa-triangle-exclamation",
+                    },
+                    info: {
+                        box: "bg-sky-50 border-sky-200",
+                        iconBox: "bg-sky-100 text-sky-600",
+                        title: "text-sky-900",
+                        message: "text-sky-700",
+                        progress: "bg-sky-500",
+                        icon: "fa-circle-info",
+                    },
+                };
+
+                var current = variants[type] || variants.info;
+
+                var alert = document.createElement("div");
+                alert.className =
+                    "alert24-item relative overflow-hidden rounded-xl border px-4 py-3 shadow-lg " +
+                    current.box;
+
+                alert.innerHTML =
+                    '<div class="flex items-start gap-3">' +
+                    '<div class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ' +
+                    current.iconBox +
+                    '">' +
+                    '<i class="fa-solid ' +
+                    current.icon +
+                    ' text-sm"></i>' +
+                    "</div>" +
+                    '<div class="min-w-0 flex-1">' +
+                    '<p class="text-sm font-semibold ' +
+                    current.title +
+                    '">' +
+                    escapeHtml24(title || "Thông báo") +
+                    "</p>" +
+                    '<p class="mt-0.5 text-xs leading-relaxed ' +
+                    current.message +
+                    '">' +
+                    escapeHtml24(message || "") +
+                    "</p>" +
+                    "</div>" +
+                    '<button type="button" class="alert24-close mt-0.5 shrink-0 text-gray-400 hover:text-gray-600" aria-label="Đóng thông báo">' +
+                    '<i class="fa-solid fa-xmark text-sm"></i>' +
+                    "</button>" +
+                    "</div>" +
+                    '<div class="alert24-progress ' +
+                    current.progress +
+                    '" style="animation-duration: ' +
+                    duration +
+                    'ms;"></div>';
+
+                container.appendChild(alert);
+
+                var isRemoved = false;
+                var timer = setTimeout(removeAlert, duration);
+
+                function removeAlert() {
+                    if (isRemoved) return;
+
+                    isRemoved = true;
+                    clearTimeout(timer);
+                    alert.classList.add("alert24-removing");
+
+                    setTimeout(function () {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+
+                        if (typeof callback === "function") {
+                            callback();
+                        }
+                    }, 220);
+                }
+
+                var closeButton = alert.querySelector(".alert24-close");
+
+                if (closeButton) {
+                    closeButton.addEventListener("click", removeAlert);
+                }
+
+                alert.addEventListener("mouseenter", function () {
+                    clearTimeout(timer);
+
+                    var progress = alert.querySelector(".alert24-progress");
+                    if (progress) {
+                        progress.style.animationPlayState = "paused";
+                    }
+                });
+
+                alert.addEventListener("mouseleave", function () {
+                    var progress = alert.querySelector(".alert24-progress");
+
+                    if (progress) {
+                        progress.style.animationPlayState = "running";
+                    }
+
+                    timer = setTimeout(removeAlert, 1200);
+                });
+            }
+        </script>
     </head>
 
     <body>
-        <!-- Hiệu ứng nền -->
+        <div
+            id="alert24-container"
+            style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 999999;
+                width: 360px;
+                max-width: calc(100vw - 2rem);
+            "
+            class="space-y-3 pointer-events-none max-sm:left-4 max-sm:right-4 max-sm:w-auto"
+        ></div>
+
         <div class="bg-pattern" aria-hidden="true"></div>
 
         {{> auth/header}}
 
-        <main>{{{body}}}</main>
+        <main class="relative z-10 flex-1">{{{body}}}</main>
 
         {{> auth/footer}}
     </body>

@@ -2,7 +2,7 @@ import { Controller, Get, Render } from '@nestjs/common';
 
 @Controller()
 export class AuthViewController {
-  siteName = 'Ecom Market';
+  private readonly siteName = 'Ecom Market';
 
   @Get('login')
   @Render('auth/login')
@@ -10,7 +10,7 @@ export class AuthViewController {
     return {
       layout: 'layouts/auth',
       title: 'Đăng nhập',
-      siteName: 'Ecom Market',
+      siteName: this.siteName,
       siteShortName: this.siteName.split(' ')[0],
       authHeroTitle: 'Mua sắm thông minh hơn',
       authHeroHighlight: 'với tài khoản',
@@ -26,7 +26,7 @@ export class AuthViewController {
     return {
       layout: 'layouts/auth',
       title: 'Đăng ký',
-      siteName: 'Ecom Market',
+      siteName: this.siteName,
       siteShortName: this.siteName.split(' ')[0],
       authHeroTitle: 'Tham gia Ecom Market',
       authHeroHighlight: 'ngay hôm nay',
@@ -42,13 +42,29 @@ export class AuthViewController {
     return {
       layout: 'layouts/auth',
       title: 'Quên mật khẩu',
-      siteName: 'Ecom Market',
+      siteName: this.siteName,
       siteShortName: this.siteName.split(' ')[0],
       authHeroTitle: 'Khôi phục tài khoản',
-      authHeroHighlight: 'an toàn và nhanh chóng',
+      authHeroHighlight: 'qua email',
       description:
-        'Làm theo các bước xác minh email, nhận mã OTP và đặt lại mật khẩu để bảo vệ tài khoản của bạn.',
+        'Nhập email đã đăng ký để nhận liên kết đặt lại mật khẩu an toàn từ Ecom Market.',
       message: 'Trang quên mật khẩu',
+    };
+  }
+
+  @Get('reset-password')
+  @Render('auth/reset-password')
+  resetPassword() {
+    return {
+      layout: 'layouts/auth',
+      title: 'Đặt lại mật khẩu',
+      siteName: this.siteName,
+      siteShortName: this.siteName.split(' ')[0],
+      authHeroTitle: 'Tạo mật khẩu mới',
+      authHeroHighlight: 'an toàn hơn',
+      description:
+        'Nhập mật khẩu mới và xác nhận mật khẩu để khôi phục quyền truy cập tài khoản của bạn.',
+      message: 'Trang đặt lại mật khẩu',
     };
   }
 }
