@@ -1,7 +1,5 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { SkipThrottle } from '@nestjs/throttler';
 
-@SkipThrottle({ default: true })
 @Controller()
 export class ErrorViewController {
   private readonly siteName = 'Ecom Market';
