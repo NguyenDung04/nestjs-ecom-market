@@ -33,6 +33,31 @@ function registerNamespacedPartials(
   logger.log(`Đã register partial namespace: ${namespace}`);
 }
 
+function registerPartialsFromDirectory(
+  directory: string,
+  namespace: string,
+  logger: Logger,
+): void {
+  if (!existsSync(directory)) {
+    logger.warn(`Không tìm thấy partial directory: ${directory}`);
+    return;
+  }
+
+  const files = readdirSync(directory).filter(
+    (file) => extname(file) === '.hbs',
+  );
+
+  for (const file of files) {
+    const partialName = `${namespace}/${basename(file, '.hbs')}`;
+    const partialPath = join(directory, file);
+    const partialContent = readFileSync(partialPath, 'utf8');
+
+    hbs.registerPartial(partialName, partialContent);
+  }
+
+  logger.log(`Đã register partial directory: ${namespace}`);
+}
+
 export function setupViewEngine(
   app: NestExpressApplication,
   logger: Logger,
@@ -65,6 +90,12 @@ export function setupViewEngine(
   } else {
     logger.warn(`Không tìm thấy partials directory: ${partialsDir}`);
   }
+
+  registerPartialsFromDirectory(
+    join(viewsDir, 'admin', 'categories', 'partials'),
+    'admin/categories/partials',
+    logger,
+  );
 
   hbs.registerHelper('eq', function (a: unknown, b: unknown) {
     return a === b;

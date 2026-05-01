@@ -1,0 +1,177 @@
+<div
+    id="categoryModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4"
+>
+    <div class="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+        <div class="flex items-start justify-between border-b border-slate-100 px-6 py-5">
+            <div>
+                <h2 id="modalTitle" class="text-xl font-bold text-slate-950">
+                    Thêm danh mục
+                </h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    Slug sẽ được hệ thống tự tạo từ tên danh mục.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="close-modal grid h-10 w-10 place-items-center rounded-xl text-slate-500 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="categoryForm" class="max-h-[calc(92vh-86px)] overflow-y-auto px-6 py-5">
+            <input id="categoryId" type="hidden" />
+
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                <div>
+                    <label class="mb-2 block text-sm font-bold text-slate-700">
+                        Tên danh mục <span class="text-rose-500">*</span>
+                    </label>
+
+                    <input
+                        id="nameInput"
+                        type="text"
+                        class="h-12 w-full rounded-2xl border border-slate-200 px-4 text-sm outline-none focus:border-kigen-500"
+                        placeholder="Ví dụ: Điện thoại thông minh"
+                    />
+
+                    <p data-error="nameInput" class="mt-1 text-xs font-semibold text-rose-500"></p>
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm font-bold text-slate-700">
+                        Danh mục cha
+                    </label>
+
+                    <select
+                        id="parentInput"
+                        class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-kigen-500"
+                    >
+                        <option value="">Không có danh mục cha</option>
+                    </select>
+
+                    <p data-error="parentInput" class="mt-1 text-xs font-semibold text-rose-500"></p>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <label class="mb-2 block text-sm font-bold text-slate-700">
+                        Ảnh danh mục
+                    </label>
+
+                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr]">
+                        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
+                            <img
+                                id="imagePreview"
+                                src="https://placehold.co/900x520/f0fdfa/0f766e?text=Category"
+                                alt="Preview"
+                                class="h-44 w-full object-cover"
+                            />
+                        </div>
+
+                        <div>
+                            <input
+                                id="imageFile"
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                class="block w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-kigen-50 file:px-4 file:py-2 file:text-sm file:font-bold file:text-kigen-700 hover:file:bg-kigen-100"
+                            />
+
+                            <p class="mt-2 text-xs font-medium text-slate-500">
+                                Chỉ hỗ trợ JPG, PNG, WEBP. Tối đa 2MB.
+                            </p>
+
+                            <p data-error="imageFile" class="mt-1 text-xs font-semibold text-rose-500"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <label class="mb-2 block text-sm font-bold text-slate-700">
+                        Mô tả
+                    </label>
+
+                    <textarea
+                        id="descriptionInput"
+                        rows="4"
+                        maxlength="255"
+                        class="w-full resize-none rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500"
+                        placeholder="Nhập mô tả ngắn về danh mục..."
+                    ></textarea>
+
+                    <div class="mt-1 flex items-center justify-between">
+                        <p data-error="descriptionInput" class="text-xs font-semibold text-rose-500"></p>
+                        <p id="descriptionCounter" class="text-xs font-semibold text-slate-400">0 ký tự</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <label class="mb-2 block text-sm font-bold text-slate-700">
+                        Trạng thái
+                    </label>
+
+                    <input id="statusInput" type="hidden" value="active" />
+
+                    <button
+                        id="statusToggle"
+                        type="button"
+                        class="mt-2 flex h-12 w-full items-center justify-between rounded-2xl border border-kigen-200 bg-kigen-50 px-4 text-sm font-bold text-kigen-700"
+                    >
+                        <span id="statusText">Hiển thị</span>
+
+                        <span
+                            id="statusPill"
+                            class="flex h-7 w-12 items-center rounded-full bg-kigen-600 p-1 transition"
+                        >
+                            <span class="h-5 w-5 translate-x-5 rounded-full bg-white shadow transition"></span>
+                        </span>
+                    </button>
+
+                    <p data-error="statusInput" class="mt-1 text-xs font-semibold text-rose-500"></p>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-5">
+                <button
+                    type="button"
+                    class="close-modal rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-100"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    id="saveCategoryBtn"
+                    type="submit"
+                    class="rounded-2xl bg-kigen-600 px-5 py-3 text-sm font-bold text-white hover:bg-kigen-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
+                    Lưu danh mục
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div
+    id="detailModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4"
+>
+    <div class="w-full max-w-4xl rounded-3xl bg-white p-6 shadow-2xl">
+        <div class="mb-5 flex items-center justify-between">
+            <h2 class="text-xl font-bold text-slate-950">
+                Chi tiết danh mục
+            </h2>
+
+            <button
+                id="closeDetailModal"
+                type="button"
+                class="grid h-10 w-10 place-items-center rounded-xl text-slate-500 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="detailBody"></div>
+    </div>
+</div>

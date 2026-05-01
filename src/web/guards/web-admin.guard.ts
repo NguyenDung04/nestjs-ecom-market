@@ -25,12 +25,40 @@ export class WebAdminGuard implements CanActivate {
     }
 
     const allowedStaffPaths = [
+      '/admin',
+      '/admin/dashboard',
+
       '/admin/orders',
-      '/admin/contacts',
       '/admin/payments',
+      '/admin/coupons',
+
+      '/admin/products',
+      '/admin/categories',
+      '/admin/banners',
+      '/admin/reviews',
+
+      '/admin/contacts',
+
+      '/admin/notifications',
+    ];
+
+    const adminOnlyPaths = [
+      '/admin/roles',
+      '/admin/users',
+      '/admin/settings',
+      '/admin/trash',
     ];
 
     const currentPath = request.path;
+
+    const isAdminOnly = adminOnlyPaths.some((path) => {
+      return currentPath === path || currentPath.startsWith(`${path}/`);
+    });
+
+    if (isAdminOnly) {
+      response.redirect('/403');
+      return false;
+    }
 
     const isAllowedForStaff = allowedStaffPaths.some((path) => {
       return currentPath === path || currentPath.startsWith(`${path}/`);

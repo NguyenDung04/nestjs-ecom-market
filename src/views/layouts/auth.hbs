@@ -536,6 +536,328 @@
                 });
             }
         </script>
+        <script>
+            (function AuthCommon(window, document) {
+                "use strict";
+
+                var appConfig = window.APP_CONFIG || {};
+
+                function getApiBaseUrl() {
+                    return (
+                        appConfig.APP_URL_API || window.location.origin + "/api"
+                    );
+                }
+
+                function buildApiUrl(path) {
+                    return getApiBaseUrl() + path;
+                }
+
+                function mapElements(selectors) {
+                    var elements = {};
+
+                    Object.keys(selectors).forEach(function (key) {
+                        elements[key] = document.getElementById(selectors[key]);
+                    });
+
+                    return elements;
+                }
+
+                function notify(type, title, message, duration, callback) {
+                    if (typeof window.showAlert24 === "function") {
+                        window.showAlert24(
+                            type,
+                            title,
+                            message,
+                            duration || 3500,
+                            callback,
+                        );
+                        return;
+                    }
+
+                    if (typeof Swal !== "undefined") {
+                        Swal.fire({
+                            title: title || "Thông báo",
+                            text: message || "",
+                            icon:
+                                type === "error"
+                                    ? "error"
+                                    : type === "warning"
+                                      ? "warning"
+                                      : type === "success"
+                                        ? "success"
+                                        : "info",
+                            confirmButtonColor: "#0d9488",
+                        }).then(function () {
+                            if (typeof callback === "function") {
+                                callback();
+                            }
+                        });
+
+                        return;
+                    }
+
+                    console[type === "error" ? "error" : "log"](
+                        (title ? title + ": " : "") + (message || ""),
+                    );
+
+                    if (typeof callback === "function") {
+                        callback();
+                    }
+                }
+
+                function setFieldError(input, errorElement, message) {
+                    if (!input || !errorElement) return;
+
+                    errorElement.textContent = message || "";
+                    errorElement.classList.toggle("hidden", !message);
+
+                    input.classList.toggle("input-error", !!message);
+
+                    if (message) {
+                        input.classList.remove("input-valid");
+                    }
+                }
+
+                function clearFieldError(input, errorElement) {
+                    setFieldError(input, errorElement, "");
+                }
+
+                function setFieldValid(input, errorElement) {
+                    if (!input) return;
+
+                    input.classList.remove("input-error");
+                    input.classList.add("input-valid");
+
+                    if (errorElement) {
+                        errorElement.textContent = "";
+                        errorElement.classList.add("hidden");
+                    }
+                }
+
+                function setTextError(errorElement, message) {
+                    if (!errorElement) return;
+
+                    errorElement.textContent = message || "";
+                    errorElement.classList.toggle("hidden", !message);
+                }
+
+                function clearTextError(errorElement) {
+                    setTextError(errorElement, "");
+                }
+
+                function isValidEmail(email) {
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                }
+
+                function isValidVietnamesePhone(phone) {
+                    return /^(0[35789])[0-9]{8}$/.test(phone);
+                }
+
+                function onlyDigits(value) {
+                    return String(value || "").replace(/\D/g, "");
+                }
+
+                function calculatePasswordScore(password) {
+                    var score = 0;
+
+                    if (!password) return score;
+
+                    if (password.length >= 6) score++;
+                    if (password.length >= 10) score++;
+                    if (/[A-Z]/.test(password)) score++;
+                    if (/[a-z]/.test(password)) score++;
+                    if (/[0-9]/.test(password)) score++;
+                    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+                    return score;
+                }
+
+                function getPasswordStrength(password) {
+                    var score = calculatePasswordScore(password);
+
+                    if (!password) {
+                        return {
+                            label: "Nhập mật khẩu để kiểm tra độ mạnh",
+                            color: "#9ca3af",
+                            width: "0%",
+                        };
+                    }
+
+                    if (score <= 2) {
+                        return {
+                            label: "Mật khẩu yếu",
+                            color: "#ef4444",
+                            width: "33%",
+                        };
+                    }
+
+                    if (score <= 4) {
+                        return {
+                            label: "Mật khẩu trung bình",
+                            color: "#f59e0b",
+                            width: "66%",
+                        };
+                    }
+
+                    return {
+                        label: "Mật khẩu mạnh",
+                        color: "var(--teal-500)",
+                        width: "100%",
+                    };
+                }
+
+                function updatePasswordStrength(
+                    password,
+                    fillElement,
+                    textElement,
+                ) {
+                    var result = getPasswordStrength(password);
+
+                    if (fillElement) {
+                        fillElement.style.width = result.width;
+                        fillElement.style.background = result.color;
+                    }
+
+                    if (textElement) {
+                        textElement.textContent = result.label;
+                        textElement.style.color = result.color;
+                    }
+                }
+
+                function togglePassword(input, button) {
+                    if (!input || !button) return;
+
+                    var icon = button.querySelector("i");
+                    var isHidden = input.type === "password";
+
+                    input.type = isHidden ? "text" : "password";
+
+                    if (icon) {
+                        icon.className = isHidden
+                            ? "fa-solid fa-eye-slash"
+                            : "fa-solid fa-eye";
+                    }
+
+                    button.setAttribute(
+                        "aria-label",
+                        isHidden ? "Ẩn mật khẩu" : "Hiển thị mật khẩu",
+                    );
+                }
+
+                function setButtonLoading(
+                    button,
+                    icon,
+                    text,
+                    isLoading,
+                    options,
+                ) {
+                    if (!button) return;
+
+                    var loadingIcon =
+                        options.loadingIcon ||
+                        "fa-solid fa-spinner fa-spin text-sm";
+                    var defaultIcon = options.defaultIcon || "";
+                    var loadingText = options.loadingText || "Đang xử lý...";
+                    var defaultText = options.defaultText || "Xác nhận";
+
+                    button.disabled = isLoading;
+
+                    if (icon) {
+                        icon.className = isLoading ? loadingIcon : defaultIcon;
+                    }
+
+                    if (text) {
+                        text.textContent = isLoading
+                            ? loadingText
+                            : defaultText;
+                    }
+                }
+
+                async function readJsonResponse(response) {
+                    try {
+                        return await response.json();
+                    } catch (error) {
+                        return null;
+                    }
+                }
+
+                async function requestJson(url, options, fallbackMessage) {
+                    var response = await fetch(url, {
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        ...(options || {}),
+                    });
+
+                    var result = await readJsonResponse(response);
+
+                    if (!response.ok || !result || result.success === false) {
+                        throw new Error(
+                            (result && result.message) ||
+                                fallbackMessage ||
+                                "Yêu cầu xử lý thất bại.",
+                        );
+                    }
+
+                    return result;
+                }
+
+                function redirectWithNotice(options) {
+                    notify(
+                        options.successType || "success",
+                        options.successTitle || "Thành công",
+                        options.successMessage || "Thao tác thành công.",
+                        options.successDuration || 2200,
+                    );
+
+                    if (options.infoMessage) {
+                        window.setTimeout(function () {
+                            notify(
+                                "info",
+                                options.infoTitle || "Đang chuyển hướng",
+                                options.infoMessage,
+                                options.infoDuration || 1200,
+                            );
+                        }, options.infoDelay || 700);
+                    }
+
+                    window.setTimeout(function () {
+                        window.location.href = options.redirectUrl || "/";
+                    }, options.redirectDelay || 1800);
+                }
+
+                window.AuthCommon = {
+                    getApiBaseUrl: getApiBaseUrl,
+                    buildApiUrl: buildApiUrl,
+                    mapElements: mapElements,
+
+                    notify: notify,
+
+                    setFieldError: setFieldError,
+                    clearFieldError: clearFieldError,
+                    setFieldValid: setFieldValid,
+                    setTextError: setTextError,
+                    clearTextError: clearTextError,
+
+                    isValidEmail: isValidEmail,
+                    isValidVietnamesePhone: isValidVietnamesePhone,
+                    onlyDigits: onlyDigits,
+
+                    calculatePasswordScore: calculatePasswordScore,
+                    getPasswordStrength: getPasswordStrength,
+                    updatePasswordStrength: updatePasswordStrength,
+
+                    togglePassword: togglePassword,
+                    setButtonLoading: setButtonLoading,
+
+                    readJsonResponse: readJsonResponse,
+                    requestJson: requestJson,
+
+                    redirectWithNotice: redirectWithNotice,
+                };
+            })(window, document);
+        </script>
     </head>
 
     <body>

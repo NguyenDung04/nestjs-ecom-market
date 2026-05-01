@@ -1,0 +1,110 @@
+<section class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-950">Quản lý thanh toán</h1>
+        <p class="mt-1 text-sm text-slate-500">
+            Theo dõi giao dịch thanh toán, phương thức thanh toán và trạng thái xử lý.
+        </p>
+    </div>
+
+    <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Tổng giao dịch</p>
+                    <h2 class="mt-2 text-2xl font-bold text-slate-950">0</h2>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-2xl bg-kigen-50 text-kigen-600">
+                    <i class="fa-solid fa-credit-card"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Đã thanh toán</p>
+                    <h2 class="mt-2 text-2xl font-bold text-emerald-600">0</h2>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Chờ thanh toán</p>
+                    <h2 class="mt-2 text-2xl font-bold text-amber-600">0</h2>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-2xl bg-amber-50 text-amber-600">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Thất bại</p>
+                    <h2 class="mt-2 text-2xl font-bold text-rose-600">0</h2>
+                </div>
+                <div class="grid h-12 w-12 place-items-center rounded-2xl bg-rose-50 text-rose-600">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <input
+                type="text"
+                placeholder="Tìm mã giao dịch, mã đơn hàng..."
+                class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500 md:max-w-sm"
+            />
+
+            <select class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500">
+                <option>Tất cả trạng thái</option>
+                <option>Đã thanh toán</option>
+                <option>Chờ thanh toán</option>
+                <option>Thất bại</option>
+                <option>Đã hoàn tiền</option>
+            </select>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-4 py-3">Mã giao dịch</th>
+                        <th class="px-4 py-3">Mã đơn hàng</th>
+                        <th class="px-4 py-3">Phương thức</th>
+                        <th class="px-4 py-3">Số tiền</th>
+                        <th class="px-4 py-3">Trạng thái</th>
+                        <th class="px-4 py-3">Ngày thanh toán</th>
+                        <th class="px-4 py-3 text-right">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+                    <tr>
+                        <td class="px-4 py-4 font-semibold text-slate-800">---</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-slate-500">0₫</td>
+                        <td class="px-4 py-4">
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+                                Chưa có
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-right">
+                            <button class="font-semibold text-kigen-600">Chi tiết</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

@@ -1,14 +1,18 @@
-import { Controller, Get, Post, Render, Req, UseGuards } from '@nestjs/common';
-import { Response } from 'express';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
 import { WebAuthGuard } from './guards/web-auth.guard';
 import { WebAdminGuard } from './guards/web-admin.guard';
 import type { WebAuthRequest } from './guards/web-auth.guard';
+import { ConfigService } from '@nestjs/config';
 import { SkipThrottle } from '@nestjs/throttler';
 
 @SkipThrottle({ default: true })
 @Controller()
 export class AdminViewController {
   private readonly siteName = 'Ecom Market';
+  constructor(private readonly configService: ConfigService) {}
 
   private getViewData(
     request: WebAuthRequest,
@@ -18,22 +22,38 @@ export class AdminViewController {
     const authUser = request.user;
     const authRole = authUser?.role || null;
 
+    const authName = authUser?.email || 'Admin';
+
+    const authAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      authName,
+    )}&background=0d9488&color=fff`;
+
+    const appUrl =
+      this.configService.get<string>('APP_URL') || 'http://localhost:8080';
+
+    const appUrlApi =
+      this.configService.get<string>('APP_URL_API') || `${appUrl}/api`;
+
     return {
       layout: 'layouts/admin',
       title,
       siteName: this.siteName,
+      appUrl,
+      appUrlApi,
+      currentYear: new Date().getFullYear(),
+
       authUser,
       authRole,
+      authName,
+      authAvatar,
+
       isAdmin: authRole === 'admin',
       isStaff: authRole === 'staff',
       isMember: authRole === 'member',
+
       ...extra,
     };
   }
-
-  // =========================
-  // ADMIN ROUTES
-  // =========================
 
   @Get('admin')
   @UseGuards(WebAuthGuard, WebAdminGuard)
@@ -56,53 +76,11 @@ export class AdminViewController {
     return this.getViewData(request, 'Quản lý sản phẩm');
   }
 
-  @Get('admin/products/create')
-  @UseGuards(WebAuthGuard, WebAdminGuard)
-  @Render('admin/products/form')
-  createProduct(@Req() request: WebAuthRequest) {
-    return this.getViewData(request, 'Thêm sản phẩm', {
-      action: '/admin/products/create',
-      product: {},
-    });
-  }
-
-  @Post('admin/products/create')
-  @UseGuards(WebAuthGuard, WebAdminGuard)
-  @Render('admin/products/form')
-  storeProduct(@Req() request: WebAuthRequest) {
-    return this.getViewData(request, 'Thêm sản phẩm', {
-      action: '/admin/products/create',
-      product: {},
-      success: 'Thêm sản phẩm mẫu thành công.',
-    });
-  }
-
   @Get('admin/categories')
   @UseGuards(WebAuthGuard, WebAdminGuard)
   @Render('admin/categories/index')
-  categories(@Req() request: WebAuthRequest) {
+  categoriesView(@Req() request: WebAuthRequest) {
     return this.getViewData(request, 'Quản lý danh mục');
-  }
-
-  @Get('admin/categories/create')
-  @UseGuards(WebAuthGuard, WebAdminGuard)
-  @Render('admin/categories/form')
-  createCategory(@Req() request: WebAuthRequest) {
-    return this.getViewData(request, 'Thêm danh mục', {
-      action: '/admin/categories/create',
-      category: {},
-    });
-  }
-
-  @Post('admin/categories/create')
-  @UseGuards(WebAuthGuard, WebAdminGuard)
-  @Render('admin/categories/form')
-  storeCategory(@Req() request: WebAuthRequest) {
-    return this.getViewData(request, 'Thêm danh mục', {
-      action: '/admin/categories/create',
-      category: {},
-      success: 'Thêm danh mục mẫu thành công.',
-    });
   }
 
   @Get('admin/banners')
@@ -140,6 +118,13 @@ export class AdminViewController {
     return this.getViewData(request, 'Quản lý đánh giá');
   }
 
+  @Get('admin/payments')
+  @UseGuards(WebAuthGuard, WebAdminGuard)
+  @Render('admin/payments/index')
+  paymentsView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Quản lý thanh toán');
+  }
+
   @Get('admin/contacts')
   @UseGuards(WebAuthGuard, WebAdminGuard)
   @Render('admin/contacts/index')
@@ -161,11 +146,17 @@ export class AdminViewController {
     return this.getViewData(request, 'Cài đặt hệ thống');
   }
 
-  // Nếu vẫn muốn giữ trang thanh toán trong admin
-  @Get('admin/payments')
+  @Get('admin/trash')
   @UseGuards(WebAuthGuard, WebAdminGuard)
-  @Render('admin/payments/index')
-  paymentsView(@Req() request: WebAuthRequest) {
-    return this.getViewData(request, 'Quản lý thanh toán');
+  @Render('admin/trash/index')
+  trashView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Thùng rác');
+  }
+
+  @Get('admin/notifications')
+  @UseGuards(WebAuthGuard, WebAdminGuard)
+  @Render('admin/notifications/index')
+  notificationsView(@Req() request: WebAuthRequest) {
+    return this.getViewData(request, 'Thông báo toàn hệ thống');
   }
 }

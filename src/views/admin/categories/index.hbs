@@ -1,6 +1,1359 @@
-{{> admin/breadcrumb}}
+<main class="space-y-6 p-4 pb-28 lg:p-8 lg:pb-28">
+    <section
+        class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"
+    >
+        <div>
+            <nav class="mb-3 text-sm font-semibold text-slate-400">
+                Admin <span class="mx-2">/</span>
+                <span class="text-kigen-700">Quản lý danh mục</span>
+            </nav>
 
-<div class="rounded-2xl bg-white p-6 shadow-sm">
-  <h2 class="text-xl font-bold text-slate-900">Quản lý danh mục</h2>
-  <p class="mt-2 text-slate-500">Trang danh mục mẫu.</p>
-</div>
+            <h1 class="text-2xl font-bold text-slate-950 sm:text-3xl">
+                Quản lý danh mục
+            </h1>
+
+            <p class="mt-2 text-sm text-slate-500">
+                Phân loại sản phẩm, quản lý danh mục cha - con, ảnh đại diện và
+                trạng thái hiển thị.
+            </p>
+        </div>
+
+        <button
+            id="addCategoryBtn"
+            type="button"
+            class="inline-flex w-max items-center gap-2 rounded-2xl bg-kigen-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-kigen-600/20 hover:bg-kigen-700"
+        >
+            <i class="fa-solid fa-plus"></i>
+            Thêm danh mục
+        </button>
+    </section>
+
+    {{> admin/categories/partials/stats}} {{> admin/categories/partials/filter}}
+    {{> admin/categories/partials/table}} {{> admin/categories/partials/modal}}
+</main>
+
+<script>
+    const APP_CONFIG = window.APP_CONFIG || {};
+
+    const PUBLIC_BASE_URL = APP_CONFIG.APP_URL || window.location.origin;
+    const API_BASE_URL = APP_CONFIG.APP_URL_API || `${PUBLIC_BASE_URL}/api`;
+    const CATEGORY_API_URL = `${API_BASE_URL}/categories`;
+
+    const allowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    const state = {
+        categories: [],
+        treeCategories: [],
+        activeCategories: [],
+        selected: new Set(),
+        search: "",
+        status: "all",
+        type: "all",
+        view: "table",
+        page: 1,
+        limit: 10,
+        meta: null,
+        editingId: null,
+        imageFile: null,
+    };
+
+    const $ = (id) => document.getElementById(id);
+    function notify(type, title, message) {
+        if (typeof showAlert24 === "function") {
+            showAlert24(type, title, message);
+            return;
+        }
+
+        if (typeof Swal !== "undefined") {
+            Swal.fire({
+                title,
+                text: message || "",
+                icon:
+                    type === "error"
+                        ? "error"
+                        : type === "warning"
+                          ? "warning"
+                          : type === "success"
+                            ? "success"
+                            : "info",
+                confirmButtonColor: "#0d9488",
+            });
+            return;
+        }
+
+        console[type === "error" ? "error" : "log"](
+            `${title}: ${message || ""}`,
+        );
+    }
+
+    function confirmAction(options = {}) {
+        const {
+            title = "Xác nhận thao tác",
+            message = "Bạn có chắc muốn thực hiện thao tác này không?",
+            confirmText = "Xác nhận",
+            cancelText = "Hủy",
+            icon = "warning",
+        } = options;
+
+        if (typeof Swal !== "undefined") {
+            return Swal.fire({
+                title,
+                text: message,
+                icon,
+                showCancelButton: true,
+                confirmButtonText: confirmText,
+                cancelButtonText: cancelText,
+                confirmButtonColor: "#e11d48",
+                cancelButtonColor: "#64748b",
+                reverseButtons: true,
+            }).then((result) => result.isConfirmed);
+        }
+        
+        function confirmAction(options = {}) {
+            const {
+                title = "Xác nhận thao tác",
+                message = "Bạn có chắc muốn thực hiện thao tác này không?",
+                confirmText = "Xác nhận",
+                cancelText = "Hủy",
+                icon = "warning",
+            } = options;
+
+            if (typeof Swal !== "undefined") {
+                return Swal.fire({
+                    title,
+                    text: message,
+                    icon,
+                    showCancelButton: true,
+                    confirmButtonText: confirmText,
+                    cancelButtonText: cancelText,
+                    confirmButtonColor: "#e11d48",
+                    cancelButtonColor: "#64748b",
+                    reverseButtons: true,
+                }).then((result) => result.isConfirmed);
+            }
+
+            return Promise.resolve(window.confirm(`${title}\n\n${message}`));
+        }
+    }
+
+    function getItemsFromResponse(result) {
+        return result?.data?.data || result?.data || [];
+    }
+
+    function getMetaFromResponse(result) {
+        return result?.data?.meta || null;
+    }
+
+    function getCategoryImageUrl(image) {
+        if (!image) {
+            return "https://placehold.co/120x120/f0fdfa/0f766e?text=CAT";
+        }
+
+        if (image.startsWith("http://") || image.startsWith("https://")) {
+            return image;
+        }
+
+        return `${PUBLIC_BASE_URL}/${image.replace(/^\/+/, "")}`;
+    }
+
+    function formatDate(value) {
+        if (!value) return "---";
+
+        return new Intl.DateTimeFormat("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        }).format(new Date(value));
+    }
+
+    function getCategoryIsActive(category) {
+        return category?.isActive === true || category?.isActive === "true";
+    }
+
+    function parentName(parentId) {
+        if (!parentId) return "Không có";
+
+        const parent =
+            state.categories.find(
+                (category) => Number(category.id) === Number(parentId),
+            ) ||
+            state.activeCategories.find(
+                (category) => Number(category.id) === Number(parentId),
+            );
+
+        return parent?.name || "Không xác định";
+    }
+
+    function categoryDepth(category) {
+        let depth = 0;
+        let current = category;
+
+        while (current?.parentId) {
+            depth += 1;
+
+            current = state.categories.find(
+                (item) => Number(item.id) === Number(current.parentId),
+            );
+
+            if (depth > 10) break;
+        }
+
+        return depth;
+    }
+
+    function getDescendantIds(id) {
+        const ids = [];
+
+        const walk = (parentId) => {
+            state.categories
+                .filter(
+                    (category) =>
+                        Number(category.parentId) === Number(parentId),
+                )
+                .forEach((child) => {
+                    ids.push(Number(child.id));
+                    walk(child.id);
+                });
+        };
+
+        walk(id);
+
+        return ids;
+    }
+
+    function filteredCategories() {
+        let list = [...state.categories];
+
+        const keyword = state.search.toLowerCase();
+
+        if (keyword) {
+            list = list.filter((category) => {
+                return (
+                    String(category.name || "")
+                        .toLowerCase()
+                        .includes(keyword) ||
+                    String(category.slug || "")
+                        .toLowerCase()
+                        .includes(keyword)
+                );
+            });
+        }
+
+        if (state.status === "active") {
+            list = list.filter((category) => getCategoryIsActive(category));
+        }
+
+        if (state.status === "hidden") {
+            list = list.filter((category) => !getCategoryIsActive(category));
+        }
+
+        if (state.type === "parent") {
+            list = list.filter((category) => !category.parentId);
+        }
+
+        if (state.type === "child") {
+            list = list.filter((category) => Boolean(category.parentId));
+        }
+
+        return list;
+    }
+    
+    function statusBadge(category) {
+        return getCategoryIsActive(category)
+            ? '<span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-emerald-200">Đang hiển thị</span>'
+            : '<span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Đang ẩn</span>';
+    }
+
+    function statusSwitch(category) {
+        const active = getCategoryIsActive(category);
+
+        return `
+        <button
+            type="button"
+            onclick="toggleCategoryStatus(${category.id})"
+            class="inline-flex h-7 w-12 items-center rounded-full p-1 transition ${active ? "bg-kigen-600" : "bg-slate-300"}"
+            title="Bật/tắt trạng thái"
+        >
+            <span class="h-5 w-5 rounded-full bg-white shadow transition ${active ? "translate-x-5" : ""}"></span>
+        </button>
+    `;
+    }
+
+    function actionButtons(category) {
+        return `
+        <div class="flex justify-end gap-2">
+            <button
+                type="button"
+                onclick="openDetail(${category.id})"
+                class="grid h-9 w-9 place-items-center rounded-xl bg-slate-100 text-slate-600 hover:text-kigen-700"
+                title="Xem nhanh"
+            >
+                <i class="fa-regular fa-eye"></i>
+            </button>
+
+            <button
+                type="button"
+                onclick="openCategoryModal(${category.id})"
+                class="grid h-9 w-9 place-items-center rounded-xl bg-kigen-50 text-kigen-700 hover:bg-kigen-100"
+                title="Sửa"
+            >
+                <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+
+            <button
+                type="button"
+                onclick="viewProducts(${category.id})"
+                class="grid h-9 w-9 place-items-center rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                title="Xem sản phẩm"
+            >
+                <i class="fa-solid fa-box"></i>
+            </button>
+
+            <button
+                type="button"
+                onclick="deleteCategory(${category.id})"
+                class="grid h-9 w-9 place-items-center rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100"
+                title="Xóa"
+            >
+                <i class="fa-regular fa-trash-can"></i>
+            </button>
+        </div>
+    `;
+    }
+
+    function renderStats() {
+        const list = state.categories;
+
+        $("statTotalCategories").textContent =
+            state.meta?.totalItems || list.length;
+
+        $("statActiveCategories").textContent = list.filter((category) =>
+            getCategoryIsActive(category),
+        ).length;
+
+        $("statInactiveCategories").textContent = list.filter(
+            (category) => !getCategoryIsActive(category),
+        ).length;
+
+        $("statParentCategories").textContent = list.filter(
+            (category) => !category.parentId,
+        ).length;
+
+        $("statChildCategories").textContent = list.filter((category) =>
+            Boolean(category.parentId),
+        ).length;
+    }
+
+    function renderSelectionInfo(list) {
+        $("selectedText").textContent = state.selected.size
+            ? `Đã chọn ${state.selected.size} danh mục`
+            : "Chưa chọn danh mục";
+
+        $("resultText").textContent = `${list.length} danh mục phù hợp`;
+
+        const selectAll = $("selectAll");
+
+        if (selectAll) {
+            selectAll.checked =
+                list.length > 0 &&
+                list.every((category) =>
+                    state.selected.has(Number(category.id)),
+                );
+        }
+    }
+
+    function renderTable() {
+        const list = filteredCategories();
+
+        renderSelectionInfo(list);
+
+        if (!list.length) {
+            $("categoryTable").innerHTML = `
+            <tr>
+                <td colspan="9" class="px-5 py-12 text-center text-sm font-semibold text-slate-500">
+                    Không có danh mục phù hợp.
+                </td>
+            </tr>
+        `;
+
+            $("categoryCards").innerHTML = `
+            <div class="rounded-2xl bg-slate-50 p-6 text-center text-sm font-semibold text-slate-500">
+                Không có danh mục phù hợp.
+            </div>
+        `;
+
+            return;
+        }
+
+        $("categoryTable").innerHTML = list
+            .map((category) => {
+                const depth = categoryDepth(category);
+
+                return `
+                <tr class="border-t border-slate-100 hover:bg-slate-50">
+                    <td class="px-5 py-4">
+                        <input
+                            type="checkbox"
+                            ${state.selected.has(Number(category.id)) ? "checked" : ""}
+                            onchange="toggleSelect(${category.id})"
+                            class="h-4 w-4 rounded border-slate-300 text-kigen-600"
+                        />
+                    </td>
+
+                    <td class="px-5 py-4">
+                        <div class="flex items-center gap-3" style="padding-left:${depth * 24}px">
+                            <img
+                                src="${getCategoryImageUrl(category.image)}"
+                                alt="${category.name}"
+                                class="h-14 w-14 rounded-2xl object-cover ring-1 ring-slate-200"
+                            />
+
+                            <div class="min-w-0">
+                                <p class="font-bold text-slate-950">
+                                    <i class="fa-solid ${category.parentId ? "fa-folder-open" : "fa-folder"} mr-2 text-kigen-700"></i>
+                                    ${category.name}
+                                </p>
+
+                                <p class="max-w-64 truncate text-xs text-slate-500">
+                                    ${category.description || "Không có mô tả"}
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="px-5 py-4 font-semibold text-slate-600">
+                        ${category.slug || "---"}
+                    </td>
+
+                    <td class="px-5 py-4 text-slate-600">
+                        ${category.parent?.name || parentName(category.parentId)}
+                    </td>
+
+                    <td class="px-5 py-4 font-bold text-slate-950">
+                        ${category.productCount || 0}
+                    </td>
+
+                    <td class="px-5 py-4 font-bold text-slate-950">
+                        ${category.childrenCount || 0}
+                    </td>
+
+                    <td class="px-5 py-4">
+                        <div class="flex items-center gap-3">
+                            ${statusSwitch(category)}
+                            ${statusBadge(category)}
+                        </div>
+                    </td>
+
+                    <td class="px-5 py-4 text-slate-500">
+                        ${formatDate(category.createdAt)}
+                    </td>
+
+                    <td class="px-5 py-4">
+                        ${actionButtons(category)}
+                    </td>
+                </tr>
+            `;
+            })
+            .join("");
+
+        $("categoryCards").innerHTML = list
+            .map((category) => {
+                return `
+                <article class="rounded-3xl border border-slate-200 bg-white p-4">
+                    <div class="flex gap-3">
+                        <input
+                            type="checkbox"
+                            ${state.selected.has(Number(category.id)) ? "checked" : ""}
+                            onchange="toggleSelect(${category.id})"
+                            class="mt-2 h-4 w-4 rounded border-slate-300 text-kigen-600"
+                        />
+
+                        <img
+                            src="${getCategoryImageUrl(category.image)}"
+                            alt="${category.name}"
+                            class="h-20 w-20 rounded-2xl object-cover ring-1 ring-slate-200"
+                        />
+
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-950">${category.name}</p>
+
+                            <p class="mt-1 text-xs text-slate-500">
+                                ${category.slug || "---"} • Cha: ${category.parent?.name || parentName(category.parentId)}
+                            </p>
+
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                ${statusBadge(category)}
+
+                                <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+                                    ${category.productCount || 0} sản phẩm
+                                </span>
+
+                                <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+                                    ${category.childrenCount || 0} danh mục con
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                        ${statusSwitch(category)}
+                        ${actionButtons(category)}
+                    </div>
+                </article>
+            `;
+            })
+            .join("");
+    }
+
+    function renderTree() {
+        const list = filteredCategories();
+        const allowed = new Set(list.map((category) => Number(category.id)));
+
+        const renderNode = (category, depth = 0) => {
+            const children = state.categories
+                .filter(
+                    (child) => Number(child.parentId) === Number(category.id),
+                )
+                .filter((child) => allowed.has(Number(child.id)));
+
+            if (!allowed.has(Number(category.id)) && !children.length)
+                return "";
+
+            return `
+            <div class="${depth ? "ml-6 border-l border-slate-200 pl-4" : ""}">
+                <div class="mb-3 flex flex-col gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="flex items-center gap-3">
+                        <input
+                            type="checkbox"
+                            ${state.selected.has(Number(category.id)) ? "checked" : ""}
+                            onchange="toggleSelect(${category.id})"
+                            class="h-4 w-4 rounded border-slate-300 text-kigen-600"
+                        />
+
+                        <img
+                            src="${getCategoryImageUrl(category.image)}"
+                            alt="${category.name}"
+                            class="h-14 w-14 rounded-2xl object-cover ring-1 ring-slate-200"
+                        />
+
+                        <div>
+                            <p class="font-bold text-slate-950">
+                                <i class="fa-solid ${children.length ? "fa-folder-tree" : "fa-folder"} mr-2 text-kigen-700"></i>
+                                ${category.name}
+                            </p>
+
+                            <p class="text-xs text-slate-500">
+                                ${category.slug || "---"} • ${category.productCount || 0} sản phẩm • ${category.childrenCount || 0} danh mục con
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-end gap-3">
+                        ${statusSwitch(category)}
+                        ${statusBadge(category)}
+                        ${actionButtons(category)}
+                    </div>
+                </div>
+
+                ${children.map((child) => renderNode(child, depth + 1)).join("")}
+            </div>
+        `;
+        };
+
+        const roots = state.categories.filter((category) => !category.parentId);
+
+        $("treeView").innerHTML =
+            roots.map((root) => renderNode(root)).join("") ||
+            '<div class="rounded-2xl bg-slate-50 p-6 text-center text-sm font-semibold text-slate-500">Không có danh mục phù hợp.</div>';
+    }
+
+    function renderPagination() {
+        const meta = state.meta;
+
+        if (!meta) {
+            $("paginationText").textContent = `Trang ${state.page}`;
+            $("prevPageBtn").disabled = state.page <= 1;
+            $("nextPageBtn").disabled = true;
+            return;
+        }
+
+        $("paginationText").textContent =
+            `Trang ${meta.page}/${meta.totalPages} • ${meta.totalItems} danh mục`;
+
+        $("prevPageBtn").disabled = !meta.hasPreviousPage;
+        $("nextPageBtn").disabled = !meta.hasNextPage;
+    }
+
+    function renderViewMode() {
+        $("tableView").classList.toggle("hidden", state.view !== "table");
+        $("treeView").classList.toggle("hidden", state.view !== "tree");
+
+        $("tableModeBtn").className =
+            `flex-1 rounded-xl px-3 py-2 text-sm font-bold ${state.view === "table" ? "bg-white text-kigen-700 shadow-sm" : "text-slate-500"}`;
+
+        $("treeModeBtn").className =
+            `flex-1 rounded-xl px-3 py-2 text-sm font-bold ${state.view === "tree" ? "bg-white text-kigen-700 shadow-sm" : "text-slate-500"}`;
+    }
+
+    function renderAll() {
+        renderStats();
+        renderTable();
+        renderTree();
+        renderPagination();
+        renderViewMode();
+    }
+
+    async function fetchJson(url, options = {}) {
+        const response = await fetch(url, {
+            credentials: "include",
+            ...options,
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.success === false) {
+            throw new Error(result.message || "Thao tác thất bại");
+        }
+
+        return result;
+    }
+
+    function buildCategoryListUrl() {
+        const params = new URLSearchParams();
+
+        params.set("page", state.page);
+        params.set("limit", state.limit);
+
+        if (state.search) {
+            params.set("search", state.search);
+        }
+
+        if (state.status === "active") {
+            params.set("isActive", "true");
+        }
+
+        if (state.status === "hidden") {
+            params.set("isActive", "false");
+        }
+
+        return `${CATEGORY_API_URL}?${params.toString()}`;
+    }
+
+    async function fetchCategories() {
+        $("categoryTable").innerHTML = `
+        <tr>
+            <td colspan="9" class="px-5 py-12 text-center text-sm font-semibold text-slate-500">
+                Đang tải danh mục...
+            </td>
+        </tr>
+    `;
+
+        try {
+            const result = await fetchJson(buildCategoryListUrl());
+
+            state.categories = getItemsFromResponse(result);
+            state.meta = getMetaFromResponse(result);
+
+            renderAll();
+        } catch (error) {
+            $("categoryTable").innerHTML = `
+            <tr>
+                <td colspan="9" class="px-5 py-12 text-center text-sm font-semibold text-rose-500">
+                    ${error.message}
+                </td>
+            </tr>
+        `;
+
+            notify("error", "Lỗi tải danh mục", error.message);
+        }
+    }
+
+    async function fetchActiveCategories() {
+        try {
+            const result = await fetchJson(`${CATEGORY_API_URL}/active`);
+
+            state.activeCategories = Array.isArray(result.data)
+                ? result.data
+                : [];
+        } catch {
+            state.activeCategories = [];
+        }
+    }
+
+    function renderParentOptions(currentId = null) {
+        const invalidIds = currentId
+            ? getDescendantIds(currentId).concat(Number(currentId))
+            : [];
+
+        const source = state.activeCategories.length
+            ? state.activeCategories
+            : state.categories;
+
+        const options = source
+            .filter((category) => !invalidIds.includes(Number(category.id)))
+            .map((category) => {
+                return `<option value="${category.id}">${category.name}</option>`;
+            })
+            .join("");
+
+        $("parentInput").innerHTML =
+            `<option value="">Không có danh mục cha</option>${options}`;
+    }
+
+    function setStatusUi() {
+        const active = $("statusInput").value === "active";
+
+        $("statusText").textContent = active ? "Hiển thị" : "Ẩn";
+
+        $("statusToggle").className =
+            `mt-2 flex h-12 w-full items-center justify-between rounded-2xl border px-4 text-sm font-bold ${
+                active
+                    ? "border-kigen-200 bg-kigen-50 text-kigen-700"
+                    : "border-slate-200 bg-white text-slate-600"
+            }`;
+
+        $("statusPill").className =
+            `flex h-7 w-12 items-center rounded-full p-1 transition ${
+                active ? "bg-kigen-600" : "bg-slate-300"
+            }`;
+
+        $("statusPill").innerHTML =
+            `<span class="h-5 w-5 rounded-full bg-white shadow transition ${active ? "translate-x-5" : ""}"></span>`;
+    }
+
+    function resetImagePreview() {
+        state.imageFile = null;
+        $("imageFile").value = "";
+        $("imagePreview").src =
+            "https://placehold.co/900x520/f0fdfa/0f766e?text=Category";
+    }
+
+    function openCategoryModal(id = null) {
+        state.editingId = id;
+
+        clearErrors();
+        $("categoryForm").reset();
+        resetImagePreview();
+
+        const category = state.categories.find(
+            (item) => Number(item.id) === Number(id),
+        );
+
+        $("modalTitle").textContent = category
+            ? "Sửa danh mục"
+            : "Thêm danh mục";
+        $("categoryId").value = category?.id || "";
+        $("nameInput").value = category?.name || "";
+        $("descriptionInput").value = category?.description || "";
+        $("statusInput").value =
+            category && !getCategoryIsActive(category) ? "inactive" : "active";
+
+        if (category?.image) {
+            $("imagePreview").src = getCategoryImageUrl(category.image);
+        }
+
+        $("descriptionCounter").textContent =
+            `${$("descriptionInput").value.length} ký tự`;
+
+        renderParentOptions(id);
+
+        $("parentInput").value = category?.parentId || "";
+
+        setStatusUi();
+
+        $("categoryModal").classList.remove("hidden");
+        $("categoryModal").classList.add("flex");
+
+        setTimeout(() => $("nameInput").focus(), 50);
+    }
+
+    function closeCategoryModal() {
+        $("categoryModal").classList.add("hidden");
+        $("categoryModal").classList.remove("flex");
+    }
+
+    function clearErrors() {
+        document.querySelectorAll("[data-error]").forEach((item) => {
+            item.textContent = "";
+        });
+
+        document.querySelectorAll(".field-error").forEach((item) => {
+            item.classList.remove("field-error");
+        });
+    }
+
+    function setError(id, message, errors) {
+        errors[id] = message;
+        $(id)?.classList.add("field-error");
+
+        const error = document.querySelector(`[data-error="${id}"]`);
+
+        if (error) {
+            error.textContent = message;
+        }
+    }
+
+    function validateCategory() {
+        clearErrors();
+
+        const name = $("nameInput").value.trim();
+        const description = $("descriptionInput").value.trim();
+        const errors = {};
+
+        if (!name) {
+            setError("nameInput", "Vui lòng nhập tên danh mục.", errors);
+        } else if (name.length < 2) {
+            setError(
+                "nameInput",
+                "Tên danh mục cần tối thiểu 2 ký tự.",
+                errors,
+            );
+        } else if (name.length > 120) {
+            setError(
+                "nameInput",
+                "Tên danh mục không được vượt quá 120 ký tự.",
+                errors,
+            );
+        }
+
+        if (description.length > 255) {
+            setError(
+                "descriptionInput",
+                "Mô tả không được vượt quá 255 ký tự.",
+                errors,
+            );
+        }
+
+        if (
+            state.imageFile &&
+            !allowedImageTypes.includes(state.imageFile.type)
+        ) {
+            setError(
+                "imageFile",
+                "Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP.",
+                errors,
+            );
+        }
+
+        if (state.imageFile && state.imageFile.size > 2 * 1024 * 1024) {
+            setError("imageFile", "Ảnh không được vượt quá 2MB.", errors);
+        }
+
+        const firstError = Object.keys(errors)[0];
+
+        if (firstError) {
+            $(firstError)?.focus();
+            notify(
+                "warning",
+                "Dữ liệu chưa hợp lệ",
+                "Vui lòng kiểm tra lại thông tin danh mục.",
+            );
+        }
+
+        return !firstError;
+    }
+
+    function buildCategoryFormData() {
+        const formData = new FormData();
+
+        const parentId = $("parentInput").value;
+        const description = $("descriptionInput").value.trim();
+
+        formData.append("name", $("nameInput").value.trim());
+
+        // Không chọn danh mục cha -> gửi "null"
+        // BE DTO transform "null" -> null
+        // DB parent_id = NULL => danh mục cấp 1
+        formData.append("parentId", parentId ? parentId : "null");
+
+        formData.append("description", description);
+        formData.append(
+            "isActive",
+            $("statusInput").value === "active" ? "true" : "false",
+        );
+
+        if (state.imageFile) {
+            formData.append("image", state.imageFile);
+        }
+
+        return formData;
+    }
+
+    async function saveCategory(event) {
+        event.preventDefault();
+
+        if (!validateCategory()) return;
+
+        const id = $("categoryId").value;
+        const isEdit = Boolean(id);
+
+        $("saveCategoryBtn").disabled = true;
+
+        try {
+            await fetchJson(
+                isEdit ? `${CATEGORY_API_URL}/${id}` : CATEGORY_API_URL,
+                {
+                    method: isEdit ? "PATCH" : "POST",
+                    body: buildCategoryFormData(),
+                },
+            );
+
+            closeCategoryModal();
+            await fetchCategories();
+            await fetchActiveCategories();
+
+            notify(
+                "success",
+                "Đã lưu danh mục",
+                isEdit
+                    ? "Cập nhật danh mục thành công."
+                    : "Thêm danh mục thành công.",
+            );
+        } catch (error) {
+            notify("error", "Lỗi lưu danh mục", error.message);
+        } finally {
+            $("saveCategoryBtn").disabled = false;
+        }
+    }
+
+    async function toggleCategoryStatus(id) {
+        try {
+            await fetchJson(`${CATEGORY_API_URL}/${id}/toggle-active`, {
+                method: "PATCH",
+            });
+
+            await fetchCategories();
+            await fetchActiveCategories();
+
+            notify(
+                "success",
+                "Đã cập nhật trạng thái",
+                "Trạng thái danh mục đã được thay đổi.",
+            );
+        } catch (error) {
+            notify("error", "Lỗi trạng thái", error.message);
+        }
+    }
+
+    function canDeleteCategory(category) {
+        if ((category.productCount || 0) > 0) {
+            notify(
+                "warning",
+                "Không thể xóa",
+                "Danh mục đang có sản phẩm, vui lòng chuyển sản phẩm trước.",
+            );
+            return false;
+        }
+
+        if ((category.childrenCount || 0) > 0) {
+            notify(
+                "warning",
+                "Không thể xóa",
+                "Danh mục đang có danh mục con, vui lòng xử lý danh mục con trước.",
+            );
+            return false;
+        }
+
+        return true;
+    }
+    
+    async function deleteCategory(id) {
+        const category = state.categories.find(
+            (item) => Number(item.id) === Number(id),
+        );
+
+        if (!category) {
+            notify(
+                "warning",
+                "Không tìm thấy danh mục",
+                "Danh mục không tồn tại trong danh sách hiện tại.",
+            );
+            return;
+        }
+
+        if (!canDeleteCategory(category)) return;
+
+        const confirmed = await confirmAction({
+            title: "Xóa danh mục?",
+            message: `Danh mục "${category.name}" sẽ được chuyển vào thùng rác.`,
+            confirmText: "Xóa danh mục",
+            cancelText: "Hủy",
+            icon: "warning",
+        });
+
+        if (!confirmed) return;
+
+        try {
+            await fetchJson(`${CATEGORY_API_URL}/${id}`, {
+                method: "DELETE",
+            });
+
+            state.selected.delete(Number(id));
+
+            await fetchCategories();
+            await fetchActiveCategories();
+
+            notify(
+                "success",
+                "Đã xóa danh mục",
+                "Danh mục đã được chuyển vào thùng rác.",
+            );
+        } catch (error) {
+            notify(
+                "error",
+                "Lỗi xóa danh mục",
+                error.message || "Không thể xóa danh mục.",
+            );
+        }
+    }
+    
+    function openDetail(id) {
+        const category = state.categories.find(
+            (item) => Number(item.id) === Number(id),
+        );
+
+        if (!category) return;
+
+        $("detailBody").innerHTML = `
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <img
+                src="${getCategoryImageUrl(category.image)}"
+                alt="${category.name}"
+                class="aspect-square w-full rounded-3xl object-cover ring-1 ring-slate-200"
+            />
+
+            <div class="space-y-4 md:col-span-2">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-950">${category.name}</h3>
+                    <p class="mt-1 text-sm text-slate-500">${category.description || "Không có mô tả"}</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    ${detailLine("Slug", category.slug || "---")}
+                    ${detailLine("Danh mục cha", category.parent?.name || parentName(category.parentId))}
+                    ${detailLine("Số sản phẩm", category.productCount || 0)}
+                    ${detailLine("Danh mục con", category.childrenCount || 0)} 
+                    ${detailLine("Trạng thái", getCategoryIsActive(category) ? "Đang hiển thị" : "Đang ẩn")}
+                    ${detailLine("Ngày tạo", formatDate(category.createdAt))}
+                    ${detailLine("Ngày cập nhật", formatDate(category.updatedAt))}
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onclick="viewProducts(${category.id})"
+                        class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100"
+                    >
+                        Xem sản phẩm
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeDetail();openCategoryModal(${category.id})"
+                        class="rounded-2xl bg-kigen-600 px-5 py-3 text-sm font-bold text-white"
+                    >
+                        Sửa danh mục
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+        $("detailModal").classList.remove("hidden");
+        $("detailModal").classList.add("flex");
+    }
+
+    function detailLine(label, value) {
+        return `
+        <div class="rounded-2xl border border-slate-100 bg-slate-50 p-3">
+            <p class="text-xs font-bold uppercase text-slate-400">${label}</p>
+            <p class="mt-1 text-sm font-bold text-slate-800">${value}</p>
+        </div>
+    `;
+    }
+
+    function closeDetail() {
+        $("detailModal").classList.add("hidden");
+        $("detailModal").classList.remove("flex");
+    }
+
+    function viewProducts(id) {
+        window.location.href = `/admin/products?categoryId=${id}`;
+    }
+
+    function toggleSelect(id) {
+        const categoryId = Number(id);
+
+        state.selected.has(categoryId)
+            ? state.selected.delete(categoryId)
+            : state.selected.add(categoryId);
+
+        renderAll();
+    }
+
+    async function bulkUpdate(isActive) {
+        if (!state.selected.size) {
+            notify(
+                "info",
+                "Chưa chọn danh mục",
+                "Vui lòng chọn ít nhất một danh mục.",
+            );
+            return;
+        }
+
+        const selectedCategories = state.categories.filter((category) =>
+            state.selected.has(Number(category.id)),
+        );
+
+        try {
+            for (const category of selectedCategories) { 
+                if (getCategoryIsActive(category) !== isActive) {
+                    await fetchJson(
+                        `${CATEGORY_API_URL}/${category.id}/toggle-active`,
+                        {
+                            method: "PATCH",
+                        },
+                    );
+                }
+            }
+
+            state.selected.clear();
+
+            await fetchCategories();
+            await fetchActiveCategories();
+
+            notify(
+                "success",
+                "Đã cập nhật",
+                "Danh mục đã chọn đã được cập nhật trạng thái.",
+            );
+        } catch (error) {
+            notify("error", "Lỗi cập nhật", error.message);
+        }
+    }
+
+    async function bulkDelete() {
+        if (!state.selected.size) {
+            notify(
+                "info",
+                "Chưa chọn danh mục",
+                "Vui lòng chọn ít nhất một danh mục.",
+            );
+            return;
+        }
+
+        const selectedCategories = state.categories.filter((category) =>
+            state.selected.has(Number(category.id)),
+        );
+
+        const blocked = selectedCategories.filter(
+            (category) =>
+                (category.productCount || 0) > 0 ||
+                (category.childrenCount || 0) > 0,
+        );
+
+        if (blocked.length) {
+            notify(
+                "warning",
+                "Không thể xóa hàng loạt",
+                "Có danh mục đang chứa sản phẩm hoặc danh mục con.",
+            );
+            return;
+        }
+
+        const confirmed = await confirmAction({
+            title: "Xóa danh mục đã chọn?",
+            message: `${selectedCategories.length} danh mục sẽ được chuyển vào thùng rác.`,
+            confirmText: "Xóa đã chọn",
+            cancelText: "Hủy",
+            icon: "warning",
+        });
+
+        if (!confirmed) return;
+
+        try {
+            for (const category of selectedCategories) {
+                await fetchJson(`${CATEGORY_API_URL}/${category.id}`, {
+                    method: "DELETE",
+                });
+            }
+
+            state.selected.clear();
+
+            await fetchCategories();
+            await fetchActiveCategories();
+
+            notify(
+                "success",
+                "Đã xóa",
+                "Các danh mục đã chọn đã được chuyển vào thùng rác.",
+            );
+        } catch (error) {
+            notify("error", "Lỗi xóa hàng loạt", error.message);
+        }
+    }
+
+    function resetFilters() {
+        state.search = "";
+        state.status = "all";
+        state.type = "all";
+        state.page = 1;
+        state.selected.clear();
+
+        $("searchInput").value = "";
+        $("statusFilter").value = "all";
+        $("typeFilter").value = "all";
+
+        const headerSearch = $("headerSearch");
+
+        if (headerSearch) {
+            headerSearch.value = "";
+        }
+
+        fetchCategories();
+
+        notify("success", "Đã đặt lại", "Bộ lọc đã được đặt lại.");
+    }
+
+    function handleImageFileChange(event) {
+        const file = event.target.files?.[0];
+
+        if (!file) {
+            resetImagePreview();
+            return;
+        }
+
+        if (!allowedImageTypes.includes(file.type)) {
+            $("imageFile").value = "";
+            notify(
+                "warning",
+                "File không hợp lệ",
+                "Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP.",
+            );
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            $("imageFile").value = "";
+            notify("warning", "File quá lớn", "Ảnh không được vượt quá 2MB.");
+            return;
+        }
+
+        state.imageFile = file;
+
+        const reader = new FileReader();
+
+        reader.onload = (readerEvent) => {
+            $("imagePreview").src = readerEvent.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function bindEvents() {
+        $("addCategoryBtn").addEventListener("click", () =>
+            openCategoryModal(),
+        );
+        $("categoryForm").addEventListener("submit", saveCategory);
+
+        document.querySelectorAll(".close-modal").forEach((button) => {
+            button.addEventListener("click", closeCategoryModal);
+        });
+
+        $("closeDetailModal").addEventListener("click", closeDetail);
+
+        $("searchInput").addEventListener("input", (event) => {
+            state.search = event.target.value.trim();
+            state.page = 1;
+            state.selected.clear();
+            fetchCategories();
+        });
+
+        $("statusFilter").addEventListener("change", (event) => {
+            state.status = event.target.value;
+            state.page = 1;
+            state.selected.clear();
+            fetchCategories();
+        });
+
+        $("typeFilter").addEventListener("change", (event) => {
+            state.type = event.target.value;
+            state.selected.clear();
+            renderAll();
+        });
+
+        $("resetFilterBtn").addEventListener("click", resetFilters);
+
+        $("tableModeBtn").addEventListener("click", () => {
+            state.view = "table";
+            renderAll();
+        });
+
+        $("treeModeBtn").addEventListener("click", () => {
+            state.view = "tree";
+            renderAll();
+        });
+
+        $("selectAll").addEventListener("change", (event) => {
+            filteredCategories().forEach((category) => {
+                event.target.checked
+                    ? state.selected.add(Number(category.id))
+                    : state.selected.delete(Number(category.id));
+            });
+
+            renderAll();
+        });
+
+        $("bulkShowBtn").addEventListener("click", () => bulkUpdate(true));
+        $("bulkHideBtn").addEventListener("click", () => bulkUpdate(false));
+        $("bulkDeleteBtn").addEventListener("click", bulkDelete);
+
+        $("prevPageBtn").addEventListener("click", () => {
+            if (state.page <= 1) return;
+
+            state.page -= 1;
+            fetchCategories();
+        });
+
+        $("nextPageBtn").addEventListener("click", () => {
+            if (state.meta && !state.meta.hasNextPage) return;
+
+            state.page += 1;
+            fetchCategories();
+        });
+
+        $("descriptionInput").addEventListener("input", () => {
+            $("descriptionCounter").textContent =
+                `${$("descriptionInput").value.length} ký tự`;
+        });
+
+        $("statusToggle").addEventListener("click", () => {
+            $("statusInput").value =
+                $("statusInput").value === "active" ? "inactive" : "active";
+
+            setStatusUi();
+        });
+
+        $("imageFile").addEventListener("change", handleImageFileChange);
+
+        const headerSearch = $("headerSearch");
+
+        if (headerSearch) {
+            headerSearch.addEventListener("input", (event) => {
+                $("searchInput").value = event.target.value;
+                state.search = event.target.value.trim();
+                state.page = 1;
+                state.selected.clear();
+
+                fetchCategories();
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        bindEvents();
+
+        await fetchActiveCategories();
+        await fetchCategories();
+    });
+</script>

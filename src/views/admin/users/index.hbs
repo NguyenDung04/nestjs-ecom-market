@@ -1,27 +1,50 @@
-{{> admin/breadcrumb}}
+<section class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-950">Quản lý khách hàng / người dùng</h1>
+        <p class="mt-1 text-sm text-slate-500">
+            Quản lý tài khoản người dùng, vai trò, trạng thái và thông tin liên hệ.
+        </p>
+    </div>
 
-<div class="overflow-hidden rounded-2xl border bg-white shadow-sm">
-  <table class="w-full text-left text-sm">
-    <thead class="bg-slate-100">
-      <tr>
-        <th class="px-5 py-4">STT</th>
-        <th class="px-5 py-4">Họ tên</th>
-        <th class="px-5 py-4">Email</th>
-        <th class="px-5 py-4">Vai trò</th>
-        <th class="px-5 py-4">Trạng thái</th>
-      </tr>
-    </thead>
+    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="mb-5">
+            <input
+                type="text"
+                placeholder="Tìm kiếm người dùng..."
+                class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500 md:max-w-sm"
+            />
+        </div>
 
-    <tbody>
-      {{#each users}}
-        <tr class="border-t">
-          <td class="px-5 py-4">{{inc @index}}</td>
-          <td class="px-5 py-4 font-semibold">{{this.name}}</td>
-          <td class="px-5 py-4">{{this.email}}</td>
-          <td class="px-5 py-4">{{this.role}}</td>
-          <td class="px-5 py-4">{{this.status}}</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+        <div class="overflow-hidden rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-4 py-3">Người dùng</th>
+                        <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Số điện thoại</th>
+                        <th class="px-4 py-3">Vai trò</th>
+                        <th class="px-4 py-3">Trạng thái</th>
+                        <th class="px-4 py-3 text-right">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+                    <tr>
+                        <td class="px-4 py-4 font-medium text-slate-800">Chưa có người dùng</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4">
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+                                Chưa có
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 text-right">
+                            <button class="font-semibold text-kigen-600">Xem</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

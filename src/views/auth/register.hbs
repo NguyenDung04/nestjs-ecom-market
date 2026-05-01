@@ -315,7 +315,13 @@
 </main>
 
 <script>
-    (function AuthRegisterPage() {
+    (function AuthRegisterPage(window, document) {
+        "use strict";
+
+        var Auth = window.AuthCommon;
+
+        if (!Auth) return;
+
         var selectors = {
             form: "auth-register-form",
             name: "auth-register-name",
@@ -347,7 +353,7 @@
         };
 
         var config = {
-            apiUrl: "/api/auth/register",
+            apiUrl: Auth.buildApiUrl("/auth/register"),
             redirectUrl: "/login",
             redirectDelay: 1800,
         };
@@ -359,7 +365,7 @@
         var elements = {};
 
         function init() {
-            mapElements();
+            elements = Auth.mapElements(selectors);
 
             if (
                 !elements.form ||
@@ -377,18 +383,15 @@
             updatePasswordStrength();
         }
 
-        function mapElements() {
-            Object.keys(selectors).forEach(function (key) {
-                elements[key] = document.getElementById(selectors[key]);
-            });
-        }
-
         function bindEvents() {
             elements.form.addEventListener("submit", handleSubmit);
 
             if (elements.togglePassword) {
                 elements.togglePassword.addEventListener("click", function () {
-                    togglePassword(elements.password, elements.togglePassword);
+                    Auth.togglePassword(
+                        elements.password,
+                        elements.togglePassword,
+                    );
                 });
             }
 
@@ -396,7 +399,7 @@
                 elements.toggleConfirmPassword.addEventListener(
                     "click",
                     function () {
-                        togglePassword(
+                        Auth.togglePassword(
                             elements.confirmPassword,
                             elements.toggleConfirmPassword,
                         );
@@ -406,21 +409,21 @@
 
             elements.name.addEventListener("input", function () {
                 if (elements.name.value.trim().length >= 2) {
-                    clearFieldError(elements.name, elements.nameError);
+                    Auth.clearFieldError(elements.name, elements.nameError);
                 }
             });
 
             elements.email.addEventListener("input", function () {
                 if (elements.email.value.trim().length > 3) {
-                    clearFieldError(elements.email, elements.emailError);
+                    Auth.clearFieldError(elements.email, elements.emailError);
                 }
             });
 
             elements.phone.addEventListener("input", function () {
-                elements.phone.value = elements.phone.value.replace(/\D/g, "");
+                elements.phone.value = Auth.onlyDigits(elements.phone.value);
 
                 if (elements.phone.value.trim().length >= 10) {
-                    clearFieldError(elements.phone, elements.phoneError);
+                    Auth.clearFieldError(elements.phone, elements.phoneError);
                 }
             });
 
@@ -428,7 +431,10 @@
                 updatePasswordStrength();
 
                 if (elements.password.value.length >= 6) {
-                    clearFieldError(elements.password, elements.passwordError);
+                    Auth.clearFieldError(
+                        elements.password,
+                        elements.passwordError,
+                    );
                 }
             });
 
@@ -437,7 +443,7 @@
                     elements.confirmPassword.value &&
                     elements.confirmPassword.value === elements.password.value
                 ) {
-                    setFieldValid(
+                    Auth.setFieldValid(
                         elements.confirmPassword,
                         elements.confirmPasswordError,
                     );
@@ -447,7 +453,7 @@
             if (elements.agreeTerms) {
                 elements.agreeTerms.addEventListener("change", function () {
                     if (elements.agreeTerms.checked) {
-                        clearTermsError();
+                        Auth.clearTextError(elements.termsError);
                     }
                 });
             }
@@ -456,7 +462,7 @@
                 elements.termsLink.addEventListener("click", function (event) {
                     event.preventDefault();
 
-                    notify(
+                    Auth.notify(
                         "info",
                         "Điều khoản sử dụng",
                         "Trang điều khoản sử dụng đang được cập nhật.",
@@ -469,7 +475,7 @@
                 elements.policyLink.addEventListener("click", function (event) {
                     event.preventDefault();
 
-                    notify(
+                    Auth.notify(
                         "info",
                         "Chính sách bảo mật",
                         "Trang chính sách bảo mật đang được cập nhật.",
@@ -479,78 +485,16 @@
             }
         }
 
-        function notify(type, title, message, duration, callback) {
-            if (typeof window.showAlert24 === "function") {
-                window.showAlert24(
-                    type,
-                    title,
-                    message,
-                    duration || 3500,
-                    callback,
-                );
-                return;
-            }
-
-            alert((title ? title + "\n" : "") + (message || ""));
-
-            if (typeof callback === "function") {
-                callback();
-            }
-        }
-
-        function setFieldError(input, errorElement, message) {
-            if (!input || !errorElement) return;
-
-            errorElement.textContent = message || "";
-            errorElement.classList.toggle("hidden", !message);
-
-            input.classList.toggle("input-error", !!message);
-
-            if (message) {
-                input.classList.remove("input-valid");
-            }
-        }
-
-        function clearFieldError(input, errorElement) {
-            setFieldError(input, errorElement, "");
-        }
-
-        function setFieldValid(input, errorElement) {
-            if (!input) return;
-
-            input.classList.remove("input-error");
-            input.classList.add("input-valid");
-
-            if (errorElement) {
-                errorElement.textContent = "";
-                errorElement.classList.add("hidden");
-            }
-        }
-
         function clearAllErrors() {
-            clearFieldError(elements.name, elements.nameError);
-            clearFieldError(elements.email, elements.emailError);
-            clearFieldError(elements.phone, elements.phoneError);
-            clearFieldError(elements.password, elements.passwordError);
-            clearFieldError(
+            Auth.clearFieldError(elements.name, elements.nameError);
+            Auth.clearFieldError(elements.email, elements.emailError);
+            Auth.clearFieldError(elements.phone, elements.phoneError);
+            Auth.clearFieldError(elements.password, elements.passwordError);
+            Auth.clearFieldError(
                 elements.confirmPassword,
                 elements.confirmPasswordError,
             );
-            clearTermsError();
-        }
-
-        function clearTermsError() {
-            if (!elements.termsError) return;
-
-            elements.termsError.textContent = "";
-            elements.termsError.classList.add("hidden");
-        }
-
-        function setTermsError(message) {
-            if (!elements.termsError) return;
-
-            elements.termsError.textContent = message || "";
-            elements.termsError.classList.toggle("hidden", !message);
+            Auth.clearTextError(elements.termsError);
         }
 
         function validateForm() {
@@ -592,13 +536,13 @@
             var value = elements.name.value.trim();
 
             if (!value) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.name,
                     elements.nameError,
                     "Vui lòng nhập họ tên.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Thiếu họ tên",
                     "Vui lòng nhập họ tên để đăng ký.",
@@ -609,13 +553,13 @@
             }
 
             if (value.length < 2) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.name,
                     elements.nameError,
                     "Họ tên phải có ít nhất 2 ký tự.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Họ tên chưa hợp lệ",
                     "Họ tên phải có ít nhất 2 ký tự.",
@@ -625,7 +569,7 @@
                 return false;
             }
 
-            setFieldValid(elements.name, elements.nameError);
+            Auth.setFieldValid(elements.name, elements.nameError);
             return true;
         }
 
@@ -633,13 +577,13 @@
             var value = elements.email.value.trim();
 
             if (!value) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.email,
                     elements.emailError,
                     "Vui lòng nhập email.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Thiếu email",
                     "Vui lòng nhập email để đăng ký.",
@@ -649,14 +593,14 @@
                 return false;
             }
 
-            if (!isValidEmail(value)) {
-                setFieldError(
+            if (!Auth.isValidEmail(value)) {
+                Auth.setFieldError(
                     elements.email,
                     elements.emailError,
                     "Email không đúng định dạng.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Email không hợp lệ",
                     "Vui lòng nhập email đúng định dạng. Ví dụ: user@example.com.",
@@ -666,7 +610,7 @@
                 return false;
             }
 
-            setFieldValid(elements.email, elements.emailError);
+            Auth.setFieldValid(elements.email, elements.emailError);
             return true;
         }
 
@@ -674,13 +618,13 @@
             var value = elements.phone.value.trim();
 
             if (!value) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.phone,
                     elements.phoneError,
                     "Vui lòng nhập số điện thoại.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Thiếu số điện thoại",
                     "Vui lòng nhập số điện thoại để đăng ký.",
@@ -690,14 +634,14 @@
                 return false;
             }
 
-            if (!isValidVietnamesePhone(value)) {
-                setFieldError(
+            if (!Auth.isValidVietnamesePhone(value)) {
+                Auth.setFieldError(
                     elements.phone,
                     elements.phoneError,
                     "Số điện thoại không đúng định dạng. Ví dụ: 0912345678.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Số điện thoại không hợp lệ",
                     "Vui lòng nhập số điện thoại Việt Nam hợp lệ.",
@@ -707,7 +651,7 @@
                 return false;
             }
 
-            setFieldValid(elements.phone, elements.phoneError);
+            Auth.setFieldValid(elements.phone, elements.phoneError);
             return true;
         }
 
@@ -715,13 +659,13 @@
             var value = elements.password.value;
 
             if (!value) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.password,
                     elements.passwordError,
                     "Vui lòng nhập mật khẩu.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Thiếu mật khẩu",
                     "Vui lòng nhập mật khẩu để đăng ký.",
@@ -732,13 +676,13 @@
             }
 
             if (value.length < 6) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.password,
                     elements.passwordError,
                     "Mật khẩu phải có ít nhất 6 ký tự.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Mật khẩu chưa hợp lệ",
                     "Mật khẩu phải có ít nhất 6 ký tự.",
@@ -748,7 +692,7 @@
                 return false;
             }
 
-            setFieldValid(elements.password, elements.passwordError);
+            Auth.setFieldValid(elements.password, elements.passwordError);
             return true;
         }
 
@@ -756,13 +700,13 @@
             var value = elements.confirmPassword.value;
 
             if (!value) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.confirmPassword,
                     elements.confirmPasswordError,
                     "Vui lòng nhập lại mật khẩu.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Thiếu xác nhận mật khẩu",
                     "Vui lòng nhập lại mật khẩu.",
@@ -773,13 +717,13 @@
             }
 
             if (value !== elements.password.value) {
-                setFieldError(
+                Auth.setFieldError(
                     elements.confirmPassword,
                     elements.confirmPasswordError,
                     "Mật khẩu xác nhận không khớp.",
                 );
 
-                notify(
+                Auth.notify(
                     "warning",
                     "Mật khẩu không khớp",
                     "Mật khẩu xác nhận phải trùng với mật khẩu.",
@@ -789,7 +733,7 @@
                 return false;
             }
 
-            setFieldValid(
+            Auth.setFieldValid(
                 elements.confirmPassword,
                 elements.confirmPasswordError,
             );
@@ -798,15 +742,16 @@
 
         function validateTerms() {
             if (!elements.agreeTerms || elements.agreeTerms.checked) {
-                clearTermsError();
+                Auth.clearTextError(elements.termsError);
                 return true;
             }
 
-            setTermsError(
+            Auth.setTextError(
+                elements.termsError,
                 "Bạn cần đồng ý với Điều khoản và Chính sách bảo mật.",
             );
 
-            notify(
+            Auth.notify(
                 "warning",
                 "Chưa đồng ý điều khoản",
                 "Bạn cần đồng ý với Điều khoản và Chính sách bảo mật.",
@@ -816,129 +761,54 @@
             return false;
         }
 
-        function isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        function isValidVietnamesePhone(phone) {
-            return /^(0[35789])[0-9]{8}$/.test(phone);
-        }
-
         function updatePasswordStrength() {
-            var password = elements.password.value;
-            var score = calculatePasswordScore(password);
-
-            var result = {
-                label: "Nhập mật khẩu để kiểm tra độ mạnh",
-                color: "#9ca3af",
-                width: "0%",
-            };
-
-            if (password && score <= 2) {
-                result = {
-                    label: "Mật khẩu yếu",
-                    color: "#ef4444",
-                    width: "33%",
-                };
-            } else if (password && score <= 4) {
-                result = {
-                    label: "Mật khẩu trung bình",
-                    color: "#f59e0b",
-                    width: "66%",
-                };
-            } else if (password) {
-                result = {
-                    label: "Mật khẩu mạnh",
-                    color: "var(--teal-500)",
-                    width: "100%",
-                };
-            }
-
-            if (elements.strengthFill) {
-                elements.strengthFill.style.width = result.width;
-                elements.strengthFill.style.background = result.color;
-            }
-
-            if (elements.strengthText) {
-                elements.strengthText.textContent = result.label;
-                elements.strengthText.style.color = result.color;
-            }
-        }
-
-        function calculatePasswordScore(password) {
-            var score = 0;
-
-            if (!password) return score;
-
-            if (password.length >= 6) score++;
-            if (password.length >= 10) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[a-z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[^A-Za-z0-9]/.test(password)) score++;
-
-            return score;
+            Auth.updatePasswordStrength(
+                elements.password.value,
+                elements.strengthFill,
+                elements.strengthText,
+            );
         }
 
         function setLoading(isLoading) {
-            if (!elements.submit) return;
-
-            elements.submit.disabled = isLoading;
-
-            if (elements.submitIcon) {
-                elements.submitIcon.className = isLoading
-                    ? "fa-solid fa-spinner fa-spin text-sm"
-                    : "fa-solid fa-user-plus text-sm";
-            }
-
-            if (elements.submitText) {
-                elements.submitText.textContent = isLoading
-                    ? "Đang tạo tài khoản..."
-                    : "Đăng ký";
-            }
+            Auth.setButtonLoading(
+                elements.submit,
+                elements.submitIcon,
+                elements.submitText,
+                isLoading,
+                {
+                    defaultIcon: "fa-solid fa-user-plus text-sm",
+                    loadingText: "Đang tạo tài khoản...",
+                    defaultText: "Đăng ký",
+                },
+            );
         }
 
         async function handleSubmit(event) {
             event.preventDefault();
 
             if (state.isSubmitting) return;
-
-            if (!validateForm()) {
-                return;
-            }
+            if (!validateForm()) return;
 
             state.isSubmitting = true;
             setLoading(true);
 
             try {
                 var result = await register();
-
                 var registeredUser = result && result.data ? result.data : null;
 
-                notify(
-                    "success",
-                    "Đăng ký thành công",
-                    registeredUser && registeredUser.name
-                        ? "Tài khoản " +
+                Auth.redirectWithNotice({
+                    successTitle: "Đăng ký thành công",
+                    successMessage:
+                        registeredUser && registeredUser.name
+                            ? "Tài khoản " +
                               registeredUser.name +
                               " đã được tạo. Vui lòng đăng nhập để tiếp tục."
-                        : result.message ||
+                            : result.message ||
                               "Tài khoản đã được tạo. Vui lòng đăng nhập để tiếp tục.",
-                    2200,
-                );
-
-                window.setTimeout(function () {
-                    notify(
-                        "info",
-                        "Đang chuyển hướng",
-                        "Bạn sẽ được chuyển đến trang đăng nhập.",
-                        1200,
-                    );
-                }, 700);
-
-                window.setTimeout(function () {
-                    window.location.href = config.redirectUrl;
-                }, config.redirectDelay);
+                    infoMessage: "Bạn sẽ được chuyển đến trang đăng nhập.",
+                    redirectUrl: config.redirectUrl,
+                    redirectDelay: config.redirectDelay,
+                });
             } catch (error) {
                 state.isSubmitting = false;
                 setLoading(false);
@@ -946,39 +816,21 @@
             }
         }
 
-        async function register() {
-            var response = await fetch(config.apiUrl, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
+        function register() {
+            return Auth.requestJson(
+                config.apiUrl,
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        name: elements.name.value.trim(),
+                        email: elements.email.value.trim(),
+                        phone: elements.phone.value.trim(),
+                        password: elements.password.value,
+                        confirmPassword: elements.confirmPassword.value,
+                    }),
                 },
-                body: JSON.stringify({
-                    name: elements.name.value.trim(),
-                    email: elements.email.value.trim(),
-                    phone: elements.phone.value.trim(),
-                    password: elements.password.value,
-                    confirmPassword: elements.confirmPassword.value,
-                }),
-            });
-
-            var result = await readJsonResponse(response);
-
-            if (!response.ok || !result || result.success === false) {
-                throw new Error(
-                    (result && result.message) || "Đăng ký tài khoản thất bại.",
-                );
-            }
-
-            return result;
-        }
-
-        async function readJsonResponse(response) {
-            try {
-                return await response.json();
-            } catch (error) {
-                return null;
-            }
+                "Đăng ký tài khoản thất bại.",
+            );
         }
 
         function handleRegisterError(error) {
@@ -986,39 +838,27 @@
             var lowerMessage = message.toLowerCase();
 
             if (lowerMessage.includes("email")) {
-                setFieldError(elements.email, elements.emailError, message);
+                Auth.setFieldError(
+                    elements.email,
+                    elements.emailError,
+                    message,
+                );
                 elements.email.focus();
             } else if (
                 lowerMessage.includes("phone") ||
                 lowerMessage.includes("số điện thoại")
             ) {
-                setFieldError(elements.phone, elements.phoneError, message);
+                Auth.setFieldError(
+                    elements.phone,
+                    elements.phoneError,
+                    message,
+                );
                 elements.phone.focus();
             }
 
-            notify("error", "Đăng ký thất bại", message, 4000);
-        }
-
-        function togglePassword(input, button) {
-            if (!input || !button) return;
-
-            var icon = button.querySelector("i");
-            var isHidden = input.type === "password";
-
-            input.type = isHidden ? "text" : "password";
-
-            if (icon) {
-                icon.className = isHidden
-                    ? "fa-solid fa-eye-slash"
-                    : "fa-solid fa-eye";
-            }
-
-            button.setAttribute(
-                "aria-label",
-                isHidden ? "Ẩn mật khẩu" : "Hiển thị mật khẩu",
-            );
+            Auth.notify("error", "Đăng ký thất bại", message, 4000);
         }
 
         init();
-    })();
+    })(window, document);
 </script>

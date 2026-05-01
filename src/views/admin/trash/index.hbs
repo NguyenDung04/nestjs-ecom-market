@@ -1,0 +1,59 @@
+<section class="space-y-6">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-950">Thùng rác</h1>
+            <p class="mt-1 text-sm text-slate-500">
+                Quản lý dữ liệu đã xóa mềm và khôi phục khi cần thiết.
+            </p>
+        </div>
+
+        <button class="rounded-2xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700">
+            <i class="fa-solid fa-trash-can-arrow-up mr-2"></i>
+            Dọn thùng rác
+        </button>
+    </div>
+
+    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <input
+                type="text"
+                placeholder="Tìm dữ liệu đã xóa..."
+                class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500 md:max-w-sm"
+            />
+
+            <select class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500">
+                <option>Tất cả loại dữ liệu</option>
+                <option>Sản phẩm</option>
+                <option>Danh mục</option>
+                <option>Banner</option>
+                <option>Mã giảm giá</option>
+                <option>Người dùng</option>
+            </select>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-4 py-3">Tên dữ liệu</th>
+                        <th class="px-4 py-3">Loại</th>
+                        <th class="px-4 py-3">Ngày xóa</th>
+                        <th class="px-4 py-3 text-right">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+                    <tr>
+                        <td class="px-4 py-4 font-medium text-slate-800">Chưa có dữ liệu đã xóa</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-slate-500">---</td>
+                        <td class="px-4 py-4 text-right">
+                            <button class="font-semibold text-kigen-600">Khôi phục</button>
+                            <button class="ml-3 font-semibold text-rose-600">Xóa vĩnh viễn</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

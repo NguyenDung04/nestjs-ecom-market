@@ -1,0 +1,100 @@
+<section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft">
+    <div class="grid grid-cols-1 gap-3 xl:grid-cols-12">
+        <div class="relative xl:col-span-5">
+            <i
+                class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            ></i>
+
+            <input
+                id="searchInput"
+                class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none focus:border-kigen-500"
+                placeholder="Tìm theo tên hoặc slug danh mục..."
+                autocomplete="off"
+            />
+        </div>
+
+        <select
+            id="statusFilter"
+            class="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-kigen-500 xl:col-span-2"
+        >
+            <option value="all">Tất cả trạng thái</option>
+            <option value="active">Đang hiển thị</option>
+            <option value="hidden">Đang ẩn</option>
+        </select>
+
+        <select
+            id="typeFilter"
+            class="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-kigen-500 xl:col-span-2"
+        >
+            <option value="all">Tất cả loại</option>
+            <option value="parent">Danh mục cha</option>
+            <option value="child">Danh mục con</option>
+        </select>
+
+        <div class="flex rounded-2xl bg-slate-100 p-1 xl:col-span-2">
+            <button
+                id="tableModeBtn"
+                type="button"
+                class="flex-1 rounded-xl px-3 py-2 text-sm font-bold"
+            >
+                Bảng
+            </button>
+
+            <button
+                id="treeModeBtn"
+                type="button"
+                class="flex-1 rounded-xl px-3 py-2 text-sm font-bold"
+            >
+                Cây
+            </button>
+        </div>
+
+        <button
+            id="resetFilterBtn"
+            type="button"
+            class="h-12 rounded-2xl border border-slate-200 px-4 text-sm font-bold text-slate-600 hover:border-kigen-500 hover:text-kigen-700 xl:col-span-1"
+            title="Đặt lại"
+        >
+            <i class="fa-solid fa-rotate-left"></i>
+        </button>
+    </div>
+
+    <div
+        class="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-5 lg:flex-row lg:items-center lg:justify-between"
+    >
+        <div class="flex flex-wrap items-center gap-2">
+            <span
+                id="selectedText"
+                class="text-sm font-semibold text-slate-500"
+            >
+                Chưa chọn danh mục
+            </span>
+
+            <button
+                id="bulkShowBtn"
+                type="button"
+                class="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-700 hover:bg-emerald-100"
+            >
+                Hiện đã chọn
+            </button>
+
+            <button
+                id="bulkHideBtn"
+                type="button"
+                class="rounded-xl bg-amber-50 px-3 py-2 text-sm font-bold text-amber-700 hover:bg-amber-100"
+            >
+                Ẩn đã chọn
+            </button>
+
+            <button
+                id="bulkDeleteBtn"
+                type="button"
+                class="rounded-xl bg-rose-50 px-3 py-2 text-sm font-bold text-rose-700 hover:bg-rose-100"
+            >
+                Xóa đã chọn
+            </button>
+        </div>
+
+        <p id="resultText" class="text-sm font-semibold text-slate-500"></p>
+    </div>
+</section>

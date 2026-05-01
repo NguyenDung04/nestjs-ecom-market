@@ -10,12 +10,12 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { Product } from '../../products/entities/product.entity';
 
 @Entity('categories')
+@Index('IDX_CATEGORIES_SLUG', ['slug'], { unique: true })
+@Index('IDX_CATEGORIES_NAME_PARENT', ['name', 'parentId'], { unique: true })
 export class Category extends BaseEntity {
-  @Index('IDX_CATEGORIES_NAME', { unique: true })
-  @Column({ type: 'varchar', length: 120, unique: true })
+  @Column({ type: 'varchar', length: 120 })
   name!: string;
 
-  @Index('IDX_CATEGORIES_SLUG', { unique: true })
   @Column({ type: 'varchar', length: 150, unique: true })
   slug!: string;
 
@@ -31,9 +31,15 @@ export class Category extends BaseEntity {
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive!: boolean;
 
-  @ManyToOne(() => Category, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => Category, (category) => category.children, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'parent_id' })
   parent!: Category | null;
+
+  @OneToMany(() => Category, (category) => category.parent)
+  children!: Category[];
 
   @OneToMany(() => Product, (product) => product.category)
   products!: Product[];

@@ -29,6 +29,41 @@
                 --teal-1100: #000f0f;
             }
 
+            * {
+                letter-spacing: 0;
+            }
+
+            body {
+                font-family:
+                    Inter,
+                    ui-sans-serif,
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
+            }
+
+            .sidebar-collapsed .sidebar-label,
+            .sidebar-collapsed .sidebar-logo-text,
+            .sidebar-collapsed .sidebar-section {
+                display: none;
+            }
+
+            .sidebar-collapsed #sidebar {
+                width: 5.25rem;
+            }
+
+            .sidebar-collapsed #mainWrap {
+                margin-left: 5.25rem;
+            }
+
+            .chart-bar:hover .chart-tooltip {
+                opacity: 1;
+                transform: translateY(-8px);
+                pointer-events: auto;
+            }
+
             .alert24-item {
                 pointer-events: auto;
                 animation: alert24In 0.25s ease-out both;
@@ -83,9 +118,47 @@
                     transform: scaleX(0);
                 }
             }
+
+            @media (max-width: 1023px) {
+                #mainWrap {
+                    margin-left: 0 !important;
+                }
+
+                #sidebar {
+                    transform: translateX(-100%);
+                }
+
+                .mobile-sidebar-open #sidebar {
+                    transform: translateX(0);
+                }
+
+                .mobile-sidebar-open #sidebarOverlay {
+                    display: block;
+                }
+            }
         </style>
 
         <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            kigen: {
+                                50: "#f0fdfa",
+                                100: "#ccfbf1",
+                                500: "#14b8a6",
+                                600: "#0d9488",
+                                700: "#0f766e",
+                                900: "#134e4a",
+                            },
+                        },
+                        boxShadow: {
+                            soft: "0 18px 45px rgba(15, 118, 110, 0.09)",
+                        },
+                    },
+                },
+            };
+
             function escapeHtml24(value) {
                 return String(value || "")
                     .replace(/&/g, "&amp;")
@@ -96,16 +169,14 @@
             }
 
             function showAlert24(type, title, message, duration, callback) {
-                var container = document.getElementById("alert24-container");
+                const container = document.getElementById("alert24-container");
 
                 if (!container) {
                     console.warn("Missing #alert24-container");
                     return;
                 }
 
-                duration = duration || 3500;
-
-                var variants = {
+                const variants = {
                     success: {
                         box: "bg-emerald-50 border-emerald-200",
                         iconBox: "bg-emerald-100 text-emerald-600",
@@ -140,48 +211,48 @@
                     },
                 };
 
-                var current = variants[type] || variants.info;
+                const current = variants[type] || variants.info;
+                const alertDuration = duration || 3500;
+                const alert = document.createElement("div");
 
-                var alert = document.createElement("div");
                 alert.className =
                     "alert24-item relative overflow-hidden rounded-xl border px-4 py-3 shadow-lg " +
                     current.box;
 
-                alert.innerHTML =
-                    '<div class="flex items-start gap-3">' +
-                    '<div class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ' +
-                    current.iconBox +
-                    '">' +
-                    '<i class="fa-solid ' +
-                    current.icon +
-                    ' text-sm"></i>' +
-                    "</div>" +
-                    '<div class="min-w-0 flex-1">' +
-                    '<p class="text-sm font-semibold ' +
-                    current.title +
-                    '">' +
-                    escapeHtml24(title || "Thông báo") +
-                    "</p>" +
-                    '<p class="mt-0.5 text-xs leading-relaxed ' +
-                    current.message +
-                    '">' +
-                    escapeHtml24(message || "") +
-                    "</p>" +
-                    "</div>" +
-                    '<button type="button" class="alert24-close mt-0.5 shrink-0 text-gray-400 hover:text-gray-600" aria-label="Đóng thông báo">' +
-                    '<i class="fa-solid fa-xmark text-sm"></i>' +
-                    "</button>" +
-                    "</div>" +
-                    '<div class="alert24-progress ' +
-                    current.progress +
-                    '" style="animation-duration: ' +
-                    duration +
-                    'ms;"></div>';
+                alert.innerHTML = `
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${current.iconBox}">
+                    <i class="fa-solid ${current.icon} text-sm"></i>
+                </div>
+
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-semibold ${current.title}">
+                        ${escapeHtml24(title || "Thông báo")}
+                    </p>
+                    <p class="mt-0.5 text-xs leading-relaxed ${current.message}">
+                        ${escapeHtml24(message || "")}
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="alert24-close mt-0.5 shrink-0 text-gray-400 hover:text-gray-600"
+                    aria-label="Đóng thông báo"
+                >
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <div
+                class="alert24-progress ${current.progress}"
+                style="animation-duration: ${alertDuration}ms;"
+            ></div>
+        `;
 
                 container.appendChild(alert);
 
-                var isRemoved = false;
-                var timer = setTimeout(removeAlert, duration);
+                let isRemoved = false;
+                let timer = setTimeout(removeAlert, alertDuration);
 
                 function removeAlert() {
                     if (isRemoved) return;
@@ -201,23 +272,21 @@
                     }, 220);
                 }
 
-                var closeButton = alert.querySelector(".alert24-close");
-
-                if (closeButton) {
-                    closeButton.addEventListener("click", removeAlert);
-                }
+                alert
+                    .querySelector(".alert24-close")
+                    ?.addEventListener("click", removeAlert);
 
                 alert.addEventListener("mouseenter", function () {
                     clearTimeout(timer);
 
-                    var progress = alert.querySelector(".alert24-progress");
+                    const progress = alert.querySelector(".alert24-progress");
                     if (progress) {
                         progress.style.animationPlayState = "paused";
                     }
                 });
 
                 alert.addEventListener("mouseleave", function () {
-                    var progress = alert.querySelector(".alert24-progress");
+                    const progress = alert.querySelector(".alert24-progress");
                     if (progress) {
                         progress.style.animationPlayState = "running";
                     }
@@ -225,95 +294,12 @@
                     timer = setTimeout(removeAlert, 1200);
                 });
             }
-        </script>
 
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            kigen: {
-                                50: "#f0fdfa",
-                                100: "#ccfbf1",
-                                500: "#14b8a6",
-                                600: "#0d9488",
-                                700: "#0f766e",
-                                900: "#134e4a",
-                            },
-                        },
-                        boxShadow: {
-                            soft: "0 18px 45px rgba(15, 118, 110, 0.09)",
-                        },
-                    },
-                },
+            window.APP_CONFIG = {
+                APP_URL: "{{appUrl}}",
+                APP_URL_API: "{{appUrlApi}}",
             };
         </script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            kigen: {
-                                50: "#f0fdfa",
-                                100: "#ccfbf1",
-                                500: "#14b8a6",
-                                600: "#0d9488",
-                                700: "#0f766e",
-                                900: "#134e4a",
-                            },
-                        },
-                        boxShadow: {
-                            soft: "0 18px 45px rgba(15, 118, 110, 0.09)",
-                        },
-                    },
-                },
-            };
-        </script>
-        <style>
-            * {
-                letter-spacing: 0;
-            }
-            body {
-                font-family:
-                    Inter,
-                    ui-sans-serif,
-                    system-ui,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    sans-serif;
-            }
-            .sidebar-collapsed .sidebar-label,
-            .sidebar-collapsed .sidebar-logo-text,
-            .sidebar-collapsed .sidebar-section {
-                display: none;
-            }
-            .sidebar-collapsed #sidebar {
-                width: 5.25rem;
-            }
-            .sidebar-collapsed #mainWrap {
-                margin-left: 5.25rem;
-            }
-            .chart-bar:hover .chart-tooltip {
-                opacity: 1;
-                transform: translateY(-8px);
-                pointer-events: auto;
-            }
-            @media (max-width: 1023px) {
-                #mainWrap {
-                    margin-left: 0 !important;
-                }
-                #sidebar {
-                    transform: translateX(-100%);
-                }
-                .mobile-sidebar-open #sidebar {
-                    transform: translateX(0);
-                }
-                .mobile-sidebar-open #sidebarOverlay {
-                    display: block;
-                }
-            }
-        </style>
     </head>
 
     <body class="bg-slate-50 text-slate-800">
@@ -341,9 +327,7 @@
             id="mainWrap"
             class="min-h-screen transition-all duration-300 lg:ml-72"
         >
-            {{> admin/header}} 
-            {{{body}}} 
-            {{> admin/footer}}
+            {{> admin/header}} {{{body}}} {{> admin/footer}}
         </div>
     </body>
 </html>

@@ -16,26 +16,57 @@
     </div>
 
     <nav
+        id="admin-sidebar-nav"
         class="flex h-[calc(100%-4rem)] flex-col justify-between overflow-y-auto px-3 py-5"
     >
         <div class="space-y-1">
-            <p
-                class="sidebar-section px-3 pb-2 text-xs font-semibold uppercase text-slate-400"
-            >
-                Quản trị
+            <p class="sidebar-section px-3 pb-2 text-xs font-semibold uppercase text-slate-400">
+                Tổng quan
             </p>
 
             <a
                 href="/admin/dashboard"
-                class="flex items-center gap-3 rounded-2xl bg-kigen-50 px-4 py-3 text-sm font-semibold text-kigen-700"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-chart-pie w-5"></i>
                 <span class="sidebar-label">Dashboard</span>
             </a>
 
+            <p class="sidebar-section px-3 pb-2 pt-4 text-xs font-semibold uppercase text-slate-400">
+                Quản lý bán hàng
+            </p>
+
+            <a
+                href="/admin/orders"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-file-invoice w-5"></i>
+                <span class="sidebar-label">Quản lý đơn hàng</span>
+            </a>
+
+            <a
+                href="/admin/payments"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-credit-card w-5"></i>
+                <span class="sidebar-label">Quản lý thanh toán</span>
+            </a>
+
+            <a
+                href="/admin/coupons"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-ticket w-5"></i>
+                <span class="sidebar-label">Quản lý mã giảm giá</span>
+            </a>
+
+            <p class="sidebar-section px-3 pb-2 pt-4 text-xs font-semibold uppercase text-slate-400">
+                Quản lý sản phẩm
+            </p>
+
             <a
                 href="/admin/products"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-box w-5"></i>
                 <span class="sidebar-label">Quản lý sản phẩm</span>
@@ -43,7 +74,7 @@
 
             <a
                 href="/admin/categories"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-layer-group w-5"></i>
                 <span class="sidebar-label">Quản lý danh mục</span>
@@ -51,61 +82,63 @@
 
             <a
                 href="/admin/banners"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-images w-5"></i>
                 <span class="sidebar-label">Quản lý banner</span>
             </a>
 
             <a
-                href="/admin/orders"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                href="/admin/reviews"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
-                <i class="fa-solid fa-file-invoice w-5"></i>
-                <span class="sidebar-label">Quản lý đơn hàng</span>
+                <i class="fa-solid fa-star-half-stroke w-5"></i>
+                <span class="sidebar-label">Quản lý đánh giá</span>
             </a>
+
+            <p class="sidebar-section px-3 pb-2 pt-4 text-xs font-semibold uppercase text-slate-400">
+                Khách hàng & hỗ trợ
+            </p>
 
             <a
                 href="/admin/users"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-users w-5"></i>
                 <span class="sidebar-label">Quản lý khách hàng</span>
             </a>
 
             <a
-                href="/admin/coupons"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
-            >
-                <i class="fa-solid fa-ticket w-5"></i>
-                <span class="sidebar-label">Quản lý mã giảm giá</span>
-            </a>
-
-            <a
-                href="/admin/reviews"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
-            >
-                <i class="fa-solid fa-star-half-stroke w-5"></i>
-                <span class="sidebar-label">Quản lý đánh giá</span>
-            </a>
-
-            <a
                 href="/admin/contacts"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-envelope w-5"></i>
-                <span class="sidebar-label">Liên hệ</span>
+                <span class="sidebar-label">Quản lý liên hệ</span>
             </a>
 
-            <p
-                class="sidebar-section px-3 pb-2 pt-4 text-xs font-semibold uppercase text-slate-400"
-            >
+            <p class="sidebar-section px-3 pb-2 pt-4 text-xs font-semibold uppercase text-slate-400">
                 Hệ thống
             </p>
 
             <a
+                href="/admin/notifications"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-bell w-5"></i>
+                <span class="sidebar-label">Thông báo hệ thống</span>
+            </a>
+
+            <a
+                href="/admin/trash"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            >
+                <i class="fa-solid fa-trash-can w-5"></i>
+                <span class="sidebar-label">Thùng rác</span>
+            </a>
+
+            <a
                 href="/admin/roles"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-user-shield w-5"></i>
                 <span class="sidebar-label">Vai trò & quyền</span>
@@ -113,14 +146,14 @@
 
             <a
                 href="/admin/settings"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                class="admin-sidebar-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
                 <i class="fa-solid fa-gear w-5"></i>
                 <span class="sidebar-label">Cài đặt</span>
             </a>
         </div>
 
-        <form action="/auth/logout" method="POST">
+        <form action="/auth/logout" method="POST" class="pt-4">
             <button
                 type="submit"
                 class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold text-rose-600 hover:bg-rose-50"
@@ -131,3 +164,82 @@
         </form>
     </nav>
 </aside>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentPath = window.location.pathname;
+        const sidebarNav = document.getElementById('admin-sidebar-nav');
+        const sidebarLinks = document.querySelectorAll('.admin-sidebar-link');
+
+        let activeLink = null;
+
+        sidebarLinks.forEach(function (link) {
+            const linkPath = new URL(link.href).pathname;
+            const icon = link.querySelector('i');
+
+            link.classList.remove(
+                'bg-kigen-50',
+                'bg-kigen-100',
+                'text-kigen-700',
+                'font-semibold',
+                'shadow-sm',
+                'border',
+                'border-kigen-100',
+                'ring-1',
+                'ring-kigen-100'
+            );
+
+            link.classList.add(
+                'text-slate-600',
+                'font-medium',
+                'hover:bg-slate-100'
+            );
+
+            if (icon) {
+                icon.classList.remove('text-kigen-600');
+                icon.classList.add('text-slate-500');
+            }
+
+            const isAdminHome =
+                currentPath === '/admin' && linkPath === '/admin/dashboard';
+
+            const isCurrentPath =
+                currentPath === linkPath || currentPath.startsWith(linkPath + '/');
+
+            if (isAdminHome || isCurrentPath) {
+                activeLink = link;
+
+                link.classList.remove(
+                    'text-slate-600',
+                    'font-medium',
+                    'hover:bg-slate-100'
+                );
+
+                link.classList.add(
+                    'bg-kigen-50',
+                    'text-kigen-700',
+                    'font-semibold',
+                    'shadow-sm',
+                    'border',
+                    'border-kigen-100',
+                    'ring-1',
+                    'ring-kigen-100'
+                );
+
+                if (icon) {
+                    icon.classList.remove('text-slate-500');
+                    icon.classList.add('text-kigen-600');
+                }
+            }
+        });
+
+        if (activeLink && sidebarNav) {
+            setTimeout(function () {
+                activeLink.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 120);
+        }
+    });
+</script>
