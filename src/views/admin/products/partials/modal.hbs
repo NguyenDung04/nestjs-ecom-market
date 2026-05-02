@@ -1,0 +1,295 @@
+<div
+    id="productModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4"
+>
+    <div
+        class="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl bg-white shadow-2xl"
+    >
+        <div
+            class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4"
+        >
+            <div>
+                <h2
+                    id="productModalTitle"
+                    class="text-xl font-bold text-slate-950"
+                >
+                    Thêm sản phẩm
+                </h2>
+
+                <p class="text-sm text-slate-500">
+                    Slug sẽ được hệ thống tự tạo từ tên sản phẩm. Ảnh đại diện dùng upload file.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="close-product-modal grid h-10 w-10 place-items-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form
+            id="productForm"
+            class="grid grid-cols-1 gap-5 p-6 lg:grid-cols-3"
+        >
+            <input type="hidden" id="productId" />
+
+            <div class="space-y-5 lg:col-span-2">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <label class="block">
+                        <span class="text-sm font-bold text-slate-700">
+                            Tên sản phẩm
+                        </span>
+
+                        <input
+                            id="nameInput"
+                            type="text"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-kigen-500"
+                            placeholder="Nhập tên sản phẩm"
+                        />
+
+                        <small
+                            data-error="nameInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-bold text-slate-700">
+                            SKU
+                        </span>
+
+                        <input
+                            id="skuInput"
+                            type="text"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-kigen-500"
+                            placeholder="VD: IP16PM-256"
+                        />
+
+                        <small
+                            data-error="skuInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-bold text-slate-700">
+                            Danh mục
+                        </span>
+
+                        <select
+                            id="categoryInput"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-kigen-500"
+                        >
+                            <option value="">Chọn danh mục</option>
+                        </select>
+
+                        <small
+                            data-error="categoryInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-bold text-slate-700">
+                            Trạng thái
+                        </span>
+
+                        <select
+                            id="statusInput"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-kigen-500"
+                        >
+                            <option value="active">Đang bán</option>
+                            <option value="inactive">Đang ẩn</option>
+                            <option value="out_of_stock">Hết hàng</option>
+                        </select>
+
+                        <small
+                            data-error="statusInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-bold text-slate-700">
+                            Giá bán
+                        </span>
+
+                        <input
+                            id="priceInput"
+                            type="number"
+                            min="0"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-kigen-500"
+                            placeholder="0"
+                        />
+
+                        <small
+                            data-error="priceInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-bold text-slate-700">
+                            Giá khuyến mãi
+                        </span>
+
+                        <input
+                            id="salePriceInput"
+                            type="number"
+                            min="0"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-kigen-500"
+                            placeholder="Bỏ trống nếu không giảm giá"
+                        />
+
+                        <small
+                            data-error="salePriceInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+
+                    <label class="block md:col-span-2">
+                        <span class="text-sm font-bold text-slate-700">
+                            Số lượng tồn kho
+                        </span>
+
+                        <input
+                            id="quantityInput"
+                            type="number"
+                            min="0"
+                            class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-kigen-500"
+                            placeholder="0"
+                        />
+
+                        <small
+                            data-error="quantityInput"
+                            class="mt-1 block text-xs font-semibold text-rose-600"
+                        ></small>
+                    </label>
+                </div>
+
+                <label class="block">
+                    <span class="text-sm font-bold text-slate-700">
+                        Mô tả ngắn
+                    </span>
+
+                    <textarea
+                        id="shortDescriptionInput"
+                        rows="3"
+                        class="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500"
+                        placeholder="Nhập mô tả ngắn của sản phẩm"
+                    ></textarea>
+
+                    <small
+                        data-error="shortDescriptionInput"
+                        class="mt-1 block text-xs font-semibold text-rose-600"
+                    ></small>
+                </label>
+
+                <label class="block">
+                    <span class="text-sm font-bold text-slate-700">
+                        Mô tả chi tiết
+                    </span>
+
+                    <textarea
+                        id="descriptionInput"
+                        rows="5"
+                        class="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500"
+                        placeholder="Nhập mô tả chi tiết"
+                    ></textarea>
+
+                    <small
+                        data-error="descriptionInput"
+                        class="mt-1 block text-xs font-semibold text-rose-600"
+                    ></small>
+                </label>
+            </div>
+
+            <div class="space-y-4">
+                <label class="block">
+                    <span class="text-sm font-bold text-slate-700">
+                        Ảnh đại diện
+                    </span>
+
+                    <input
+                        id="thumbnailFile"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        class="mt-2 w-full rounded-xl border border-slate-200 p-2 text-sm"
+                    />
+
+                    <small
+                        data-error="thumbnailFile"
+                        class="mt-1 block text-xs font-semibold text-rose-600"
+                    ></small>
+                </label>
+
+                <img
+                    id="thumbnailPreview"
+                    src="https://placehold.co/600x600/f0fdfa/0f766e?text=Product"
+                    alt="Product thumbnail preview"
+                    class="aspect-square w-full rounded-2xl border border-slate-200 object-cover"
+                />
+
+                <div class="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                    <p class="font-bold text-slate-800">
+                        Lưu ý ảnh
+                    </p>
+
+                    <p class="mt-1 leading-6">
+                        Chỉ hỗ trợ JPG, PNG, WEBP. Dung lượng tối đa 2MB.
+                        Nếu sửa sản phẩm mà không chọn ảnh mới, hệ thống giữ ảnh cũ.
+                    </p>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end lg:col-span-3"
+            >
+                <button
+                    type="button"
+                    class="close-product-modal rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-100"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    id="saveProductBtn"
+                    type="submit"
+                    class="rounded-2xl bg-kigen-600 px-5 py-3 text-sm font-bold text-white hover:bg-kigen-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    Lưu sản phẩm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div
+    id="detailModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4"
+>
+    <div class="w-full max-w-4xl rounded-3xl bg-white shadow-2xl">
+        <div
+            class="flex items-center justify-between border-b border-slate-100 px-6 py-4"
+        >
+            <h2 class="text-xl font-bold text-slate-950">
+                Chi tiết sản phẩm
+            </h2>
+
+            <button
+                id="closeDetailModal"
+                type="button"
+                class="grid h-10 w-10 place-items-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div
+            id="detailBody"
+            class="max-h-[76vh] overflow-y-auto p-6"
+        ></div>
+    </div>
+</div>

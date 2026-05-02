@@ -5,10 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from 'src/modules/categories/entities/category.entity';
+import { Product } from 'src/modules/products/entities/product.entity';
 import { IsNull, Not, Repository } from 'typeorm';
-
-import { Category } from '../entities/category.entity';
-import { Product } from '../../products/entities/product.entity';
 
 @Injectable()
 export class CategoryValidator {

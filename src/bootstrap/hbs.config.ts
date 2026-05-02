@@ -97,6 +97,12 @@ export function setupViewEngine(
     logger,
   );
 
+  registerPartialsFromDirectory(
+    join(viewsDir, 'admin', 'products', 'partials'),
+    'admin/products/partials',
+    logger,
+  );
+
   hbs.registerHelper('eq', function (a: unknown, b: unknown) {
     return a === b;
   });

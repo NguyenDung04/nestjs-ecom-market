@@ -299,6 +299,86 @@
                 APP_URL: "{{appUrl}}",
                 APP_URL_API: "{{appUrlApi}}",
             };
+
+            function notify(type, title, message) {
+                if (typeof showAlert24 === "function") {
+                    showAlert24(type, title, message);
+                    return;
+                }
+
+                if (typeof Swal !== "undefined") {
+                    Swal.fire({
+                        title,
+                        text: message || "",
+                        icon:
+                            type === "error"
+                                ? "error"
+                                : type === "warning"
+                                  ? "warning"
+                                  : type === "success"
+                                    ? "success"
+                                    : "info",
+                        confirmButtonColor: "#0d9488",
+                    });
+                    return;
+                }
+
+                console[type === "error" ? "error" : "log"](
+                    `${title}: ${message || ""}`,
+                );
+            }
+
+            function confirmAction(options = {}) {
+                const {
+                    title = "Xác nhận thao tác",
+                    message = "Bạn có chắc muốn thực hiện thao tác này không?",
+                    confirmText = "Xác nhận",
+                    cancelText = "Hủy",
+                    icon = "warning",
+                } = options;
+
+                if (typeof Swal !== "undefined") {
+                    return Swal.fire({
+                        title,
+                        text: message,
+                        icon,
+                        showCancelButton: true,
+                        confirmButtonText: confirmText,
+                        cancelButtonText: cancelText,
+                        confirmButtonColor: "#e11d48",
+                        cancelButtonColor: "#64748b",
+                        reverseButtons: true,
+                    }).then((result) => result.isConfirmed);
+                }
+
+                function confirmAction(options = {}) {
+                    const {
+                        title = "Xác nhận thao tác",
+                        message = "Bạn có chắc muốn thực hiện thao tác này không?",
+                        confirmText = "Xác nhận",
+                        cancelText = "Hủy",
+                        icon = "warning",
+                    } = options;
+
+                    if (typeof Swal !== "undefined") {
+                        return Swal.fire({
+                            title,
+                            text: message,
+                            icon,
+                            showCancelButton: true,
+                            confirmButtonText: confirmText,
+                            cancelButtonText: cancelText,
+                            confirmButtonColor: "#e11d48",
+                            cancelButtonColor: "#64748b",
+                            reverseButtons: true,
+                        }).then((result) => result.isConfirmed);
+                    }
+
+                    return Promise.resolve(
+                        window.confirm(`${title}\n\n${message}`),
+                    );
+                }
+            }
         </script>
     </head>
 

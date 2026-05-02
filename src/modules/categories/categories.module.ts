@@ -4,7 +4,7 @@ import { Category } from './entities/category.entity';
 import { CategoriesService } from './categories.service';
 import { CategoriesController } from './categories.controller';
 import { Product } from '../products/entities/product.entity';
-import { CategoryValidator } from './validators/category.validator';
+import { CategoryValidator } from 'src/common/validators/category.validator';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Category, Product])],

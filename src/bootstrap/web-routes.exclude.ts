@@ -75,11 +75,11 @@ export const WEB_ROUTE_EXCLUDES = [
    * Client views
    */
   {
-    path: 'products',
+    path: 'san-pham',
     method: RequestMethod.GET,
   },
   {
-    path: 'products/:slug',
+    path: 'san-pham/:slug',
     method: RequestMethod.GET,
   },
   {

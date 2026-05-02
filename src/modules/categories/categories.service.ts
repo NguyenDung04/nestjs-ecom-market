@@ -12,16 +12,16 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { QueryCategoryDto } from './dto/query-category.dto';
 
-import { CategoryValidator } from './validators/category.validator';
-import {
-  applyCategoryFilters,
-  getCategorySortOptions,
-} from 'src/common/helpers/category-query.helper';
-import { buildCategoryTree } from 'src/common/helpers/category-tree.helper';
+import { buildCategoryTree } from 'src/common/helpers/category/category-tree.helper';
 import {
   normalizeCreateCategoryPayload,
   normalizeUpdateCategoryPayload,
-} from 'src/common/helpers/category-normalizer.helper';
+} from 'src/common/helpers/category/category-normalizer.helper';
+import { CategoryValidator } from 'src/common/validators/category.validator';
+import {
+  applyCategoryFilters,
+  getCategorySortOptions,
+} from 'src/common/helpers/category/category-query.helper';
 
 /**
  * Service xử lý nghiệp vụ danh mục.

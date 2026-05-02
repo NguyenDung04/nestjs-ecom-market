@@ -17,11 +17,11 @@ import { InventoryLog } from '../../inventory-logs/entities/inventory-log.entity
 
 @Entity('products')
 export class Product extends BaseEntity {
-  @Column({ name: 'category_id', type: 'int', nullable: true })
-  categoryId!: number | null;
+  @Column({ name: 'category_id', type: 'int' })
+  categoryId!: number;
 
   @Index('IDX_PRODUCTS_NAME')
-  @Column({ type: 'varchar', length: 180 })
+  @Column({ type: 'varchar', length: 200 })
   name!: string;
 
   @Index('IDX_PRODUCTS_SLUG', { unique: true })
@@ -32,13 +32,13 @@ export class Product extends BaseEntity {
   @Column({ type: 'varchar', length: 80, unique: true })
   sku!: string;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
   price!: string;
 
   @Column({
     name: 'sale_price',
     type: 'decimal',
-    precision: 12,
+    precision: 15,
     scale: 2,
     nullable: true,
   })
@@ -50,7 +50,7 @@ export class Product extends BaseEntity {
   @Column({
     name: 'short_description',
     type: 'varchar',
-    length: 255,
+    length: 500,
     nullable: true,
   })
   shortDescription!: string | null;
@@ -65,11 +65,10 @@ export class Product extends BaseEntity {
   status!: ProductStatus;
 
   @ManyToOne(() => Category, (category) => category.products, {
-    nullable: true,
-    onDelete: 'SET NULL',
+    nullable: false,
   })
   @JoinColumn({ name: 'category_id' })
-  category!: Category | null;
+  category!: Category;
 
   @OneToMany(() => ProductImage, (image) => image.product)
   images!: ProductImage[];

@@ -1,0 +1,72 @@
+<section class="rounded-3xl border border-slate-200 bg-white shadow-soft">
+    <div class="hidden overflow-x-auto lg:block">
+        <table class="min-w-full text-left text-sm">
+            <thead class="bg-slate-50 text-xs uppercase text-slate-400">
+                <tr>
+                    <th class="px-5 py-4">
+                        <input
+                            id="selectAll"
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-slate-300 text-kigen-600"
+                        />
+                    </th>
+
+                    <th class="px-5 py-4">Sản phẩm</th>
+                    <th class="px-5 py-4">SKU</th>
+                    <th class="px-5 py-4">Danh mục</th>
+                    <th class="px-5 py-4">Giá bán</th>
+                    <th class="px-5 py-4">Giá khuyến mãi</th>
+                    <th class="px-5 py-4">Tồn kho</th>
+                    <th class="px-5 py-4">Trạng thái</th>
+                    <th class="px-5 py-4">Ngày tạo</th>
+                    <th class="px-5 py-4 text-right">Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody id="productTable">
+                <tr>
+                    <td
+                        colspan="10"
+                        class="px-5 py-12 text-center text-sm font-semibold text-slate-500"
+                    >
+                        Đang tải sản phẩm...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div
+        id="productCards"
+        class="space-y-4 p-4 lg:hidden"
+    ></div>
+
+    <div
+        class="flex flex-col gap-3 border-t border-slate-100 p-5 sm:flex-row sm:items-center sm:justify-between"
+    >
+        <p
+            id="paginationText"
+            class="text-sm font-semibold text-slate-500"
+        >
+            Trang 1
+        </p>
+
+        <div class="flex flex-wrap gap-2">
+            <button
+                id="prevPageBtn"
+                type="button"
+                class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+                Trước
+            </button>
+
+            <button
+                id="nextPageBtn"
+                type="button"
+                class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+                Sau
+            </button>
+        </div>
+    </div>
+</section>

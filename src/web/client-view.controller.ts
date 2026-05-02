@@ -60,7 +60,7 @@ export class ClientViewController {
   /**
    * Render trang danh sách sản phẩm.
    */
-  @Get('products')
+  @Get('san-pham')
   @Render('client/products/list')
   products() {
     return this.getViewData('Sản phẩm');
@@ -104,13 +104,6 @@ export class ClientViewController {
     return this.getViewData('Liên hệ');
   }
 
-  /**
-   * Xử lý submit form liên hệ từ giao diện client.
-   *
-   * Ghi chú:
-   * - Hiện tại chỉ render lại trang liên hệ kèm thông báo thành công.
-   * - Sau này nên tách phần lưu liên hệ sang ContactController hoặc ContactsApiController.
-   */
   @Post('contact')
   @Render('client/contact/index')
   submitContact() {
