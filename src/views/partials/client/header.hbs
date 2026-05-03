@@ -1,25 +1,170 @@
-<header class="border-b bg-white shadow-sm">
-  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-    <a href="/" class="text-2xl font-bold" style="color: var(--teal-600);">
-      Ecom Market
-    </a>
+<!-- ========== HEADER ========== -->
+<header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100"> 
+    <!-- Main header -->
+    <div class="max-w-7xl mx-auto px-4 py-3">
+        <div class="flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-2 shrink-0">
+                <div
+                    class="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center"
+                >
+                    <i class="fas fa-store text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold text-teal-700 tracking-tight"
+                        >Shop<span class="text-teal-500">Teal</span></span
+                    >
+                    <p class="text-[10px] text-gray-400 -mt-1 leading-none">
+                        Mua sắm dễ dàng
+                    </p>
+                </div>
+            </a>
 
-    <nav class="hidden items-center gap-5 text-sm font-medium md:flex">
-      <a href="/" class="hover:text-teal-700">Trang chủ</a>
-      <a href="/products" class="hover:text-teal-700">Sản phẩm</a>
-      <a href="/contact" class="hover:text-teal-700">Liên hệ</a>
-      <a href="/orders" class="hover:text-teal-700">Đơn hàng</a>
-    </nav>
+            <!-- Search bar - Desktop -->
+            <div
+                class="hidden md:flex flex-1 max-w-xl relative"
+                id="searchContainer"
+            >
+                <div
+                    class="flex w-full border-2 border-teal-200 rounded-full overflow-hidden focus-within:border-teal-500 transition-colors"
+                >
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Tìm kiếm sản phẩm..."
+                        class="flex-1 px-5 py-2.5 text-sm outline-none bg-white"
+                        autocomplete="off"
+                    />
+                    <button
+                        class="px-5 bg-teal-500 hover:bg-teal-700 text-white transition-colors"
+                    >
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <!-- Search dropdown -->
+                <div
+                    id="searchDropdown"
+                    class="search-dropdown absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 hidden z-50"
+                >
+                    <div id="searchResults" class="p-2"></div>
+                </div>
+            </div>
 
-    <div class="flex items-center gap-3">
-      <a href="/cart" class="rounded-lg border px-3 py-2 text-sm">
-        <i class="fa-solid fa-cart-shopping"></i>
-        Giỏ hàng
-      </a>
+            <!-- Actions -->
+            <div class="flex items-center gap-2 md:gap-3">
+                <!-- Cart -->
+                <button
+                    id="cartBtn"
+                    class="relative p-2.5 rounded-full hover:bg-teal-50 transition-colors group"
+                    title="Giỏ hàng"
+                >
+                    <i
+                        class="fas fa-shopping-cart text-gray-600 group-hover:text-teal-600 text-lg"
+                    ></i>
+                    <span
+                        id="cartBadge"
+                        class="cart-badge absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden"
+                        >0</span
+                    >
+                </button>
 
-      <a href="/auth/login" class="rounded-lg px-3 py-2 text-sm text-white" style="background: var(--teal-600);">
-        Đăng nhập
-      </a>
+                <!-- Login -->
+                <a
+                    href="/login"
+                    id="loginBtn"
+                    class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors"
+                >
+                    <i class="fas fa-user-circle"></i>
+                    <span>Đăng nhập</span>
+                </a>
+
+                <!-- Register -->
+                <a
+                    href="/register"
+                    id="registerBtn"
+                    class="hidden sm:inline-flex btn-teal px-4 py-2 text-sm font-medium rounded-full"
+                >
+                    Đăng ký
+                </a>
+
+                <!-- Mobile menu button -->
+                <button
+                    id="mobileMenuBtn"
+                    class="md:hidden p-2.5 rounded-full hover:bg-teal-50 transition-colors"
+                >
+                    <i class="fas fa-bars text-gray-600 text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search bar - Mobile -->
+        <div class="md:hidden mt-3 relative" id="searchContainerMobile">
+            <div
+                class="flex w-full border-2 border-teal-200 rounded-full overflow-hidden focus-within:border-teal-500 transition-colors"
+            >
+                <input
+                    type="text"
+                    id="searchInputMobile"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    class="flex-1 px-4 py-2.5 text-sm outline-none bg-white"
+                    autocomplete="off"
+                />
+                <button
+                    class="px-4 bg-teal-500 hover:bg-teal-700 text-white transition-colors"
+                >
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div
+                id="searchDropdownMobile"
+                class="search-dropdown absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 hidden z-50"
+            >
+                <div id="searchResultsMobile" class="p-2"></div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:block bg-teal-50/60 border-t border-teal-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex items-center gap-1 text-sm font-medium">
+                <li>
+                    <a
+                        href="/"
+                        class="px-4 py-2.5 text-teal-700 hover:bg-teal-100 rounded-lg transition-colors flex items-center gap-1.5"
+                        ><i class="fas fa-home text-xs"></i> Trang chủ</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/zai/client/products/index.html"
+                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors"
+                        >Sản phẩm</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/categories"
+                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors"
+                        >Danh mục</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/promotions"
+                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors flex items-center gap-1.5"
+                        ><i class="fas fa-tags text-xs text-red-400"></i> Khuyến
+                        mãi</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/contact"
+                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors"
+                        >Liên hệ</a
+                    >
+                </li>
+            </ul>
+        </div>
+    </nav>
 </header>

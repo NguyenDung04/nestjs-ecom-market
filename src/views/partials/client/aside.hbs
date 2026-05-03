@@ -1,0 +1,94 @@
+<!-- Mobile menu -->
+<aside
+    id="mobileMenu"
+    class="mobile-menu fixed top-0 left-0 w-72 h-full bg-white z-50 shadow-2xl overflow-y-auto"
+>
+    <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div
+                class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center"
+            >
+                <i class="fas fa-store text-white text-sm"></i>
+            </div>
+            <span class="text-lg font-bold text-teal-700">ShopTeal</span>
+        </div>
+        <button
+            id="closeMobileMenu"
+            class="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        >
+            <i class="fas fa-times text-gray-500"></i>
+        </button>
+    </div>
+    <nav class="p-4">
+        <ul class="space-y-1">
+            <li>
+                <a
+                    href="/"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-teal-700 bg-teal-50 font-medium"
+                    ><i class="fas fa-home w-5 text-center text-teal-500"></i>
+                    Trang chủ</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/products"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-box w-5 text-center"></i> Sản phẩm</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/categories"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-th-large w-5 text-center"></i> Danh mục</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/promotions"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-tags w-5 text-center text-red-400"></i>
+                    Khuyến mãi</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/contact"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-envelope w-5 text-center"></i> Liên hệ</a
+                >
+            </li>
+        </ul>
+        <hr class="my-4 border-gray-100" />
+        <ul class="space-y-1">
+            <li>
+                <a
+                    href="/login"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-sign-in-alt w-5 text-center"></i> Đăng
+                    nhập</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/register"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-user-plus w-5 text-center"></i> Đăng ký</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/cart"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                    ><i class="fas fa-shopping-cart w-5 text-center"></i>
+                    Giỏ hàng
+                    <span
+                        class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full"
+                        id="mobileCartCount"
+                        >0</span
+                    ></a
+                >
+            </li>
+        </ul>
+    </nav>
+</aside>

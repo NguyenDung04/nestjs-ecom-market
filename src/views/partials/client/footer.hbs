@@ -1,28 +1,125 @@
-<footer class="mt-10 border-t bg-white">
-  <div class="mx-auto grid max-w-7xl gap-6 px-4 py-8 md:grid-cols-3">
-    <div>
-      <h3 class="text-lg font-bold" style="color: var(--teal-700);">Ecom Market</h3>
-      <p class="mt-2 text-sm text-slate-500">
-        Website thương mại điện tử dùng NestJS MVC và Handlebars.
-      </p>
+<!-- Footer -->
+<footer style="background: var(--teal-900)" class="text-teal-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <!-- About -->
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div
+                        class="w-9 h-9 rounded-xl flex items-center justify-center"
+                        style="background: var(--teal-500)"
+                    >
+                        <i class="fas fa-store text-white text-sm"></i>
+                    </div>
+                    <span class="text-lg font-bold text-white"
+                        >Kigen Market</span
+                    >
+                </div>
+                <p class="text-teal-300 text-sm leading-relaxed">
+                    Nền tảng thương mại điện tử uy tín, mang đến trải nghiệm mua
+                    sắm hiện đại và tiện lợi cho mọi khách hàng.
+                </p>
+                <div class="flex items-center gap-3 mt-5">
+                    <a
+                        href="#"
+                        class="w-9 h-9 rounded-lg bg-teal-800 hover:bg-teal-700 flex items-center justify-center transition"
+                        ><i class="fab fa-facebook-f text-sm"></i
+                    ></a>
+                    <a
+                        href="#"
+                        class="w-9 h-9 rounded-lg bg-teal-800 hover:bg-teal-700 flex items-center justify-center transition"
+                        ><i class="fab fa-instagram text-sm"></i
+                    ></a>
+                    <a
+                        href="#"
+                        class="w-9 h-9 rounded-lg bg-teal-800 hover:bg-teal-700 flex items-center justify-center transition"
+                        ><i class="fab fa-youtube text-sm"></i
+                    ></a>
+                    <a
+                        href="#"
+                        class="w-9 h-9 rounded-lg bg-teal-800 hover:bg-teal-700 flex items-center justify-center transition"
+                        ><i class="fab fa-tiktok text-sm"></i
+                    ></a>
+                </div>
+            </div>
+            <!-- Contact -->
+            <div>
+                <h3 class="text-white font-semibold mb-4">Liên hệ</h3>
+                <ul class="space-y-3 text-sm text-teal-300">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-teal-400"></i
+                        ><span>123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-phone text-teal-400"></i
+                        ><span>1900 1234 56</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-teal-400"></i
+                        ><span>support@kigenmarket.vn</span>
+                    </li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h3 class="text-white font-semibold mb-4">Chính sách</h3>
+                <ul class="space-y-3 text-sm text-teal-300">
+                    <li>
+                        <a href="#" class="hover:text-white transition"
+                            >Chính sách bảo mật</a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition"
+                            >Chính sách đổi trả</a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition"
+                            >Điều khoản sử dụng</a
+                        >
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition"
+                            >Chính sách vận chuyển</a
+                        >
+                    </li>
+                </ul>
+            </div>
+            <!-- Newsletter -->
+            <div>
+                <h3 class="text-white font-semibold mb-4">
+                    Nhận tin khuyến mãi
+                </h3>
+                <p class="text-sm text-teal-300 mb-4">
+                    Đăng ký để nhận ưu đãi mới nhất từ chúng tôi.
+                </p>
+                <div class="flex gap-2">
+                    <input
+                        type="email"
+                        placeholder="Email của bạn"
+                        class="flex-1 bg-teal-800 border border-teal-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-teal-400 outline-none focus:border-teal-400 transition"
+                    />
+                    <button
+                        class="btn-teal px-4 py-2.5 rounded-xl text-sm font-semibold shrink-0"
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div>
-      <h3 class="font-semibold">Liên kết</h3>
-      <div class="mt-2 space-y-1 text-sm text-slate-500">
-        <a href="/" class="block hover:text-teal-700">Trang chủ</a>
-        <a href="/products" class="block hover:text-teal-700">Sản phẩm</a>
-        <a href="/contact" class="block hover:text-teal-700">Liên hệ</a>
-      </div>
+    <div class="border-t border-teal-800">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-teal-400"
+        >
+            <span>&copy; 2026 Kigen Market. Tất cả quyền được bảo lưu.</span>
+            <span
+                >Thiết kế bởi
+                <span class="text-teal-200 font-medium"
+                    >Kigen.design</span
+                ></span
+            >
+        </div>
     </div>
-
-    <div>
-      <h3 class="font-semibold">Liên hệ</h3>
-      <div class="mt-2 space-y-1 text-sm text-slate-500">
-        <p>Email: support@example.com</p>
-        <p>Hotline: 0900 000 000</p>
-        <p>Địa chỉ: Việt Nam</p>
-      </div>
-    </div>
-  </div>
 </footer>

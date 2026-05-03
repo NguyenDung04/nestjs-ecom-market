@@ -1,29 +1,1044 @@
-<section class="mx-auto max-w-7xl px-4 py-10">
-  <div class="rounded-3xl bg-white p-10 shadow-sm">
-    <p class="mb-3 text-sm font-semibold uppercase tracking-wide" style="color: var(--teal-600);">
-      Client Website
-    </p>
+<!-- ========== MAIN ========== -->
+<main>
+    <!-- ===== BANNER SECTION ===== -->
+    <section class="banner-gradient hero-pattern relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 py-12 md:py-20">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="text-white space-y-6 animate-fade-in-up">
+                    <span
+                        class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm"
+                    >
+                        <i class="fas fa-fire text-yellow-300"></i> Ưu đãi đặc
+                        biệt
+                    </span>
+                    <h1
+                        class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight"
+                    >
+                        Mua Sắm<br />
+                        <span class="text-teal-200">Thông Minh</span><br />
+                        Tiết Kiệm Hơn
+                    </h1>
+                    <p
+                        class="text-teal-100 text-base md:text-lg max-w-md leading-relaxed"
+                    >
+                        Khám phá hàng ngàn sản phẩm chất lượng với giá ưu đãi
+                        tốt nhất. Giao hàng nhanh, đổi trả dễ dàng.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a
+                            href="/products"
+                            class="inline-flex items-center gap-2 bg-white text-teal-700 font-semibold px-6 py-3 rounded-full hover:bg-teal-50 transition-colors shadow-lg"
+                        >
+                            <i class="fas fa-shopping-bag"></i> Mua ngay
+                        </a>
+                        <a
+                            href="/promotions"
+                            class="inline-flex items-center gap-2 border-2 border-white/40 text-white font-medium px-6 py-3 rounded-full hover:bg-white/10 transition-colors"
+                        >
+                            <i class="fas fa-percentage"></i> Xem khuyến mãi
+                        </a>
+                    </div>
+                    <div
+                        class="flex items-center gap-6 pt-2 text-teal-100 text-sm"
+                    >
+                        <span class="flex items-center gap-2"
+                            ><i class="fas fa-truck text-teal-200"></i> Miễn phí
+                            giao hàng</span
+                        >
+                        <span class="flex items-center gap-2"
+                            ><i class="fas fa-shield-alt text-teal-200"></i> Bảo
+                            hành chính hãng</span
+                        >
+                    </div>
+                </div>
+                <div class="hidden md:flex justify-center">
+                    <div class="relative">
+                        <div
+                            class="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10"
+                        >
+                            <div
+                                class="w-64 h-64 lg:w-80 lg:h-80 rounded-full bg-white/10 flex items-center justify-center border border-white/10"
+                            >
+                                <i
+                                    class="fas fa-shopping-bag text-7xl lg:text-8xl text-white/40"
+                                ></i>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-8 right-0 bg-white rounded-2xl shadow-xl p-3 flex items-center gap-2 animate-bounce"
+                            style="animation-duration: 3s"
+                        >
+                            <div
+                                class="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center"
+                            >
+                                <i class="fas fa-headphones text-teal-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Hỗ trợ</p>
+                                <p class="text-sm font-bold text-gray-700">
+                                    24/7
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute bottom-12 -left-4 bg-white rounded-2xl shadow-xl p-3 flex items-center gap-2"
+                            style="animation: fadeInUp 1s ease 0.5s both"
+                        >
+                            <div
+                                class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center"
+                            >
+                                <i class="fas fa-percent text-red-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Giảm đến</p>
+                                <p class="text-sm font-bold text-red-600">
+                                    50%
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Wave -->
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg
+                viewBox="0 0 1440 80"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M0 40L48 35C96 30 192 20 288 25C384 30 480 50 576 55C672 60 768 50 864 40C960 30 1056 20 1152 22C1248 24 1344 38 1392 45L1440 52V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0V40Z"
+                    fill="#f8fafb"
+                />
+            </svg>
+        </div>
+    </section>
 
-    <h1 class="text-4xl font-bold text-slate-900">
-      {{message}}
-    </h1>
+    <!-- ===== DANH MỤC NỔI BẬT ===== -->
+    <section class="py-14 md:py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h2
+                        class="section-title text-2xl md:text-3xl font-bold text-gray-800"
+                    >
+                        Danh mục nổi bật
+                    </h2>
+                    <p class="text-gray-400 mt-3 text-sm">
+                        Khám phá các nhóm sản phẩm phổ biến
+                    </p>
+                </div>
+                <a
+                    href="/categories"
+                    class="hidden sm:inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 text-sm font-medium transition-colors"
+                >
+                    Xem tất cả
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div
+                id="categoriesGrid"
+                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+            >
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section>
 
-    <p class="mt-4 max-w-2xl text-slate-600">
-      Đây là trang chủ phía người dùng, dùng layout client và partial header/footer client.
-    </p>
+    <!-- ===== SẢN PHẨM MỚI ===== -->
+    <section class="py-14 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h2
+                        class="section-title text-2xl md:text-3xl font-bold text-gray-800"
+                    >
+                        Sản phẩm mới
+                    </h2>
+                    <p class="text-gray-400 mt-3 text-sm">
+                        Những sản phẩm vừa được thêm vào cửa hàng
+                    </p>
+                </div>
+                <a
+                    href="/products?sort=newest"
+                    class="hidden sm:inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 text-sm font-medium transition-colors"
+                >
+                    Xem tất cả
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div
+                id="newProductsGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+            >
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section>
 
-    <div class="mt-6 flex gap-3">
-      <a
-        href="/products"
-        class="rounded-xl px-5 py-3 font-semibold text-white"
-        style="background: var(--teal-600);"
-      >
-        Xem sản phẩm
-      </a>
+    <!-- ===== SẢN PHẨM BÁN CHẠY ===== -->
+    <section class="py-14 md:py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h2
+                        class="section-title text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2"
+                    >
+                        Sản phẩm bán chạy
+                        <span class="text-lg"
+                            ><i class="fas fa-fire text-orange-500"></i
+                        ></span>
+                    </h2>
+                    <p class="text-gray-400 mt-3 text-sm">
+                        Các sản phẩm được yêu thích nhất (dữ liệu tổng hợp từ
+                        order_items)
+                    </p>
+                </div>
+                <a
+                    href="/products?sort=best-selling"
+                    class="hidden sm:inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 text-sm font-medium transition-colors"
+                >
+                    Xem tất cả
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div
+                id="bestSellingGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+            >
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section>
 
-      <a href="/auth/login" class="rounded-xl border bg-white px-5 py-3 font-semibold">
-        Đăng nhập
-      </a>
-    </div>
-  </div>
-</section>
+    <!-- ===== SẢN PHẨM KHUYẾN MÃI ===== -->
+    <section class="py-14 md:py-20 bg-gradient-to-b from-red-50/50 to-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h2
+                        class="section-title text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2"
+                    >
+                        Sản phẩm khuyến mãi
+                        <span class="text-lg"
+                            ><i class="fas fa-bolt text-red-500"></i
+                        ></span>
+                    </h2>
+                    <p class="text-gray-400 mt-3 text-sm">
+                        Các sản phẩm đang có chương trình giảm giá hấp dẫn
+                    </p>
+                </div>
+                <a
+                    href="/promotions"
+                    class="hidden sm:inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 text-sm font-medium transition-colors"
+                >
+                    Xem tất cả
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div
+                id="saleProductsGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+            >
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section> 
+</main>
+<!-- ========== SCRIPTS ========== -->
+<script>
+    // =============================================
+    // DỮ LIỆU MẪU BÁM THEO DB CHUẨN
+    // =============================================
+
+    const categoriesData = [
+        {
+            id: 1,
+            parent_id: null,
+            name: "Điện thoại",
+            slug: "dien-thoai",
+            image: "https://picsum.photos/seed/cat-phone/400/300.jpg",
+            description: "Các dòng điện thoại phổ biến nhất hiện nay",
+            status: "active",
+            created_at: "2025-01-10T00:00:00.000Z",
+            updated_at: "2025-01-10T00:00:00.000Z",
+        },
+        {
+            id: 2,
+            parent_id: null,
+            name: "Laptop",
+            slug: "laptop",
+            image: "https://picsum.photos/seed/cat-laptop/400/300.jpg",
+            description: "Laptop văn phòng, gaming, thiết kế",
+            status: "active",
+            created_at: "2025-01-11T00:00:00.000Z",
+            updated_at: "2025-01-11T00:00:00.000Z",
+        },
+        {
+            id: 3,
+            parent_id: null,
+            name: "Phụ kiện",
+            slug: "phu-kien",
+            image: "https://picsum.photos/seed/cat-accessory/400/300.jpg",
+            description: "Tai nghe, sạc, ốp lưng, chuột...",
+            status: "active",
+            created_at: "2025-01-12T00:00:00.000Z",
+            updated_at: "2025-01-12T00:00:00.000Z",
+        },
+        {
+            id: 4,
+            parent_id: null,
+            name: "Đồng hồ thông minh",
+            slug: "dong-ho-thong-minh",
+            image: "https://picsum.photos/seed/cat-watch/400/300.jpg",
+            description: "Smartwatch, band theo dõi sức khỏe",
+            status: "active",
+            created_at: "2025-01-13T00:00:00.000Z",
+            updated_at: "2025-01-13T00:00:00.000Z",
+        },
+        {
+            id: 5,
+            parent_id: null,
+            name: "Tablet",
+            slug: "tablet",
+            image: "https://picsum.photos/seed/cat-tablet/400/300.jpg",
+            description: "Tablet học tập, giải trí, làm việc",
+            status: "active",
+            created_at: "2025-01-14T00:00:00.000Z",
+            updated_at: "2025-01-14T00:00:00.000Z",
+        },
+        {
+            id: 6,
+            parent_id: null,
+            name: "Thiết bị nhà thông minh",
+            slug: "thiet-bi-nha-thong-minh",
+            image: "https://picsum.photos/seed/cat-smarthome/400/300.jpg",
+            description: "Loa thông minh, camera, bulb...",
+            status: "active",
+            created_at: "2025-01-15T00:00:00.000Z",
+            updated_at: "2025-01-15T00:00:00.000Z",
+        },
+        {
+            id: 7,
+            parent_id: null,
+            name: "Đã ẩn",
+            slug: "da-an",
+            image: "",
+            description: "Danh mục không hiển thị",
+            status: "inactive",
+            created_at: "2025-01-16T00:00:00.000Z",
+            updated_at: "2025-01-16T00:00:00.000Z",
+        },
+    ];
+
+    const productsData = [
+        {
+            id: 1,
+            category_id: 1,
+            name: "iPhone 15 Pro Max 256GB",
+            slug: "iphone-15-pro-max-256gb",
+            sku: "IP15PM-256",
+            price: 34990000,
+            sale_price: 31990000,
+            quantity: 15,
+            short_description:
+                "Chip A17 Pro, camera 48MP, màn hình Super Retina XDR 6.7 inch",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-iphone15/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-01T00:00:00.000Z",
+            updated_at: "2025-06-01T00:00:00.000Z",
+        },
+        {
+            id: 2,
+            category_id: 1,
+            name: "Samsung Galaxy S24 Ultra",
+            slug: "samsung-galaxy-s24-ultra",
+            sku: "SS-S24U",
+            price: 33990000,
+            sale_price: 29990000,
+            quantity: 20,
+            short_description:
+                "Snapdragon 8 Gen 3, S Pen, camera 200MP, màn hình 6.8 inch",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-s24ultra/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-02T00:00:00.000Z",
+            updated_at: "2025-06-02T00:00:00.000Z",
+        },
+        {
+            id: 3,
+            category_id: 2,
+            name: "MacBook Air M3 13 inch",
+            slug: "macbook-air-m3-13-inch",
+            sku: "MBA-M3-13",
+            price: 27990000,
+            sale_price: null,
+            quantity: 8,
+            short_description:
+                "Chip M3, 8GB RAM, 256GB SSD, màn hình Liquid Retina 13.6 inch",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-mba-m3/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-03T00:00:00.000Z",
+            updated_at: "2025-06-03T00:00:00.000Z",
+        },
+        {
+            id: 4,
+            category_id: 2,
+            name: "ASUS ROG Strix G16 2024",
+            slug: "asus-rog-strix-g16-2024",
+            sku: "ASUS-ROG-G16",
+            price: 35990000,
+            sale_price: 32990000,
+            quantity: 5,
+            short_description:
+                "Intel i9-14900HX, RTX 4070, 16GB RAM, 512GB SSD",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-rog-g16/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-04T00:00:00.000Z",
+            updated_at: "2025-06-04T00:00:00.000Z",
+        },
+        {
+            id: 5,
+            category_id: 3,
+            name: "AirPods Pro 2 USB-C",
+            slug: "airpods-pro-2-usb-c",
+            sku: "APP2-USBC",
+            price: 6190000,
+            sale_price: 4990000,
+            quantity: 50,
+            short_description: "Chống ồn chủ động, Adaptive Audio, sạc USB-C",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-airpods/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-05T00:00:00.000Z",
+            updated_at: "2025-06-05T00:00:00.000Z",
+        },
+        {
+            id: 6,
+            category_id: 3,
+            name: "Chuột Logitech MX Master 3S",
+            slug: "chuot-logitech-mx-master-3s",
+            sku: "LOG-MXM3S",
+            price: 2790000,
+            sale_price: null,
+            quantity: 30,
+            short_description:
+                "Chuột không dây ergonomics, cảm ứng 8000 DPI, đa thiết bị",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-mxmaster/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-06T00:00:00.000Z",
+            updated_at: "2025-06-06T00:00:00.000Z",
+        },
+        {
+            id: 7,
+            category_id: 4,
+            name: "Apple Watch Ultra 2",
+            slug: "apple-watch-ultra-2",
+            sku: "AW-U2-49",
+            price: 21990000,
+            sale_price: 19990000,
+            quantity: 10,
+            short_description:
+                "Titanium 49mm, GPS+Cellular, pin 36h, độ sâu nước 100m",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-awu2/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-07T00:00:00.000Z",
+            updated_at: "2025-06-07T00:00:00.000Z",
+        },
+        {
+            id: 8,
+            category_id: 5,
+            name: "iPad Air M2 11 inch",
+            slug: "ipad-air-m2-11-inch",
+            sku: "IPA-M2-11",
+            price: 16990000,
+            sale_price: null,
+            quantity: 12,
+            short_description:
+                "Chip M2, 8GB RAM, 128GB SSD, màn hình Liquid Retina",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-ipadair/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-08T00:00:00.000Z",
+            updated_at: "2025-06-08T00:00:00.000Z",
+        },
+        {
+            id: 9,
+            category_id: 6,
+            name: "Google Nest Hub Max",
+            slug: "google-nest-hub-max",
+            sku: "GNH-MAX",
+            price: 5490000,
+            sale_price: 4290000,
+            quantity: 18,
+            short_description:
+                "Màn hình 10 inch, loa stereo, camera, Google Assistant",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-nesthub/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-09T00:00:00.000Z",
+            updated_at: "2025-06-09T00:00:00.000Z",
+        },
+        {
+            id: 10,
+            category_id: 1,
+            name: "Xiaomi 14 Ultra",
+            slug: "xiaomi-14-ultra",
+            sku: "XM-14U",
+            price: 24990000,
+            sale_price: 21990000,
+            quantity: 0,
+            short_description:
+                "Snapdragon 8 Gen 3, camera Leica 4 lens, sạc 90W",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-xiaomi14u/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-10T00:00:00.000Z",
+            updated_at: "2025-06-10T00:00:00.000Z",
+        },
+        {
+            id: 11,
+            category_id: 3,
+            name: "Sạc nhanh 65W Anker",
+            slug: "sac-nhanh-65w-anker",
+            sku: "ANK-65W",
+            price: 890000,
+            sale_price: 690000,
+            quantity: 100,
+            short_description:
+                "Sạc nhanh GaN, 3 cổng (2 USB-C + 1 USB-A), tương thích đa thiết bị",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-anker65/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-11T00:00:00.000Z",
+            updated_at: "2025-06-11T00:00:00.000Z",
+        },
+        {
+            id: 12,
+            category_id: 4,
+            name: "Samsung Galaxy Watch 6 Classic",
+            slug: "samsung-galaxy-watch-6-classic",
+            sku: "SGW6C-47",
+            price: 8990000,
+            sale_price: 7490000,
+            quantity: 22,
+            short_description:
+                "Màn hình 47mm, bezel xoay, BioActive sensor, Wear OS",
+            description: "",
+            thumbnail: "https://picsum.photos/seed/prod-gwatch6/400/400.jpg",
+            status: "active",
+            created_at: "2025-06-12T00:00:00.000Z",
+            updated_at: "2025-06-12T00:00:00.000Z",
+        },
+    ];
+
+    // Dữ liệu bán chạy giả lập từ order_items (tổng hợp quantity)
+    // Không thêm field sold_count vào products, đây là dữ liệu join từ order_items
+    const bestSellingData = [
+        { product_id: 5, total_sold: 156 }, // AirPods Pro 2
+        { product_id: 1, total_sold: 134 }, // iPhone 15 Pro Max
+        { product_id: 11, total_sold: 128 }, // Sạc nhanh Anker
+        { product_id: 2, total_sold: 112 }, // Samsung S24 Ultra
+    ];
+
+    const bannersData = [
+        {
+            id: 1,
+            title: "Flash Sale Cuối Tuần",
+            image: "https://picsum.photos/seed/banner1/1200/500.jpg",
+            link: "/promotions",
+            position: "home_main",
+            status: "active",
+            created_at: "2025-06-01T00:00:00.000Z",
+            updated_at: "2025-06-01T00:00:00.000Z",
+        },
+        {
+            id: 2,
+            title: "Ra Mặt iPhone 15 Series",
+            image: "https://picsum.photos/seed/banner2/1200/500.jpg",
+            link: "/products?category=dien-thoai",
+            position: "home_sub",
+            status: "active",
+            created_at: "2025-06-02T00:00:00.000Z",
+            updated_at: "2025-06-02T00:00:00.000Z",
+        },
+    ];
+
+    // =============================================
+    // TIỆN ÍCH
+    // =============================================
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat("vi-VN").format(price) + "đ";
+    }
+
+    function calcDiscountPercent(price, salePrice) {
+        if (!salePrice || salePrice >= price) return 0;
+        return Math.round(((price - salePrice) / price) * 100);
+    }
+
+    function isOutOfStock(product) {
+        return product.quantity === 0;
+    }
+
+    // =============================================
+    // GIỎ HÀNG DEMO
+    // =============================================
+
+    let cartCount = 0;
+
+    function updateCartBadge() {
+        const badge = document.getElementById("cartBadge");
+        const mobileCount = document.getElementById("mobileCartCount");
+        if (cartCount > 0) {
+            badge.textContent = cartCount > 99 ? "99+" : cartCount;
+            badge.classList.remove("hidden");
+            badge.classList.add("cart-badge");
+            // Re-trigger animation
+            void badge.offsetWidth;
+            badge.classList.add("cart-badge");
+        } else {
+            badge.classList.add("hidden");
+        }
+        if (mobileCount) mobileCount.textContent = cartCount;
+    }
+
+    function addToCart(product) {
+        if (isOutOfStock(product)) {
+            Swal.fire({
+                icon: "warning",
+                title: "Sản phẩm đã hết hàng",
+                text: `"${product.name}" hiện tại không còn trong kho.`,
+                confirmButtonColor: "#007a7a",
+                background: "#fff",
+            });
+            return;
+        }
+        cartCount++;
+        updateCartBadge();
+        Swal.fire({
+            icon: "success",
+            title: "Đã thêm vào giỏ hàng",
+            text: `"${product.name}" đã được thêm vào giỏ hàng.`,
+            confirmButtonColor: "#007a7a",
+            background: "#fff",
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+    }
+
+    // =============================================
+    // RENDER DANH MỤC
+    // =============================================
+
+    function renderCategories() {
+        const grid = document.getElementById("categoriesGrid");
+        const activeCategories = categoriesData.filter(
+            (c) => c.status === "active",
+        );
+
+        grid.innerHTML = activeCategories
+            .map(
+                (cat) => `
+        <div class="category-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer group" onclick="goToCategory('${cat.slug}', '${cat.name}')">
+          <div class="relative h-36 sm:h-40 overflow-hidden">
+            <img src="${cat.image}" alt="${cat.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            <div class="absolute bottom-3 left-3 right-3">
+              <h3 class="text-white font-semibold text-base truncate">${cat.name}</h3>
+            </div>
+          </div>
+          <div class="p-4">
+            <p class="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-3">${cat.description}</p>
+            <span class="inline-flex items-center gap-1 text-teal-600 text-xs font-medium group-hover:gap-2 transition-all">
+              Xem sản phẩm <i class="fas fa-arrow-right text-[10px]"></i>
+            </span>
+          </div>
+        </div>
+      `,
+            )
+            .join("");
+    }
+
+    function goToCategory(slug, name) {
+        Swal.fire({
+            icon: "info",
+            title: "Chuyển đến danh mục",
+            html: `Bạn sẽ chuyển đến danh mục <strong>${name}</strong><br><code class="text-xs text-gray-400">/categories/${slug}</code>`,
+            confirmButtonColor: "#007a7a",
+            background: "#fff",
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+    }
+
+    // =============================================
+    // RENDER PRODUCT CARD (CHUNG)
+    // =============================================
+
+    function renderProductCard(product, badgeType, extraInfo) {
+        const outOfStock = isOutOfStock(product);
+        const hasSale =
+            product.sale_price && product.sale_price < product.price;
+        const discount = calcDiscountPercent(product.price, product.sale_price);
+
+        let badgeHtml = "";
+        if (outOfStock) {
+            badgeHtml =
+                '<span class="badge-out absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold">Hết hàng</span>';
+        } else if (badgeType === "new") {
+            badgeHtml =
+                '<span class="badge-new absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold">Mới</span>';
+        } else if (badgeType === "hot") {
+            badgeHtml =
+                '<span class="badge-hot absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold"><i class="fas fa-fire mr-1"></i>Bán chạy</span>';
+        } else if (badgeType === "sale" && hasSale) {
+            badgeHtml = `<span class="badge-sale absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold">-${discount}%</span>`;
+        }
+
+        const priceHtml = hasSale
+            ? `<span class="text-red-500 font-bold text-lg">${formatPrice(product.sale_price)}</span>
+           <span class="text-gray-400 line-through text-sm ml-1">${formatPrice(product.price)}</span>`
+            : `<span class="text-teal-700 font-bold text-lg">${formatPrice(product.price)}</span>`;
+
+        const hotBorder = badgeType === "hot" ? "ring-2 ring-orange-200" : "";
+
+        return `
+        <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 ${hotBorder}">
+          <div class="relative group cursor-pointer" onclick="viewProductDetail(${product.id})">
+            <div class="aspect-square overflow-hidden bg-gray-50">
+              <img src="${product.thumbnail}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400 ${outOfStock ? "opacity-60" : ""}" loading="lazy">
+            </div>
+            ${badgeHtml}
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div>
+          </div>
+          <div class="p-4 space-y-2.5">
+            <h3 class="font-semibold text-gray-800 text-sm leading-snug line-clamp-2 cursor-pointer hover:text-teal-600 transition-colors" onclick="viewProductDetail(${product.id})">${product.name}</h3>
+            <p class="text-gray-400 text-xs leading-relaxed line-clamp-2">${product.short_description}</p>
+            ${extraInfo ? `<p class="text-xs text-gray-500">${extraInfo}</p>` : ""}
+            <div class="flex items-center flex-wrap gap-1">${priceHtml}</div>
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="viewProductDetail(${product.id})" class="btn-outline-teal flex-1 py-2 rounded-xl text-xs font-medium text-center">
+                <i class="fas fa-eye mr-1"></i> Xem chi tiết
+              </button>
+              <button onclick='addToCart(${JSON.stringify(product).replace(/'/g, "\\'")})' class="btn-teal flex-1 py-2 rounded-xl text-xs font-medium text-center ${outOfStock ? "opacity-50 cursor-not-allowed" : ""}" ${outOfStock ? "disabled" : ""}>
+                <i class="fas fa-cart-plus mr-1"></i> Thêm vào giỏ
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =============================================
+    // RENDER SẢN PHẨM MỚI
+    // =============================================
+
+    function renderNewProducts() {
+        const grid = document.getElementById("newProductsGrid");
+        const activeProducts = productsData.filter(
+            (p) => p.status === "active",
+        );
+        // Sắp xếp theo created_at giảm dần, lấy 4 sản phẩm mới nhất
+        const newProducts = [...activeProducts]
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            .slice(0, 4);
+
+        grid.innerHTML = newProducts
+            .map((p) => renderProductCard(p, "new", null))
+            .join("");
+    }
+
+    // =============================================
+    // RENDER SẢN PHẨM BÁN CHẠY
+    // =============================================
+
+    function renderBestSelling() {
+        const grid = document.getElementById("bestSellingGrid");
+        const html = bestSellingData
+            .map((item) => {
+                const product = productsData.find(
+                    (p) => p.id === item.product_id,
+                );
+                if (!product || product.status !== "active") return "";
+                const extraInfo = `<i class="fas fa-chart-line text-orange-400 mr-1"></i> Đã bán <strong>${item.total_sold}</strong> sản phẩm <span class="text-gray-300 ml-1">(tổng hợp từ order_items)</span>`;
+                return renderProductCard(product, "hot", extraInfo);
+            })
+            .join("");
+        grid.innerHTML = html;
+    }
+
+    // =============================================
+    // RENDER SẢN PHẨM KHUYẾN MÃI
+    // =============================================
+
+    function renderSaleProducts() {
+        const grid = document.getElementById("saleProductsGrid");
+        // Điều kiện: sale_price khác null VÀ sale_price < price
+        const saleProducts = productsData.filter(
+            (p) =>
+                p.status === "active" &&
+                p.sale_price !== null &&
+                p.sale_price < p.price,
+        );
+
+        grid.innerHTML = saleProducts
+            .map((p) => renderProductCard(p, "sale", null))
+            .join("");
+    }
+
+    // =============================================
+    // XEM CHI TIẾT SẢN PHẨM (SWEETALERT2)
+    // =============================================
+
+    function viewProductDetail(productId) {
+        const product = productsData.find((p) => p.id === productId);
+        if (!product) return;
+
+        const hasSale =
+            product.sale_price && product.sale_price < product.price;
+        const discount = calcDiscountPercent(product.price, product.sale_price);
+        const outOfStock = isOutOfStock(product);
+
+        const priceSection = hasSale
+            ? `<div class="flex items-center gap-2 mb-2">
+             <span class="text-red-500 font-bold text-2xl">${formatPrice(product.sale_price)}</span>
+             <span class="text-gray-400 line-through text-sm">${formatPrice(product.price)}</span>
+             <span class="bg-red-100 text-red-600 text-xs font-semibold px-2 py-0.5 rounded-full">-${discount}%</span>
+           </div>`
+            : `<div class="mb-2"><span class="text-teal-700 font-bold text-2xl">${formatPrice(product.price)}</span></div>`;
+
+        const stockText = outOfStock
+            ? '<span class="text-red-500 text-sm font-medium"><i class="fas fa-times-circle mr-1"></i>Hết hàng</span>'
+            : `<span class="text-green-600 text-sm font-medium"><i class="fas fa-check-circle mr-1"></i>Còn hàng: ${product.quantity} sản phẩm</span>`;
+
+        Swal.fire({
+            title: "",
+            html: `
+          <div class="text-left">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <img src="${product.thumbnail}" alt="${product.name}" class="w-full sm:w-48 h-48 object-cover rounded-xl border border-gray-100">
+              <div class="flex-1">
+                <h3 class="font-bold text-gray-800 text-lg mb-1">${product.name}</h3>
+                <p class="text-gray-400 text-xs mb-3">SKU: ${product.sku}</p>
+                ${priceSection}
+                <p class="text-gray-500 text-sm leading-relaxed mb-3">${product.short_description}</p>
+                <div class="mb-3">${stockText}</div>
+                <div class="text-xs text-gray-400">
+                  <i class="fas fa-link mr-1"></i> /products/${product.slug}
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+            confirmButtonText: outOfStock
+                ? "Đóng"
+                : '<i class="fas fa-cart-plus mr-1"></i> Thêm vào giỏ',
+            confirmButtonColor: outOfStock ? "#94a3b8" : "#007a7a",
+            showCancelButton: true,
+            cancelButtonText: "Đóng",
+            cancelButtonColor: "#e2e8f0",
+            customClass: { cancelButton: "!text-gray-600" },
+            width: 600,
+            background: "#fff",
+            preConfirm: () => {
+                if (!outOfStock) addToCart(product);
+                return false;
+            },
+        });
+    }
+
+    // =============================================
+    // TÌM KIẾM NHANH
+    // =============================================
+
+    function setupSearch(inputId, dropdownId, resultsId) {
+        const input = document.getElementById(inputId);
+        const dropdown = document.getElementById(dropdownId);
+        const results = document.getElementById(resultsId);
+
+        input.addEventListener("input", function () {
+            const keyword = this.value.trim().toLowerCase();
+            if (keyword.length === 0) {
+                dropdown.classList.add("hidden");
+                return;
+            }
+
+            const matched = productsData
+                .filter(
+                    (p) =>
+                        p.status === "active" &&
+                        p.name.toLowerCase().includes(keyword),
+                )
+                .slice(0, 6);
+
+            if (matched.length === 0) {
+                results.innerHTML = `
+            <div class="px-4 py-6 text-center text-gray-400 text-sm">
+              <i class="fas fa-search text-2xl mb-2 block text-gray-300"></i>
+              Không tìm thấy sản phẩm phù hợp
+            </div>`;
+            } else {
+                results.innerHTML = matched
+                    .map((p) => {
+                        const hasSale = p.sale_price && p.sale_price < p.price;
+                        const displayPrice = hasSale
+                            ? `<span class="text-red-500 font-semibold">${formatPrice(p.sale_price)}</span> <span class="text-gray-300 line-through text-xs">${formatPrice(p.price)}</span>`
+                            : `<span class="text-teal-700 font-semibold">${formatPrice(p.price)}</span>`;
+                        return `
+              <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-teal-50 cursor-pointer transition-colors" onclick="viewProductDetail(${p.id}); document.getElementById('${inputId}').value=''; document.getElementById('${dropdownId}').classList.add('hidden');">
+                <img src="${p.thumbnail}" alt="${p.name}" class="w-11 h-11 rounded-lg object-cover border border-gray-100 shrink-0">
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-800 truncate">${p.name}</p>
+                  <div class="text-xs mt-0.5">${displayPrice}</div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-300 text-xs shrink-0"></i>
+              </div>`;
+                    })
+                    .join("");
+            }
+            dropdown.classList.remove("hidden");
+        });
+
+        input.addEventListener("focus", function () {
+            if (this.value.trim().length > 0) {
+                dropdown.classList.remove("hidden");
+            }
+        });
+
+        // Đóng dropdown khi click bên ngoài
+        document.addEventListener("click", function (e) {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
+    }
+
+    // =============================================
+    // MOBILE MENU
+    // =============================================
+
+    function setupMobileMenu() {
+        const menuBtn = document.getElementById("mobileMenuBtn");
+        const closeBtn = document.getElementById("closeMobileMenu");
+        const menu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("mobileOverlay");
+
+        function openMenu() {
+            menu.classList.add("active");
+            overlay.classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeMenu() {
+            menu.classList.remove("active");
+            overlay.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+
+        menuBtn.addEventListener("click", openMenu);
+        closeBtn.addEventListener("click", closeMenu);
+        overlay.addEventListener("click", closeMenu);
+
+        // Đóng menu khi click link
+        menu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", closeMenu);
+        });
+    }
+
+    // =============================================
+    // CART BUTTON
+    // =============================================
+
+    function setupCartButton() {
+        document
+            .getElementById("cartBtn")
+            .addEventListener("click", function () {
+                Swal.fire({
+                    icon: "info",
+                    title: "Giỏ hàng",
+                    html:
+                        cartCount > 0
+                            ? `Bạn có <strong>${cartCount}</strong> sản phẩm trong giỏ hàng.<br><code class="text-xs text-gray-400">/cart</code>`
+                            : "Giỏ hàng của bạn đang trống.",
+                    confirmButtonColor: "#007a7a",
+                    background: "#fff",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/zai/client/cart/";
+                    }
+                });
+            });
+    }
+
+    // =============================================
+    // LOGIN / REGISTER BUTTONS
+    // =============================================
+
+    function setupAuthButtons() {
+        document
+            .getElementById("loginBtn")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: "info",
+                    title: "Đăng nhập",
+                    html: 'Bạn sẽ chuyển đến trang đăng nhập.<br><code class="text-xs text-gray-400">/login</code>',
+                    confirmButtonColor: "#007a7a",
+                    background: "#fff",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                }).then(() => {
+                    window.location.href = "/zai/client/auth/login.html";
+                });
+            });
+
+        document
+            .getElementById("registerBtn")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: "info",
+                    title: "Đăng ký",
+                    html: 'Bạn sẽ chuyển đến trang đăng ký.<br><code class="text-xs text-gray-400">/register</code>',
+                    confirmButtonColor: "#007a7a",
+                    background: "#fff",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                }).then(() => {
+                    window.location.href = "/zai/client/auth/register.html";
+                });
+            });
+    } 
+
+    // =============================================
+    // KHỞI TẠO
+    // =============================================
+
+    document.addEventListener("DOMContentLoaded", function () {
+        renderCategories();
+        renderNewProducts();
+        renderBestSelling();
+        renderSaleProducts();
+        setupSearch("searchInput", "searchDropdown", "searchResults");
+        setupSearch(
+            "searchInputMobile",
+            "searchDropdownMobile",
+            "searchResultsMobile",
+        );
+        setupMobileMenu();
+        setupCartButton();
+        setupAuthButtons(); 
+        updateCartBadge();
+    });
+</script>
