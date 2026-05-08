@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 @Controller()
 export class AuthViewController {
   private readonly siteName = 'Ecom Market';
-
   constructor(private readonly configService: ConfigService) {}
 
   private getViewData(title: string, extra: Record<string, unknown> = {}) {

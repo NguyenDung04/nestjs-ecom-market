@@ -1,170 +1,899 @@
-<!-- ========== HEADER ========== -->
-<header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100"> 
-    <!-- Main header -->
+<!-- ========== CLIENT HEADER + MOBILE DRAWER ========== -->
+<header class="sticky top-0 z-40 bg-white shadow-sm border-b border-gray-100">
+    <!-- Desktop / Mobile top header -->
     <div class="max-w-7xl mx-auto px-4 py-3">
         <div class="flex items-center justify-between gap-4">
             <!-- Logo -->
-            <a href="/" class="flex items-center gap-2 shrink-0">
+            <a
+                href="/"
+                class="flex items-center gap-2 shrink-0"
+                aria-label="{{siteName}}"
+            >
                 <div
-                    class="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center"
+                    class="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm"
                 >
-                    <i class="fas fa-store text-white text-lg"></i>
+                    <i class="fa-solid fa-store text-white text-lg"></i>
                 </div>
-                <div>
-                    <span class="text-xl font-bold text-teal-700 tracking-tight"
-                        >Shop<span class="text-teal-500">Teal</span></span
+
+                <div class="leading-tight">
+                    <span
+                        class="text-xl font-bold text-teal-700 tracking-tight"
                     >
-                    <p class="text-[10px] text-gray-400 -mt-1 leading-none">
+                        {{siteShortName}}<span class="text-teal-500"
+                            >Market</span
+                        >
+                    </span>
+                    <p class="text-[10px] text-gray-400 -mt-0.5 leading-none">
                         Mua sắm dễ dàng
                     </p>
                 </div>
             </a>
 
-            <!-- Search bar - Desktop -->
-            <div
+            <!-- Search desktop -->
+            <form
+                id="clientHeaderSearchForm"
                 class="hidden md:flex flex-1 max-w-xl relative"
-                id="searchContainer"
+                action="/products"
+                method="GET"
             >
                 <div
-                    class="flex w-full border-2 border-teal-200 rounded-full overflow-hidden focus-within:border-teal-500 transition-colors"
+                    class="flex w-full border-2 border-teal-200 rounded-full overflow-hidden focus-within:border-teal-500 transition-colors bg-white"
                 >
                     <input
                         type="text"
-                        id="searchInput"
+                        id="clientHeaderSearchInput"
+                        name="keyword"
                         placeholder="Tìm kiếm sản phẩm..."
-                        class="flex-1 px-5 py-2.5 text-sm outline-none bg-white"
+                        class="flex-1 px-5 py-2.5 text-sm outline-none bg-white text-gray-700 placeholder:text-gray-400"
                         autocomplete="off"
                     />
+
                     <button
+                        type="submit"
                         class="px-5 bg-teal-500 hover:bg-teal-700 text-white transition-colors"
+                        aria-label="Tìm kiếm"
                     >
-                        <i class="fas fa-search"></i>
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
-                <!-- Search dropdown -->
-                <div
-                    id="searchDropdown"
-                    class="search-dropdown absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 hidden z-50"
-                >
-                    <div id="searchResults" class="p-2"></div>
-                </div>
-            </div>
+            </form>
 
-            <!-- Actions -->
+            <!-- Actions desktop/mobile -->
             <div class="flex items-center gap-2 md:gap-3">
                 <!-- Cart -->
-                <button
-                    id="cartBtn"
+                <a
+                    href="/cart"
+                    id="clientHeaderCartLink"
                     class="relative p-2.5 rounded-full hover:bg-teal-50 transition-colors group"
                     title="Giỏ hàng"
+                    aria-label="Giỏ hàng"
                 >
                     <i
-                        class="fas fa-shopping-cart text-gray-600 group-hover:text-teal-600 text-lg"
+                        class="fa-solid fa-cart-shopping text-gray-600 group-hover:text-teal-600 text-lg"
                     ></i>
+
                     <span
-                        id="cartBadge"
-                        class="cart-badge absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden"
+                        id="clientHeaderCartBadge"
+                        class="cart-badge absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full hidden items-center justify-center"
                         >0</span
                     >
-                </button>
-
-                <!-- Login -->
-                <a
-                    href="/login"
-                    id="loginBtn"
-                    class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors"
-                >
-                    <i class="fas fa-user-circle"></i>
-                    <span>Đăng nhập</span>
                 </a>
 
-                <!-- Register -->
-                <a
-                    href="/register"
-                    id="registerBtn"
-                    class="hidden sm:inline-flex btn-teal px-4 py-2 text-sm font-medium rounded-full"
-                >
-                    Đăng ký
-                </a>
+                <!-- Account desktop -->
+                <div class="hidden md:block relative">
+                    {{#if isLoggedIn}}
+                    <button
+                        type="button"
+                        id="clientAccountDropdownBtn"
+                        class="flex items-center gap-2 rounded-full border border-gray-100 bg-white px-2 py-1.5 hover:bg-teal-50 hover:border-teal-100 transition-colors"
+                        aria-expanded="false"
+                    >
+                        <img
+                            src="{{authAvatar}}"
+                            alt="{{authName}}"
+                            class="h-8 w-8 rounded-full object-cover border border-teal-100"
+                        />
+
+                        <span
+                            class="max-w-[150px] truncate text-sm font-medium text-gray-700"
+                        >
+                            {{authName}}
+                        </span>
+
+                        <i
+                            class="fa-solid fa-chevron-down text-[11px] text-gray-400"
+                        ></i>
+                    </button>
+
+                    <div
+                        id="clientAccountDropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-64 rounded-2xl border border-gray-100 bg-white shadow-xl overflow-hidden z-50"
+                    >
+                        <div
+                            class="px-4 py-3 bg-teal-50/70 border-b border-teal-100"
+                        >
+                            <p class="text-xs text-gray-500">Tài khoản</p>
+                            <p
+                                class="mt-0.5 text-sm font-semibold text-teal-800 truncate"
+                            >
+                                {{authName}}
+                            </p>
+                        </div>
+
+                        <nav class="p-2">
+                            <a
+                                href="/account/profile"
+                                class="client-account-link"
+                            >
+                                <i
+                                    class="fa-solid fa-user w-5 text-center text-teal-500"
+                                ></i>
+                                <span>Thông tin cá nhân</span>
+                            </a>
+
+                            <a
+                                href="/account/addresses"
+                                class="client-account-link"
+                            >
+                                <i
+                                    class="fa-solid fa-location-dot w-5 text-center text-teal-500"
+                                ></i>
+                                <span>Địa chỉ giao hàng</span>
+                            </a>
+
+                            <a
+                                href="/account/orders"
+                                class="client-account-link"
+                            >
+                                <i
+                                    class="fa-solid fa-receipt w-5 text-center text-teal-500"
+                                ></i>
+                                <span>Đơn hàng của tôi</span>
+                            </a>
+
+                            <a
+                                href="/account/wishlist"
+                                class="client-account-link"
+                            >
+                                <i
+                                    class="fa-solid fa-heart w-5 text-center text-red-400"
+                                ></i>
+                                <span>Yêu thích</span>
+                            </a>
+
+                            <a
+                                href="/account/notifications"
+                                class="client-account-link"
+                            >
+                                <i
+                                    class="fa-solid fa-bell w-5 text-center text-amber-400"
+                                ></i>
+                                <span>Thông báo</span>
+                            </a>
+
+                            <div class="my-2 border-t border-gray-100"></div>
+
+                            <button
+                                type="button"
+                                data-client-logout
+                                class="client-account-link w-full text-left text-red-600 hover:bg-red-50"
+                            >
+                                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+                                <span>Đăng xuất</span>
+                            </button>
+                        </nav>
+                    </div>
+                    {{else}}
+                    <a
+                        href="/login"
+                        class="inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-100 hover:text-teal-800 transition-colors"
+                    >
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span>Tài khoản / Đăng nhập</span>
+                    </a>
+                    {{/if}}
+                </div>
 
                 <!-- Mobile menu button -->
                 <button
-                    id="mobileMenuBtn"
+                    type="button"
+                    id="clientMobileMenuBtn"
                     class="md:hidden p-2.5 rounded-full hover:bg-teal-50 transition-colors"
+                    aria-label="Mở menu"
+                    aria-controls="clientMobileDrawer"
+                    aria-expanded="false"
                 >
-                    <i class="fas fa-bars text-gray-600 text-lg"></i>
+                    <i class="fa-solid fa-bars text-gray-600 text-lg"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Search bar - Mobile -->
-        <div class="md:hidden mt-3 relative" id="searchContainerMobile">
+        <!-- Search mobile -->
+        <form
+            id="clientHeaderSearchFormMobile"
+            class="md:hidden mt-3 relative"
+            action="/products"
+            method="GET"
+        >
             <div
-                class="flex w-full border-2 border-teal-200 rounded-full overflow-hidden focus-within:border-teal-500 transition-colors"
+                class="flex w-full border-2 border-teal-200 rounded-full overflow-hidden focus-within:border-teal-500 transition-colors bg-white"
             >
                 <input
                     type="text"
-                    id="searchInputMobile"
+                    id="clientHeaderSearchInputMobile"
+                    name="keyword"
                     placeholder="Tìm kiếm sản phẩm..."
-                    class="flex-1 px-4 py-2.5 text-sm outline-none bg-white"
+                    class="flex-1 px-4 py-2.5 text-sm outline-none bg-white text-gray-700 placeholder:text-gray-400"
                     autocomplete="off"
                 />
+
                 <button
+                    type="submit"
                     class="px-4 bg-teal-500 hover:bg-teal-700 text-white transition-colors"
+                    aria-label="Tìm kiếm"
                 >
-                    <i class="fas fa-search"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
-            <div
-                id="searchDropdownMobile"
-                class="search-dropdown absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 hidden z-50"
-            >
-                <div id="searchResultsMobile" class="p-2"></div>
-            </div>
-        </div>
+        </form>
     </div>
 
-    <!-- Desktop nav -->
+    <!-- Desktop nav tầng 2 -->
     <nav class="hidden md:block bg-teal-50/60 border-t border-teal-100">
         <div class="max-w-7xl mx-auto px-4">
             <ul class="flex items-center gap-1 text-sm font-medium">
                 <li>
-                    <a
-                        href="/"
-                        class="px-4 py-2.5 text-teal-700 hover:bg-teal-100 rounded-lg transition-colors flex items-center gap-1.5"
-                        ><i class="fas fa-home text-xs"></i> Trang chủ</a
-                    >
+                    <a href="/" data-client-nav="/" class="client-nav-link">
+                        <i class="fa-solid fa-house text-xs"></i>
+                        <span>Trang chủ</span>
+                    </a>
                 </li>
-                <li>
-                    <a
-                        href="/zai/client/products/index.html"
-                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors"
-                        >Sản phẩm</a
-                    >
-                </li>
-                <li>
-                    <a
-                        href="/categories"
-                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors"
-                        >Danh mục</a
-                    >
-                </li>
+
                 <li>
                     <a
                         href="/promotions"
-                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors flex items-center gap-1.5"
-                        ><i class="fas fa-tags text-xs text-red-400"></i> Khuyến
-                        mãi</a
+                        data-client-nav="/promotions"
+                        class="client-nav-link"
                     >
+                        <i class="fa-solid fa-tags text-xs text-red-400"></i>
+                        <span>Khuyến mãi</span>
+                    </a>
                 </li>
+
                 <li>
                     <a
                         href="/contact"
-                        class="px-4 py-2.5 text-gray-600 hover:text-teal-700 hover:bg-teal-100 rounded-lg transition-colors"
-                        >Liên hệ</a
+                        data-client-nav="/contact"
+                        class="client-nav-link"
                     >
+                        <i class="fa-solid fa-headset text-xs"></i>
+                        <span>Hỗ trợ</span>
+                    </a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
+
+<!-- Mobile drawer overlay -->
+<div
+    id="clientMobileOverlay"
+    class="mobile-overlay fixed inset-0 z-50 bg-slate-900/45 md:hidden"
+    aria-hidden="true"
+></div>
+
+<!-- Mobile drawer -->
+<aside
+    id="clientMobileDrawer"
+    class="mobile-menu fixed top-0 left-0 z-[60] h-full w-72 max-w-[86vw] bg-white shadow-2xl overflow-y-auto md:hidden"
+    aria-label="Menu mobile"
+>
+    <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2">
+            <div
+                class="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center"
+            >
+                <i class="fa-solid fa-store text-white text-sm"></i>
+            </div>
+
+            <div>
+                <span class="text-lg font-bold text-teal-700">
+                    {{siteShortName}}<span class="text-teal-500">Market</span>
+                </span>
+                <p class="text-[10px] text-gray-400 -mt-0.5 leading-none">
+                    Menu
+                </p>
+            </div>
+        </a>
+
+        <button
+            type="button"
+            id="clientMobileMenuCloseBtn"
+            class="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            aria-label="Đóng menu"
+        >
+            <i class="fa-solid fa-xmark text-gray-500"></i>
+        </button>
+    </div>
+
+    {{#if isLoggedIn}}
+    <div
+        class="mx-4 mt-4 rounded-2xl bg-teal-50 border border-teal-100 p-3 flex items-center gap-3"
+    >
+        <img
+            src="{{authAvatar}}"
+            alt="{{authName}}"
+            class="h-10 w-10 rounded-full border border-white object-cover"
+        />
+
+        <div class="min-w-0">
+            <p class="text-xs text-gray-500">Xin chào</p>
+            <p class="text-sm font-semibold text-teal-800 truncate">
+                {{authName}}
+            </p>
+        </div>
+    </div>
+    {{/if}}
+
+    <nav class="p-4">
+        <ul class="space-y-1">
+            <li>
+                <a href="/" data-client-nav="/" class="client-drawer-link">
+                    <i
+                        class="fa-solid fa-house w-5 text-center text-teal-500"
+                    ></i>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/promotions"
+                    data-client-nav="/promotions"
+                    class="client-drawer-link"
+                >
+                    <i
+                        class="fa-solid fa-tags w-5 text-center text-red-400"
+                    ></i>
+                    <span>Khuyến mãi</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/contact"
+                    data-client-nav="/contact"
+                    class="client-drawer-link"
+                >
+                    <i class="fa-solid fa-headset w-5 text-center"></i>
+                    <span>Hỗ trợ</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/cart"
+                    data-client-nav="/cart"
+                    class="client-drawer-link"
+                >
+                    <i class="fa-solid fa-cart-shopping w-5 text-center"></i>
+                    <span>Giỏ hàng</span>
+                    <span
+                        id="clientMobileCartCount"
+                        class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full hidden"
+                        >0</span
+                    >
+                </a>
+            </li>
+        </ul>
+
+        <hr class="my-4 border-gray-100" />
+
+        {{#if isLoggedIn}}
+        <ul class="space-y-1">
+            <li>
+                <a
+                    href="/account/profile"
+                    data-client-nav="/account/profile"
+                    class="client-drawer-link"
+                >
+                    <i
+                        class="fa-solid fa-user w-5 text-center text-teal-500"
+                    ></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/account/addresses"
+                    data-client-nav="/account/addresses"
+                    class="client-drawer-link"
+                >
+                    <i
+                        class="fa-solid fa-location-dot w-5 text-center text-teal-500"
+                    ></i>
+                    <span>Địa chỉ giao hàng</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/account/orders"
+                    data-client-nav="/account/orders"
+                    class="client-drawer-link"
+                >
+                    <i
+                        class="fa-solid fa-receipt w-5 text-center text-teal-500"
+                    ></i>
+                    <span>Đơn hàng của tôi</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/account/wishlist"
+                    data-client-nav="/account/wishlist"
+                    class="client-drawer-link"
+                >
+                    <i
+                        class="fa-solid fa-heart w-5 text-center text-red-400"
+                    ></i>
+                    <span>Yêu thích</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/account/notifications"
+                    data-client-nav="/account/notifications"
+                    class="client-drawer-link"
+                >
+                    <i
+                        class="fa-solid fa-bell w-5 text-center text-amber-400"
+                    ></i>
+                    <span>Thông báo</span>
+                </a>
+            </li>
+
+            <li> 
+                <button
+                    type="button"
+                    data-client-logout
+                    class="client-drawer-link w-full text-left text-red-600 hover:bg-red-50"
+                >
+                    <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+                    <span>Đăng xuất</span>
+                </button>
+                
+            </li>
+        </ul>
+        {{else}}
+        <ul class="space-y-1">
+            <li>
+                <a
+                    href="/login"
+                    data-client-nav="/login"
+                    class="client-drawer-link"
+                >
+                    <i class="fa-solid fa-right-to-bracket w-5 text-center"></i>
+                    <span>Đăng nhập</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="/register"
+                    data-client-nav="/register"
+                    class="client-drawer-link"
+                >
+                    <i class="fa-solid fa-user-plus w-5 text-center"></i>
+                    <span>Đăng ký</span>
+                </a>
+            </li>
+        </ul>
+        {{/if}}
+    </nav>
+</aside>
+
+<style>
+    .client-nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.625rem 1rem;
+        color: #475569;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .client-nav-link:hover {
+        color: var(--teal-700);
+        background: rgba(173, 255, 255, 0.4);
+    }
+
+    .client-nav-link.is-active {
+        color: var(--teal-700);
+        background: rgba(173, 255, 255, 0.55);
+        font-weight: 700;
+    }
+
+    .client-drawer-link,
+    .client-account-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-radius: 0.875rem;
+        padding: 0.75rem 1rem;
+        color: #475569;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .client-drawer-link:hover,
+    .client-account-link:hover {
+        background: #f8fafc;
+        color: var(--teal-700);
+    }
+
+    .client-drawer-link.is-active {
+        background: #ecfeff;
+        color: var(--teal-700);
+        font-weight: 700;
+    }
+</style>
+
+<script>
+    (function () {
+        "use strict";
+
+        const SELECTORS = {
+            desktopSearchForm: "clientHeaderSearchForm",
+            desktopSearchInput: "clientHeaderSearchInput",
+            mobileSearchForm: "clientHeaderSearchFormMobile",
+            mobileSearchInput: "clientHeaderSearchInputMobile",
+
+            cartBadge: "clientHeaderCartBadge",
+            mobileCartCount: "clientMobileCartCount",
+
+            menuBtn: "clientMobileMenuBtn",
+            closeBtn: "clientMobileMenuCloseBtn",
+            drawer: "clientMobileDrawer",
+            overlay: "clientMobileOverlay",
+
+            accountBtn: "clientAccountDropdownBtn",
+            accountDropdown: "clientAccountDropdown",
+        };
+
+        function getEl(id) {
+            return document.getElementById(id);
+        }
+
+        function safeNotify(type, title, message) {
+            if (typeof window.notify === "function") {
+                window.notify(type, title, message);
+                return;
+            }
+
+            console[type === "error" ? "error" : "log"](
+                `${title || "Thông báo"}: ${message || ""}`,
+            );
+        }
+
+        function normalizeKeyword(value) {
+            return String(value || "")
+                .trim()
+                .replace(/\s+/g, " ");
+        }
+
+        function setupSearchForm(formId, inputId) {
+            const form = getEl(formId);
+            const input = getEl(inputId);
+
+            if (!form || !input) return;
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const keyword = normalizeKeyword(input.value);
+
+                if (!keyword) {
+                    safeNotify(
+                        "warning",
+                        "Thiếu từ khóa",
+                        "Anh vui lòng nhập tên sản phẩm cần tìm.",
+                    );
+                    input.focus();
+                    return;
+                }
+
+                const targetUrl = `/products?keyword=${encodeURIComponent(keyword)}`;
+                window.location.href = targetUrl;
+            });
+        }
+
+        function openMobileDrawer() {
+            const drawer = getEl(SELECTORS.drawer);
+            const overlay = getEl(SELECTORS.overlay);
+            const menuBtn = getEl(SELECTORS.menuBtn);
+
+            if (!drawer || !overlay) return;
+
+            drawer.classList.add("active");
+            overlay.classList.add("active");
+            document.body.style.overflow = "hidden";
+
+            if (menuBtn) {
+                menuBtn.setAttribute("aria-expanded", "true");
+            }
+        }
+
+        function closeMobileDrawer() {
+            const drawer = getEl(SELECTORS.drawer);
+            const overlay = getEl(SELECTORS.overlay);
+            const menuBtn = getEl(SELECTORS.menuBtn);
+
+            if (!drawer || !overlay) return;
+
+            drawer.classList.remove("active");
+            overlay.classList.remove("active");
+            document.body.style.overflow = "";
+
+            if (menuBtn) {
+                menuBtn.setAttribute("aria-expanded", "false");
+            }
+        }
+
+        function setupMobileDrawer() {
+            const menuBtn = getEl(SELECTORS.menuBtn);
+            const closeBtn = getEl(SELECTORS.closeBtn);
+            const drawer = getEl(SELECTORS.drawer);
+            const overlay = getEl(SELECTORS.overlay);
+
+            if (menuBtn) {
+                menuBtn.addEventListener("click", openMobileDrawer);
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeMobileDrawer);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeMobileDrawer);
+            }
+
+            if (drawer) {
+                drawer.querySelectorAll("a").forEach(function (link) {
+                    link.addEventListener("click", function () {
+                        closeMobileDrawer();
+                    });
+                });
+            }
+
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    closeMobileDrawer();
+                    closeAccountDropdown();
+                }
+            });
+        }
+
+        function openAccountDropdown() {
+            const btn = getEl(SELECTORS.accountBtn);
+            const dropdown = getEl(SELECTORS.accountDropdown);
+
+            if (!btn || !dropdown) return;
+
+            dropdown.classList.remove("hidden");
+            btn.setAttribute("aria-expanded", "true");
+        }
+
+        function closeAccountDropdown() {
+            const btn = getEl(SELECTORS.accountBtn);
+            const dropdown = getEl(SELECTORS.accountDropdown);
+
+            if (!btn || !dropdown) return;
+
+            dropdown.classList.add("hidden");
+            btn.setAttribute("aria-expanded", "false");
+        }
+
+        function toggleAccountDropdown() {
+            const dropdown = getEl(SELECTORS.accountDropdown);
+
+            if (!dropdown) return;
+
+            if (dropdown.classList.contains("hidden")) {
+                openAccountDropdown();
+            } else {
+                closeAccountDropdown();
+            }
+        }
+
+        function setupAccountDropdown() {
+            const btn = getEl(SELECTORS.accountBtn);
+            const dropdown = getEl(SELECTORS.accountDropdown);
+
+            if (!btn || !dropdown) return;
+
+            btn.addEventListener("click", function (event) {
+                event.stopPropagation();
+                toggleAccountDropdown();
+            });
+
+            dropdown.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            document.addEventListener("click", closeAccountDropdown);
+        }
+
+        function setCartCount(count) {
+            const safeCount = Number.isFinite(Number(count))
+                ? Number(count)
+                : 0;
+            const displayCount = safeCount > 99 ? "99+" : String(safeCount);
+
+            const badge = getEl(SELECTORS.cartBadge);
+            const mobileCount = getEl(SELECTORS.mobileCartCount);
+
+            if (badge) {
+                if (safeCount > 0) {
+                    badge.textContent = displayCount;
+                    badge.classList.remove("hidden");
+                    badge.classList.add("flex");
+
+                    badge.classList.remove("cart-badge");
+                    void badge.offsetWidth;
+                    badge.classList.add("cart-badge");
+                } else {
+                    badge.textContent = "0";
+                    badge.classList.add("hidden");
+                    badge.classList.remove("flex");
+                }
+            }
+
+            if (mobileCount) {
+                if (safeCount > 0) {
+                    mobileCount.textContent = displayCount;
+                    mobileCount.classList.remove("hidden");
+                } else {
+                    mobileCount.textContent = "0";
+                    mobileCount.classList.add("hidden");
+                }
+            }
+        }
+
+        async function loadCartCount() {
+            const apiBase = window.APP_CONFIG && window.APP_CONFIG.APP_URL_API;
+
+            if (!apiBase) {
+                setCartCount(0);
+                return;
+            }
+
+            /*
+             * Tạm thời chưa gọi API thật vì anh chưa chốt endpoint cart count.
+             * Sau này nếu có API, mình có thể dùng ví dụ:
+             *
+             * GET ${apiBase}/cart
+             * hoặc GET ${apiBase}/cart/count
+             *
+             * Sau đó gọi setCartCount(data.totalItems || data.count || 0)
+             */
+            setCartCount(0);
+        }
+        
+        function setupLogoutLinks() {
+            const logoutButtons = document.querySelectorAll("[data-client-logout]");
+
+            logoutButtons.forEach(function (button) {
+                button.addEventListener("click", async function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    closeMobileDrawer();
+                    closeAccountDropdown();
+
+                    try {
+                        const apiBase =
+                            window.APP_CONFIG && window.APP_CONFIG.APP_URL_API
+                                ? window.APP_CONFIG.APP_URL_API
+                                : "/api";
+
+                        const response = await fetch(`${apiBase}/auth/logout`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                Accept: "application/json",
+                            },
+                        });
+
+                        let data = null;
+
+                        try {
+                            data = await response.json();
+                        } catch {
+                            data = null;
+                        }
+
+                        if (!response.ok) {
+                            throw new Error(
+                                data?.message || "Đăng xuất thất bại, vui lòng thử lại.",
+                            );
+                        }
+
+                        notify(
+                            "success",
+                            "Đăng xuất thành công",
+                            data?.message || "Anh đã đăng xuất khỏi hệ thống.",
+                        );
+
+                        setTimeout(function () {
+                            window.location.href = "/";
+                        }, 700);
+                    } catch (error) {
+                        notify(
+                            "error",
+                            "Không thể đăng xuất",
+                            error.message || "Có lỗi xảy ra khi đăng xuất.",
+                        );
+                    }
+                });
+            });
+        }
+
+        function setupActiveNavigation() {
+            const currentPath = window.location.pathname || "/";
+
+            const navLinks = document.querySelectorAll("[data-client-nav]");
+
+            navLinks.forEach(function (link) {
+                const navPath = link.getAttribute("data-client-nav");
+
+                if (!navPath) return;
+
+                const isHome = navPath === "/" && currentPath === "/";
+                const isMatched =
+                    navPath !== "/" &&
+                    (currentPath === navPath ||
+                        currentPath.startsWith(navPath + "/"));
+
+                if (isHome || isMatched) {
+                    link.classList.add("is-active");
+                } else {
+                    link.classList.remove("is-active");
+                }
+            });
+        }
+
+        function exposeHeaderApi() {
+            window.ClientHeader = {
+                setCartCount,
+                openMobileDrawer,
+                closeMobileDrawer,
+                closeAccountDropdown,
+            };
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            setupSearchForm(
+                SELECTORS.desktopSearchForm,
+                SELECTORS.desktopSearchInput,
+            );
+
+            setupSearchForm(
+                SELECTORS.mobileSearchForm,
+                SELECTORS.mobileSearchInput,
+            );
+
+            setupMobileDrawer();
+            setupAccountDropdown();
+            setupLogoutLinks();
+            setupActiveNavigation();
+            exposeHeaderApi();
+            loadCartCount();
+        });
+    })();
+</script>

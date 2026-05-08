@@ -246,7 +246,7 @@
         </div>
     </section> 
 </main>
-<!-- ========== SCRIPTS ========== -->
+<!-- ========== SCRIPTS src\views\client\home\index.hbs ========== -->
 <script>
     // =============================================
     // DỮ LIỆU MẪU BÁM THEO DB CHUẨN
@@ -588,52 +588,38 @@
     }
 
     // =============================================
-    // GIỎ HÀNG DEMO
+    // GIỎ HÀNG TRANG HOME
+    // Chỉ xử lý hành động thêm sản phẩm.
+    // Badge header sẽ gọi qua window.ClientHeader nếu header.js đã load.
     // =============================================
 
-    let cartCount = 0;
-
-    function updateCartBadge() {
-        const badge = document.getElementById("cartBadge");
-        const mobileCount = document.getElementById("mobileCartCount");
-        if (cartCount > 0) {
-            badge.textContent = cartCount > 99 ? "99+" : cartCount;
-            badge.classList.remove("hidden");
-            badge.classList.add("cart-badge");
-            // Re-trigger animation
-            void badge.offsetWidth;
-            badge.classList.add("cart-badge");
-        } else {
-            badge.classList.add("hidden");
-        }
-        if (mobileCount) mobileCount.textContent = cartCount;
-    }
+    let homeCartCount = 0;
 
     function addToCart(product) {
+        if (!product) return;
+
         if (isOutOfStock(product)) {
-            Swal.fire({
-                icon: "warning",
-                title: "Sản phẩm đã hết hàng",
-                text: `"${product.name}" hiện tại không còn trong kho.`,
-                confirmButtonColor: "#007a7a",
-                background: "#fff",
-            });
+            notify(
+                "warning",
+                "Sản phẩm đã hết hàng",
+                `"${product.name}" hiện tại không còn trong kho.`,
+            );
             return;
         }
-        cartCount++;
-        updateCartBadge();
-        Swal.fire({
-            icon: "success",
-            title: "Đã thêm vào giỏ hàng",
-            text: `"${product.name}" đã được thêm vào giỏ hàng.`,
-            confirmButtonColor: "#007a7a",
-            background: "#fff",
-            timer: 2000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-        });
-    }
 
+        homeCartCount++;
+
+        if (window.ClientHeader && typeof window.ClientHeader.setCartCount === "function") {
+            window.ClientHeader.setCartCount(homeCartCount);
+        }
+
+        notify(
+            "success",
+            "Đã thêm vào giỏ hàng",
+            `"${product.name}" đã được thêm vào giỏ hàng.`,
+        );
+    }
+    
     // =============================================
     // RENDER DANH MỤC
     // =============================================
@@ -855,172 +841,7 @@
             },
         });
     }
-
-    // =============================================
-    // TÌM KIẾM NHANH
-    // =============================================
-
-    function setupSearch(inputId, dropdownId, resultsId) {
-        const input = document.getElementById(inputId);
-        const dropdown = document.getElementById(dropdownId);
-        const results = document.getElementById(resultsId);
-
-        input.addEventListener("input", function () {
-            const keyword = this.value.trim().toLowerCase();
-            if (keyword.length === 0) {
-                dropdown.classList.add("hidden");
-                return;
-            }
-
-            const matched = productsData
-                .filter(
-                    (p) =>
-                        p.status === "active" &&
-                        p.name.toLowerCase().includes(keyword),
-                )
-                .slice(0, 6);
-
-            if (matched.length === 0) {
-                results.innerHTML = `
-            <div class="px-4 py-6 text-center text-gray-400 text-sm">
-              <i class="fas fa-search text-2xl mb-2 block text-gray-300"></i>
-              Không tìm thấy sản phẩm phù hợp
-            </div>`;
-            } else {
-                results.innerHTML = matched
-                    .map((p) => {
-                        const hasSale = p.sale_price && p.sale_price < p.price;
-                        const displayPrice = hasSale
-                            ? `<span class="text-red-500 font-semibold">${formatPrice(p.sale_price)}</span> <span class="text-gray-300 line-through text-xs">${formatPrice(p.price)}</span>`
-                            : `<span class="text-teal-700 font-semibold">${formatPrice(p.price)}</span>`;
-                        return `
-              <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-teal-50 cursor-pointer transition-colors" onclick="viewProductDetail(${p.id}); document.getElementById('${inputId}').value=''; document.getElementById('${dropdownId}').classList.add('hidden');">
-                <img src="${p.thumbnail}" alt="${p.name}" class="w-11 h-11 rounded-lg object-cover border border-gray-100 shrink-0">
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-medium text-gray-800 truncate">${p.name}</p>
-                  <div class="text-xs mt-0.5">${displayPrice}</div>
-                </div>
-                <i class="fas fa-chevron-right text-gray-300 text-xs shrink-0"></i>
-              </div>`;
-                    })
-                    .join("");
-            }
-            dropdown.classList.remove("hidden");
-        });
-
-        input.addEventListener("focus", function () {
-            if (this.value.trim().length > 0) {
-                dropdown.classList.remove("hidden");
-            }
-        });
-
-        // Đóng dropdown khi click bên ngoài
-        document.addEventListener("click", function (e) {
-            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.add("hidden");
-            }
-        });
-    }
-
-    // =============================================
-    // MOBILE MENU
-    // =============================================
-
-    function setupMobileMenu() {
-        const menuBtn = document.getElementById("mobileMenuBtn");
-        const closeBtn = document.getElementById("closeMobileMenu");
-        const menu = document.getElementById("mobileMenu");
-        const overlay = document.getElementById("mobileOverlay");
-
-        function openMenu() {
-            menu.classList.add("active");
-            overlay.classList.add("active");
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeMenu() {
-            menu.classList.remove("active");
-            overlay.classList.remove("active");
-            document.body.style.overflow = "";
-        }
-
-        menuBtn.addEventListener("click", openMenu);
-        closeBtn.addEventListener("click", closeMenu);
-        overlay.addEventListener("click", closeMenu);
-
-        // Đóng menu khi click link
-        menu.querySelectorAll("a").forEach((link) => {
-            link.addEventListener("click", closeMenu);
-        });
-    }
-
-    // =============================================
-    // CART BUTTON
-    // =============================================
-
-    function setupCartButton() {
-        document
-            .getElementById("cartBtn")
-            .addEventListener("click", function () {
-                Swal.fire({
-                    icon: "info",
-                    title: "Giỏ hàng",
-                    html:
-                        cartCount > 0
-                            ? `Bạn có <strong>${cartCount}</strong> sản phẩm trong giỏ hàng.<br><code class="text-xs text-gray-400">/cart</code>`
-                            : "Giỏ hàng của bạn đang trống.",
-                    confirmButtonColor: "#007a7a",
-                    background: "#fff",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/zai/client/cart/";
-                    }
-                });
-            });
-    }
-
-    // =============================================
-    // LOGIN / REGISTER BUTTONS
-    // =============================================
-
-    function setupAuthButtons() {
-        document
-            .getElementById("loginBtn")
-            .addEventListener("click", function (e) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "info",
-                    title: "Đăng nhập",
-                    html: 'Bạn sẽ chuyển đến trang đăng nhập.<br><code class="text-xs text-gray-400">/login</code>',
-                    confirmButtonColor: "#007a7a",
-                    background: "#fff",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    showConfirmButton: false,
-                }).then(() => {
-                    window.location.href = "/zai/client/auth/login.html";
-                });
-            });
-
-        document
-            .getElementById("registerBtn")
-            .addEventListener("click", function (e) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "info",
-                    title: "Đăng ký",
-                    html: 'Bạn sẽ chuyển đến trang đăng ký.<br><code class="text-xs text-gray-400">/register</code>',
-                    confirmButtonColor: "#007a7a",
-                    background: "#fff",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    showConfirmButton: false,
-                }).then(() => {
-                    window.location.href = "/zai/client/auth/register.html";
-                });
-            });
-    } 
-
+    
     // =============================================
     // KHỞI TẠO
     // =============================================
@@ -1029,16 +850,6 @@
         renderCategories();
         renderNewProducts();
         renderBestSelling();
-        renderSaleProducts();
-        setupSearch("searchInput", "searchDropdown", "searchResults");
-        setupSearch(
-            "searchInputMobile",
-            "searchDropdownMobile",
-            "searchResultsMobile",
-        );
-        setupMobileMenu();
-        setupCartButton();
-        setupAuthButtons(); 
-        updateCartBadge();
+        renderSaleProducts(); 
     });
 </script>
