@@ -1,4 +1,3 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsNotEmpty,
@@ -9,39 +8,23 @@ import {
 import { SettingValueType } from 'src/common/enums/ecommerce.enum';
 
 export class CreateSettingDto {
-  @ApiProperty({
-    example: 'site_name',
-    description: 'Khóa cấu hình',
-    maxLength: 100,
-  })
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(100)
+  @IsNotEmpty({ message: 'Khóa cài đặt không được để trống' })
+  @IsString({ message: 'Khóa cài đặt phải là chuỗi' })
+  @MaxLength(100, { message: 'Khóa cài đặt không được vượt quá 100 ký tự' })
   settingKey!: string;
 
-  @ApiPropertyOptional({
-    example: 'Ecommerce Basic Plus',
-    description: 'Giá trị cấu hình',
-  })
   @IsOptional()
-  @IsString()
-  settingValue?: string;
+  @IsString({ message: 'Giá trị cài đặt phải là chuỗi' })
+  settingValue?: string | null;
 
-  @ApiPropertyOptional({
-    enum: SettingValueType,
-    example: SettingValueType.STRING,
-  })
   @IsOptional()
-  @IsEnum(SettingValueType)
+  @IsEnum(SettingValueType, {
+    message: 'Kiểu giá trị chỉ được là string, number, boolean hoặc json',
+  })
   valueType?: SettingValueType;
 
-  @ApiPropertyOptional({
-    example: 'Tên website',
-    description: 'Mô tả cấu hình',
-    maxLength: 255,
-  })
   @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  description?: string;
+  @IsString({ message: 'Mô tả phải là chuỗi' })
+  @MaxLength(255, { message: 'Mô tả không được vượt quá 255 ký tự' })
+  description?: string | null;
 }

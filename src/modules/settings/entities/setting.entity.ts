@@ -5,7 +5,7 @@ import { SettingValueType } from 'src/common/enums/ecommerce.enum';
 @Entity('settings')
 export class Setting extends BaseEntity {
   @Index('IDX_SETTINGS_KEY', { unique: true })
-  @Column({ name: 'setting_key', type: 'varchar', length: 100, unique: true })
+  @Column({ name: 'setting_key', type: 'varchar', length: 100 })
   settingKey!: string;
 
   @Column({ name: 'setting_value', type: 'text', nullable: true })
