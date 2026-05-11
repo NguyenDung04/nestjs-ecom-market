@@ -65,6 +65,19 @@
                 pointer-events: auto;
             }
 
+            .tab-panel {
+                display: none;
+            }
+            .tab-panel.active {
+                display: block;
+            }
+            .toggle-input:checked + .toggle-track {
+                background-color: #0d9488;
+            }
+            .toggle-input:checked + .toggle-track .toggle-dot {
+                transform: translateX(1.25rem);
+            }
+
             .alert24-item {
                 pointer-events: auto;
                 animation: alert24In 0.25s ease-out both;
@@ -380,7 +393,6 @@
                     );
                 }
             }
-            
         </script>
     </head>
 
@@ -409,7 +421,9 @@
             id="mainWrap"
             class="min-h-screen transition-all duration-300 lg:ml-72"
         >
-            {{> admin/header}} {{{body}}} {{> admin/footer}}
+            {{> admin/header}} 
+            {{{body}}} 
+            {{> admin/footer}}
         </div>
     </body>
 </html>

@@ -1,0 +1,21 @@
+<tr class="border-b border-slate-100 hover:bg-slate-50">
+  <td class="px-3 py-2">{{index}}</td>
+  <td class="px-3 py-2">{{settingKey}}</td>
+  <td class="px-3 py-2">{{settingValue}}</td>
+  <td class="px-3 py-2">{{valueType}}</td>
+  <td class="px-3 py-2">{{description}}</td>
+  <td class="px-3 py-2">{{createdAt}}</td>
+  <td class="px-3 py-2">{{updatedAt}}</td>
+  <td class="px-3 py-2">{{deletedAt}}</td>
+  <td class="px-3 py-2 text-center space-x-1">
+    {{#if deletedAt}}
+      <button class="btnRestore" data-id="{{id}}"><i class="fa-solid fa-rotate-left text-amber-500"></i></button>
+    {{else}}
+      <button class="btnEdit" data-id="{{id}}"><i class="fa-solid fa-pen text-kigen-600"></i></button>
+      <button class="btnDelete" data-id="{{id}}"><i class="fa-solid fa-trash text-rose-600"></i></button>
+      {{#if isAdmin}}
+        <button class="btnForce" data-id="{{id}}"><i class="fa-solid fa-xmark text-red-800"></i></button>
+      {{/if}}
+    {{/if}}
+  </td>
+</tr>

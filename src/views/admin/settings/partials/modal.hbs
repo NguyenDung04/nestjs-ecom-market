@@ -1,0 +1,34 @@
+<div id="modalSettings" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/40 p-4">
+  <div class="relative w-full max-w-2xl rounded-2xl bg-white shadow-lg">
+    <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+      <h3 id="modalTitle" class="text-lg font-semibold text-slate-950">Cài đặt</h3>
+      <button id="modalClose" class="text-slate-500 hover:text-slate-800">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <form id="modalForm" class="p-5 space-y-4">
+      <input type="hidden" id="modalId">
+      <div>
+        <label class="block mb-2 text-sm font-semibold">Setting Key</label>
+        <input type="text" id="modalKey" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500" readonly>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-semibold">Value</label>
+        <input type="text" id="modalValue" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500">
+        <textarea id="modalValueJson" class="hidden w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500" rows="6"></textarea>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-semibold">Value Type</label>
+        <input type="text" id="modalType" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500" readonly>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-semibold">Description</label>
+        <input type="text" id="modalDesc" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500">
+      </div>
+      <div class="flex justify-end gap-2">
+        <button type="button" id="modalCancel" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Hủy</button>
+        <button type="submit" id="modalSave" class="rounded-xl bg-kigen-600 px-4 py-2 text-sm font-semibold text-white hover:bg-kigen-700">Lưu</button>
+      </div>
+    </form>
+  </div>
+</div>

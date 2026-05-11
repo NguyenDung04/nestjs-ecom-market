@@ -1,55 +1,301 @@
-<section class="space-y-6">
-    <div>
-        <h1 class="text-2xl font-bold text-slate-950">Cài đặt hệ thống</h1>
-        <p class="mt-1 text-sm text-slate-500">
-            Cấu hình tên website, thông tin liên hệ, giao diện và các thiết lập chung.
-        </p>
-    </div>
-
-    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-lg font-bold text-slate-900">Thông tin website</h2>
-
-        <div class="mt-5 grid gap-5 md:grid-cols-2">
-            <div>
-                <label class="mb-2 block text-sm font-semibold text-slate-700">Tên website</label>
-                <input
-                    type="text"
-                    value="{{siteName}}"
-                    class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500"
-                />
+<main class="p-4 sm:p-6 lg:p-8">
+    <section
+        class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
+    >
+        <div>
+            <div class="mb-2 flex items-center gap-2 text-sm text-slate-500">
+                <span>Admin</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <span class="font-medium text-kigen-700">Cài đặt hệ thống</span>
             </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-semibold text-slate-700">Email hỗ trợ</label>
-                <input
-                    type="email"
-                    placeholder="support@example.com"
-                    class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500"
-                />
-            </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-semibold text-slate-700">Số điện thoại</label>
-                <input
-                    type="text"
-                    placeholder="0123456789"
-                    class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500"
-                />
-            </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-semibold text-slate-700">Trạng thái website</label>
-                <select class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-kigen-500">
-                    <option>Đang hoạt động</option>
-                    <option>Bảo trì</option>
-                </select>
-            </div>
+            <h2 class="text-2xl font-bold text-slate-950">Cài đặt hệ thống</h2>
+            <p class="mt-1 text-sm text-slate-500">
+                Quản lý tất cả cài đặt website, thêm/sửa/xóa, restore
+            </p>
         </div>
-
-        <div class="mt-6 flex justify-end">
-            <button class="rounded-2xl bg-kigen-600 px-5 py-3 text-sm font-semibold text-white hover:bg-kigen-700">
-                Lưu cài đặt
+        <div class="flex flex-wrap gap-2">
+            <button
+                id="btnAdd"
+                class="rounded-xl bg-kigen-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-kigen-700"
+            >
+                <i class="fa-solid fa-plus mr-2"></i>Thêm mới
+            </button>
+            <button
+                id="btnReload"
+                class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+                <i class="fa-solid fa-arrows-rotate mr-2 text-kigen-600"></i>Tải
+                lại
             </button>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white shadow-sm p-4">
+        <div class="mb-4 flex flex-wrap gap-2 items-center">
+            <input
+                type="text"
+                id="searchKey"
+                placeholder="Tìm theo key..."
+                class="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500"
+            />
+            <select
+                id="filterType"
+                class="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-kigen-500"
+            >
+                <option value="">Tất cả loại</option>
+                <option value="string">String</option>
+                <option value="number">Number</option>
+                <option value="boolean">Boolean</option>
+                <option value="json">JSON</option>
+            </select>
+            <button
+                id="btnFilter"
+                class="rounded-xl bg-kigen-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-kigen-700"
+            >
+                <i class="fa-solid fa-filter mr-2"></i>Lọc
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto border-collapse text-sm">
+                <thead class="bg-slate-50 text-left text-slate-700">
+                    <tr>
+                        <th class="border-b px-3 py-2">#</th>
+                        <th class="border-b px-3 py-2">Setting Key</th>
+                        <th class="border-b px-3 py-2">Value</th>
+                        <th class="border-b px-3 py-2">Value Type</th>
+                        <th class="border-b px-3 py-2">Description</th>
+                        <th class="border-b px-3 py-2">Created At</th>
+                        <th class="border-b px-3 py-2">Updated At</th>
+                        <th class="border-b px-3 py-2">Deleted At</th>
+                        <th class="border-b px-3 py-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="settingsTable">
+                    <!-- Render JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 flex justify-end gap-2" id="pagination"></div>
+    </section>
+
+    {{> admin/settings/partials/modal}}
+</main>
+<script>
+    const state = {
+        page: 1,
+        limit: 10,
+        totalPages: 1,
+        settings: [],
+        keyword: "",
+        valueType: "",
+    };
+
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    async function fetchSettings() {
+        const url = `/api/settings?page=${state.page}&limit=${state.limit}&keyword=${state.keyword}&valueType=${state.valueType}&withDeleted=true`;
+        const tbody = $("#settingsTable");
+        tbody.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-slate-400">Đang tải...</td></tr>`;
+        try {
+            const res = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            state.settings = data.data;
+            state.totalPages = data.meta.totalPages;
+            renderTable();
+            renderPagination();
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-rose-600">${err.message}</td></tr>`;
+        }
+    }
+
+    function renderTable() {
+        const tbody = $("#settingsTable");
+        if (!state.settings.length) {
+            tbody.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-slate-400">Chưa có setting nào</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = state.settings
+            .map((s, i) => {
+                return `{{> admin/settings/partials/tableRow
+        index="${(state.page - 1) * state.limit + i + 1}}"
+        settingKey="${s.settingKey}"
+        settingValue="${s.settingValue}"
+        valueType="${s.valueType}"
+        description="${s.description || ""}"
+        createdAt="${new Date(s.createdAt).toLocaleDateString()}"
+        updatedAt="${new Date(s.updatedAt).toLocaleDateString()}"
+        deletedAt="${s.deletedAt ? new Date(s.deletedAt).toLocaleDateString() : ""}"
+        id="${s.id}"
+        isAdmin="${true}"
+      }}`;
+            })
+            .join("");
+        bindTableActions();
+    }
+
+    function bindTableActions() {
+        $$(".btnEdit").forEach(
+            (btn) => (btn.onclick = () => openModal(btn.dataset.id)),
+        );
+        $$(".btnDelete").forEach(
+            (btn) => (btn.onclick = () => deleteSetting(btn.dataset.id)),
+        );
+        $$(".btnRestore").forEach(
+            (btn) => (btn.onclick = () => restoreSetting(btn.dataset.id)),
+        );
+        $$(".btnForce").forEach(
+            (btn) => (btn.onclick = () => forceDeleteSetting(btn.dataset.id)),
+        );
+    }
+
+    // Modal open/edit
+    async function openModal(id) {
+        const modal = $("#modalSettings");
+        const form = $("#modalForm");
+        try {
+            const res = await fetch(`/api/settings/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            const s = data.data;
+            $("#modalId").value = s.id;
+            $("#modalKey").value = s.settingKey;
+            $("#modalValue").value =
+                s.valueType === "json" ? "" : s.settingValue;
+            $("#modalValueJson").value =
+                s.valueType === "json" ? s.settingValue : "";
+            $("#modalType").value = s.valueType;
+            $("#modalDesc").value = s.description || "";
+            $("#modalValue").classList.toggle("hidden", s.valueType === "json");
+            $("#modalValueJson").classList.toggle(
+                "hidden",
+                s.valueType !== "json",
+            );
+            modal.classList.remove("hidden");
+        } catch (err) {
+            notify("error", "Lỗi", err.message);
+        }
+    }
+
+    $("#modalClose").onclick = $("#modalCancel").onclick = () =>
+        $("#modalSettings").classList.add("hidden");
+
+    $("#modalForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const id = $("#modalId").value;
+        const value =
+            $("#modalType").value === "json"
+                ? $("#modalValueJson").value
+                : $("#modalValue").value;
+        const desc = $("#modalDesc").value;
+        try {
+            const res = await fetch(`/api/settings/${id}`, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    settingValue: value,
+                    valueType: $("#modalType").value,
+                    description: desc,
+                }),
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            notify("success", "Thành công", "Cập nhật setting thành công");
+            $("#modalSettings").classList.add("hidden");
+            fetchSettings();
+        } catch (err) {
+            notify("error", "Lỗi", err.message);
+        }
+    };
+
+    // Filter / Reload / Pagination / Delete / Restore / Force Delete logic
+    $("#btnFilter").onclick = () => {
+        state.keyword = $("#searchKey").value;
+        state.valueType = $("#filterType").value;
+        state.page = 1;
+        fetchSettings();
+    };
+    $("#btnReload").onclick = () => fetchSettings();
+
+    function renderPagination() {
+        const container = $("#pagination");
+        container.innerHTML = "";
+        for (let i = 1; i <= state.totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.className = `px-3 py-1 rounded-xl ${i === state.page ? "bg-kigen-600 text-white" : "bg-slate-50 text-slate-700"}`;
+            btn.onclick = () => {
+                state.page = i;
+                fetchSettings();
+            };
+            container.appendChild(btn);
+        }
+    }
+
+    async function deleteSetting(id) {
+        if (!(await confirmAction({ title: "Xác nhận xóa mềm" }))) return;
+        try {
+            const res = await fetch(`/api/settings/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            notify("success", "Thành công", data.message);
+            fetchSettings();
+        } catch (err) {
+            notify("error", "Lỗi", err.message);
+        }
+    }
+    async function restoreSetting(id) {
+        try {
+            const res = await fetch(`/api/settings/${id}/restore`, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            notify("success", "Thành công", data.message);
+            fetchSettings();
+        } catch (err) {
+            notify("error", "Lỗi", err.message);
+        }
+    }
+    async function forceDeleteSetting(id) {
+        if (!(await confirmAction({ title: "Xác nhận xóa vĩnh viễn" }))) return;
+        try {
+            const res = await fetch(`/api/settings/${id}/force`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            notify("success", "Thành công", data.message);
+            fetchSettings();
+        } catch (err) {
+            notify("error", "Lỗi", err.message);
+        }
+    }
+
+    fetchSettings();
+</script>
